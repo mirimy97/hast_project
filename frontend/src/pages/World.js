@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
 import axios from "axios";
@@ -41,6 +41,28 @@ function World() {
     colorScale.domain([0, maxVal]);
   }, [countries]);
 
+  // const clickRegion = useCallback(({ lat: endLat, lng: endLng }) => {
+  //   const { lat: startLat, lng: startLng } = prevCoords.current;
+  //   prevCoords.current = { lat: endLat, lng: endLng };
+
+  //   // add and remove arc after 1 cycle
+  //   const arc = { startLat, startLng, endLat, endLng };
+  //   setArcsData(curArcsData => [...curArcsData, arc]);
+  //   setTimeout(() => setArcsData(curArcsData => curArcsData.filter(d => d !== arc)), FLIGHT_TIME * 2);
+
+  //   // add and remove start rings
+  //   const srcRing = { lat: startLat, lng: startLng };
+  //   setRingsData(curRingsData => [...curRingsData, srcRing]);
+  //   setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== srcRing)), FLIGHT_TIME * ARC_REL_LEN);
+
+  //   // add and remove target rings
+  //   setTimeout(() => {
+  //     const targetRing = { lat: endLat, lng: endLng };
+  //     setRingsData(curRingsData => [...curRingsData, targetRing]);
+  //     setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== targetRing)), FLIGHT_TIME * ARC_REL_LEN);
+  //   }, FLIGHT_TIME);
+  // }, []);
+
   return (
     <>
       {countries.features && (
@@ -66,6 +88,7 @@ function World() {
           `}
           onPolygonHover={setHoverD}
           polygonsTransitionDuration={300}
+          // onPolygonClick={clickRegion}
         />
       )}
     </>
