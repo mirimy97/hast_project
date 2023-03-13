@@ -11,7 +11,7 @@ function World() {
 
   const getGeoJson = () => {
     return axios
-      .get("datasets/ne_110m_admin_0_countries.geojson")
+      .get("geojson/ne_110m_admin_0_countries.geojson")
       .then((res) => res.data);
   };
 
@@ -45,18 +45,20 @@ function World() {
     <>
       {countries.features && (
         <Globe
-          globeImageUrl="./map/8k_earth_daymap.jpg"
+          globeImageUrl="map/8k_earth_daymap.jpg"
           backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
           lineHoverPrecision={0}
           polygonsData={countries.features.filter(
             (d) => d.properties.ISO_A2 !== "AQ"
           )}
-          polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
-          polygonCapColor={(d) =>
-            d === hoverD ? "steelblue" : colorScale(getVal(d))
-          }
-          polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
-          polygonStrokeColor={() => "#111"}
+          polygonAltitude={(d) => (d === hoverD ? 0.03 : 0)}
+          // polygonCapColor={(d) =>
+          //   d === hoverD ? "steelblue" : colorScale(getVal(d))
+          // }
+
+          polygonCapColor={(d) => (d === hoverD ? "#7cc2b870" : "#ffffff00")}
+          polygonSideColor={() => "#ffffff00"}
+          polygonStrokeColor={() => "#00000080"}
           polygonLabel={({ properties: d }) => `
             <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
             GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
