@@ -1,6 +1,10 @@
 import { Canvas } from "@react-three/fiber";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Earth from "./pages/Earth";
 import World from "./pages/World";
+import WorldDetail from "./pages/WorldDetail";
+import Map from "./pages/Map";
+
 function App() {
   return (
     // <Canvas
@@ -21,7 +25,16 @@ function App() {
     //   <Earth />
     // </Canvas>
     <>
-      <World />
+      <Router>
+        <Routes>
+          {/* 지구 메인 */}
+          <Route path="/" element={<World />} />
+          {/* 지구 상세 페이지 */}
+          <Route path="/worlddetail" element={<WorldDetail />} />
+          {/* 지도 페이지 */}
+          <Route path="/map" element={<Map />} />
+        </Routes>
+      </Router>
     </>
   );
 }
