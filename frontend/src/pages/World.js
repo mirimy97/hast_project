@@ -62,6 +62,7 @@ function World() {
   //     setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== targetRing)), FLIGHT_TIME * ARC_REL_LEN);
   //   }, FLIGHT_TIME);
   // }, []);
+  const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
 
   return (
     <>
@@ -81,14 +82,20 @@ function World() {
           polygonCapColor={(d) => (d === hoverD ? "#7cc2b870" : "#ffffff00")}
           polygonSideColor={() => "#ffffff00"}
           polygonStrokeColor={() => "#00000080"}
-          polygonLabel={({ properties: d }) => `
-            <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
-            GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-            Population: <i>${d.POP_EST}</i>
-          `}
+          polygonLabel={
+            ({ properties: d }) =>
+              `
+              <img src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
+              <h1 style="color: yellow;">${d.ADMIN} (${d.ISO_A2}): </h1>
+              GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
+              Population: <i>${d.POP_EST}</i>
+            `
+            //console.log(d)
+            //countryName(d)
+          }
           onPolygonHover={setHoverD}
           polygonsTransitionDuration={300}
-          // onPolygonClick={clickRegion}
+          onPolygonClick={(polygon) => global.console.log("polygon", polygon)}
         />
       )}
     </>
