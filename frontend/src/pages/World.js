@@ -75,6 +75,15 @@ function World() {
     });
   };
 
+  //   // add and remove target rings
+  //   setTimeout(() => {
+  //     const targetRing = { lat: endLat, lng: endLng };
+  //     setRingsData(curRingsData => [...curRingsData, targetRing]);
+  //     setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== targetRing)), FLIGHT_TIME * ARC_REL_LEN);
+  //   }, FLIGHT_TIME);
+  // }, []);
+  const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
+
   return (
     <>
       <button onClick={backBtn}>뒤로가기</button>
@@ -103,9 +112,16 @@ function World() {
           }
           polygonSideColor={(d) => (d === clickD ? "#e6bb3c" : "#00000050")}
           polygonStrokeColor={() => "#00000080"}
-          polygonLabel={({ properties: d }) => `
-            <b>${d.NAME} (${d.ISO_A2})</b>
-          `}
+          polygonLabel={({ properties: d }) => {
+            return clickD
+              ? ``
+              : `
+            <img src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
+            <h1 style="color: yellow;">${d.ADMIN} (${d.ISO_A2}): </h1>
+            GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
+            Population: <i>${d.POP_EST}</i>
+          `;
+          }}
           polygonsTransitionDuration={300}
           onPolygonHover={setHoverD}
           onPolygonClick={clickRegion}
