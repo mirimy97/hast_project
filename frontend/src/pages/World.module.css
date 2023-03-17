@@ -1,0 +1,8 @@
+.worldContainer {
+  position: relative;
+  transition: left 1s ease;
+}
+
+.worldContainer .scene-container {
+  position: absolute;
+}
