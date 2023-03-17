@@ -12,6 +12,7 @@ import styles from "./World.module.css";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import PreloadImages from "./PreloadImages";
 import { count } from "d3";
+import WorldSidebar from "../components/WorldSidebar";
 
 function World() {
   const globeRef = useRef();
@@ -24,6 +25,7 @@ function World() {
     lng: 124.2,
     altitude: 2.5,
   });
+  const [sidebarD, setSidebarD] = useState(-500);
 
   const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
 
@@ -85,6 +87,7 @@ function World() {
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
+      setSidebarD(0);
 
       setTimeout(function () {
         globeRef.current.pauseAnimation();
@@ -100,6 +103,7 @@ function World() {
       altitude: 2.5,
     });
     setLeft(0);
+    setSidebarD(-500);
   };
 
   //   // add and remove target rings
@@ -207,6 +211,15 @@ function World() {
             />
           </>
         )}
+      </div>
+      <div
+        style={{
+          width: `500px`,
+          right: `${sidebarD}px`,
+        }}
+        className={styles.sidebar}
+      >
+        <WorldSidebar />
       </div>
     </>
   );
