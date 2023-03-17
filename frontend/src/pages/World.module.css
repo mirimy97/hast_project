@@ -8,3 +8,10 @@
   z-index: 5;
   width: 100%;
 }
+.worldContainer {
+  position: relative;
+  transition: left 1s ease;
+}
+.worldContainer .scene-container {
+  position: absolute;
+}

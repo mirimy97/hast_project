@@ -15,6 +15,7 @@ import { count } from "d3";
 
 function World() {
   const globeRef = useRef();
+  const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [clickD, setClickD] = useState(null);
@@ -61,8 +62,7 @@ function World() {
     console.log(bbox);
     // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
     const lat = (bbox[1] + bbox[3]) / 2;
-    // const lng = (bbox[0] + bbox[2]) / 2;
-    const lng = bbox[2] - bbox[0] < 20 ? bbox[2] : (bbox[0] + 3 * bbox[2]) / 4;
+    const lng = (bbox[0] + bbox[2]) / 2;
 
     setPoint({
       lat: lat,
@@ -82,11 +82,13 @@ function World() {
   useEffect(() => {
     globeRef.current.pointOfView(point, 500);
 
-    // 클릭해서 뷰 포인트 바뀐 경우 - 애니메이션 제한
+    // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
+      setLeft(window.innerWidth * 0.2);
+
       setTimeout(function () {
         globeRef.current.pauseAnimation();
-      }, 450);
+      }, 500);
     }
   }, [globeRef, point]);
 
@@ -97,6 +99,7 @@ function World() {
     setPoint({
       altitude: 2.5,
     });
+    setLeft(0);
   };
 
   //   // add and remove target rings
@@ -144,37 +147,39 @@ function World() {
           </ToggleButtonGroup>
         </div>
       </div>
-      {countries.features && (
-        <>
-          <PreloadImages images={images} />
-          <Globe
-            ref={globeRef}
-            globeImageUrl="map/8k_earth_daymap.jpg"
-            backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-            lineHoverPrecision={0}
-            polygonsData={countries.features.filter(
-              (d) => d.properties.ISO_A2 !== "AQ"
-            )}
-            polygonAltitude={(d) =>
-              clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
-            }
-            polygonCapColor={(d) =>
-              // clickD 있으면
-              clickD
-                ? d === clickD
-                  ? "#e6bb3c30"
+      <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
+        {countries.features && (
+          <>
+            <PreloadImages images={images} />
+            <Globe
+              ref={globeRef}
+              height={window.innerHeight}
+              globeImageUrl="map/8k_earth_daymap.jpg"
+              backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+              lineHoverPrecision={0}
+              polygonsData={countries.features.filter(
+                (d) => d.properties.ISO_A2 !== "AQ"
+              )}
+              polygonAltitude={(d) =>
+                clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
+              }
+              polygonCapColor={(d) =>
+                // clickD 있으면
+                clickD
+                  ? d === clickD
+                    ? "#e6bb3c30"
+                    : "#ffffff00"
+                  : // clickD 없으면
+                  d === hoverD
+                  ? "#7cc2b870"
                   : "#ffffff00"
-                : // clickD 없으면
-                d === hoverD
-                ? "#7cc2b870"
-                : "#ffffff00"
-            }
-            polygonSideColor={(d) => (d === clickD ? "#e6bb3c" : "#00000050")}
-            polygonStrokeColor={() => "#00000080"}
-            polygonLabel={({ properties: d }) => {
-              return clickD
-                ? ``
-                : `
+              }
+              polygonSideColor={(d) => (d === clickD ? "#e6bb3c" : "#00000050")}
+              polygonStrokeColor={() => "#00000080"}
+              polygonLabel={({ properties: d }) => {
+                return clickD
+                  ? ``
+                  : `
             <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
             <h1 style="color: #f5f5f5;
             text-shadow:     0 1px 0 hsl(174,5%,80%),
@@ -195,13 +200,14 @@ function World() {
             GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
             Population: <i>${d.POP_EST}</i>
           `;
-            }}
-            polygonsTransitionDuration={300}
-            onPolygonHover={setHoverD}
-            onPolygonClick={clickRegion}
-          />
-        </>
-      )}
+              }}
+              polygonsTransitionDuration={300}
+              onPolygonHover={setHoverD}
+              onPolygonClick={clickRegion}
+            />
+          </>
+        )}
+      </div>
     </>
   );
 }
