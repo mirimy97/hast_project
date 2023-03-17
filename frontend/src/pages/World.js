@@ -7,11 +7,13 @@ import React, {
 } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
+import * as THREE from "three";
 import axios from "axios";
 import styles from "./World.module.css";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import PreloadImages from "./PreloadImages";
 import { count } from "d3";
+import { Color, Mesh, MeshPhysicalMaterial, TextureLoader } from "three";
 
 function World() {
   const globeRef = useRef();
@@ -102,6 +104,23 @@ function World() {
     setLeft(0);
   };
 
+  // custom globe material
+  const globeMaterial = new THREE.MeshPhysicalMaterial();
+  const textures = {
+    map: new THREE.TextureLoader().load("/map/earthmap.jpg"),
+    bump: new THREE.TextureLoader().load("/map/earthbump.jpg"),
+    spec: new THREE.TextureLoader().load("/map/earthspec.jpg"),
+  };
+  //globeMaterial.map = textures.map;
+  globeMaterial.roughnessMap = textures.spec;
+  globeMaterial.bumpMap = textures.bump;
+  globeMaterial.bumpScale = 0.05;
+  globeMaterial.envMapIntensity = 0.4;
+  globeMaterial.sheen = 1;
+  globeMaterial.sheenRoughness = 0.75;
+  globeMaterial.sheenColor = new Color("#ff8a00").convertSRGBToLinear();
+  globeMaterial.clearcoat = 0.05;
+
   //   // add and remove target rings
   //   setTimeout(() => {
   //     const targetRing = { lat: endLat, lng: endLng };
@@ -147,6 +166,7 @@ function World() {
           </ToggleButtonGroup>
         </div>
       </div>
+      <div className={styles.background}></div>
       <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
         {countries.features && (
           <>
@@ -154,8 +174,10 @@ function World() {
             <Globe
               ref={globeRef}
               height={window.innerHeight}
-              globeImageUrl="map/8k_earth_daymap.jpg"
-              backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+              globeImageUrl="map/earthmap.jpg"
+              backgroundImageUrl="assets/angryimg.png"
+              //backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+              globeMaterial={globeMaterial}
               lineHoverPrecision={0}
               polygonsData={countries.features.filter(
                 (d) => d.properties.ISO_A2 !== "AQ"
