@@ -4,6 +4,8 @@ import Earth from "./pages/Earth";
 import World from "./pages/World";
 import WorldDetail from "./pages/WorldDetail";
 import Map from "./pages/Map";
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 
 function App() {
   return (
@@ -24,7 +26,8 @@ function App() {
     //   </mesh>
     //   <Earth />
     // </Canvas>
-    <>
+    <React.Fragment>
+      <CssBaseline />
       <Router>
         <Routes>
           {/* 지구 메인 */}
@@ -35,7 +38,7 @@ function App() {
           <Route path="/map" element={<Map />} />
         </Routes>
       </Router>
-    </>
+    </React.Fragment>
   );
 }
 
