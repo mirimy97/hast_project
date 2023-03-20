@@ -20,8 +20,10 @@
   position: fixed;
   height: 100vh;
   top: 0px;
-  background-color: beige;
+  color: #15202b;
+  background-color: rgb(255, 254, 234);
+  box-shadow: -2px 1px 10px 1px #9d9d9d;
   transition: right 1.1s ease;
   padding: 30px;
-  border-radius: 20px 0 0 20px;
+  border-radius: 10px 0 0 10px;
 }

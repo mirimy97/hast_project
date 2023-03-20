@@ -241,7 +241,7 @@ function World() {
         }}
         className={styles.sidebar}
       >
-        <WorldSidebar />
+        <WorldSidebar country={clickD?.properties} />
       </div>
     </>
   );
