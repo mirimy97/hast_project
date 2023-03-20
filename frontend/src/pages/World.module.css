@@ -1,0 +1,27 @@
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 10px;
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+}
+.worldContainer {
+  position: relative;
+  transition: left 1s ease;
+}
+.worldContainer .scene-container {
+  position: absolute;
+}
+
+.sidebar {
+  position: fixed;
+  height: 100vh;
+  top: 0px;
+  background-color: beige;
+  transition: right 1.1s ease;
+  padding: 30px;
+  border-radius: 20px 0 0 20px;
+}

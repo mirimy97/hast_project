@@ -4,6 +4,19 @@ import Earth from "./pages/Earth";
 import World from "./pages/World";
 import WorldDetail from "./pages/WorldDetail";
 import Map from "./pages/Map";
+import * as React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+const theme = createTheme({
+  typography: {
+    fontFamily: `"Pretendard-Regular"`,
+    fontSize: 20,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+});
 
 function App() {
   return (
@@ -24,18 +37,21 @@ function App() {
     //   </mesh>
     //   <Earth />
     // </Canvas>
-    <>
-      <Router>
-        <Routes>
-          {/* 지구 메인 */}
-          <Route path="/" element={<World />} />
-          {/* 지구 상세 페이지 */}
-          <Route path="/worlddetail" element={<WorldDetail />} />
-          {/* 지도 페이지 */}
-          <Route path="/map" element={<Map />} />
-        </Routes>
-      </Router>
-    </>
+    <ThemeProvider theme={theme}>
+      <React.Fragment>
+        <CssBaseline />
+        <Router>
+          <Routes>
+            {/* 지구 메인 */}
+            <Route path="/" element={<World />} />
+            {/* 지구 상세 페이지 */}
+            <Route path="/worlddetail" element={<WorldDetail />} />
+            {/* 지도 페이지 */}
+            <Route path="/map" element={<Map />} />
+          </Routes>
+        </Router>
+      </React.Fragment>
+    </ThemeProvider>
   );
 }
 

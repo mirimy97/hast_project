@@ -1,59 +1,129 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
+import * as THREE from "three";
 import axios from "axios";
+import styles from "./World.module.css";
+import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import PreloadImages from "./PreloadImages";
+import { count } from "d3";
+import { Color, Mesh, MeshPhysicalMaterial, TextureLoader } from "three";
+import WorldSidebar from "../components/WorldSidebar";
 
 function World() {
+  const globeRef = useRef();
+  const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
+  const [clickD, setClickD] = useState(null);
+  const [point, setPoint] = useState({
+    lat: 37.6,
+    lng: 124.2,
+    altitude: 2.5,
+  });
+  const [sidebarD, setSidebarD] = useState(-500);
 
   const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
 
-  const getGeoJson = () => {
+  //geoJSON 불러오는 코드
+  const getGeoJson = useMemo(() => {
     return axios
       .get("geojson/ne_110m_admin_0_countries.geojson")
       .then((res) => res.data);
-  };
-
-  useEffect(() => {
-    const loadData = async () => {
-      // load data
-      const data = await getGeoJson();
-      setCountries(data);
-    };
-
-    // call async function
-    loadData();
   }, []);
 
-  // GDP per capita (avoiding countries with small pop)
-  const getVal = (feat) =>
-    feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
-
-  const maxVal = useMemo(
-    () => Math.max(...countries.features.map(getVal)),
-    [countries]
-  );
-
+  //국기 불러오는 api
+  const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
+  //이미지 미리 로딩
+  const images = [];
+  if (images.length === 0) {
+    //이미지 preloading
+    countries.features.map((d) => {
+      //console.log(d);
+      images.push(
+        `https://corona.lmao.ninja/assets/img/flags/${d.properties.ISO_A2.toLowerCase()}.png`
+      );
+    });
+  }
   useEffect(() => {
-    console.log(countries);
+    // call async function
+    getGeoJson.then((data) => setCountries(data));
+  }, [getGeoJson]);
 
-    colorScale.domain([0, maxVal]);
-  }, [countries]);
+  // 클릭시 카메라 point 재설정
+  const clickRegion = (d) => {
+    console.log(d);
+    // clickD에 해당 구역 할당
+    setClickD(d);
 
-  // const clickRegion = useCallback(({ lat: endLat, lng: endLng }) => {
-  //   const { lat: startLat, lng: startLng } = prevCoords.current;
-  //   prevCoords.current = { lat: endLat, lng: endLng };
+    const bbox = d.bbox;
+    console.log(bbox);
+    // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
+    const lat = (bbox[1] + bbox[3]) / 2;
+    const lng = (bbox[0] + bbox[2]) / 2;
 
-  //   // add and remove arc after 1 cycle
-  //   const arc = { startLat, startLng, endLat, endLng };
-  //   setArcsData(curArcsData => [...curArcsData, arc]);
-  //   setTimeout(() => setArcsData(curArcsData => curArcsData.filter(d => d !== arc)), FLIGHT_TIME * 2);
+    setPoint({
+      lat: lat,
+      lng: lng,
+      altitude:
+        bbox[2] - bbox[0] < 300
+          ? bbox[2] - bbox[0] < 40
+            ? bbox[2] - bbox[0] < 8
+              ? 0.25
+              : 0.5
+            : 1
+          : 2,
+    });
+  };
 
-  //   // add and remove start rings
-  //   const srcRing = { lat: startLat, lng: startLng };
-  //   setRingsData(curRingsData => [...curRingsData, srcRing]);
-  //   setTimeout(() => setRingsData(curRingsData => curRingsData.filter(r => r !== srcRing)), FLIGHT_TIME * ARC_REL_LEN);
+  // point state 변경 시 카메라 옮기기
+  useEffect(() => {
+    globeRef.current.pointOfView(point, 500);
+
+    // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
+    if (clickD) {
+      setLeft(window.innerWidth * 0.2);
+      setSidebarD(0);
+
+      setTimeout(function () {
+        globeRef.current.pauseAnimation();
+      }, 500);
+    }
+  }, [globeRef, point]);
+
+  // 뒤로가기 클릭 시 (나가기)
+  const backBtn = () => {
+    globeRef.current.resumeAnimation();
+    setClickD(null);
+    setPoint({
+      altitude: 2.5,
+    });
+    setLeft(0);
+    setSidebarD(-500);
+  };
+
+  // custom globe material
+  const globeMaterial = new THREE.MeshPhysicalMaterial();
+  const textures = {
+    map: new THREE.TextureLoader().load("/map/earthmap.jpg"),
+    bump: new THREE.TextureLoader().load("/map/earthbump.jpg"),
+    spec: new THREE.TextureLoader().load("/map/earthspec.jpg"),
+  };
+  //globeMaterial.map = textures.map;
+  globeMaterial.roughnessMap = textures.spec;
+  globeMaterial.bumpMap = textures.bump;
+  globeMaterial.bumpScale = 0.05;
+  globeMaterial.envMapIntensity = 0.4;
+  globeMaterial.sheen = 1;
+  globeMaterial.sheenRoughness = 0.75;
+  globeMaterial.sheenColor = new Color("#ff8a00").convertSRGBToLinear();
+  globeMaterial.clearcoat = 0.05;
 
   //   // add and remove target rings
   //   setTimeout(() => {
@@ -63,34 +133,116 @@ function World() {
   //   }, FLIGHT_TIME);
   // }, []);
 
+  //laguage 선택
+  const [alignment, setAlignment] = React.useState("left");
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
   return (
     <>
-      {countries.features && (
-        <Globe
-          globeImageUrl="map/8k_earth_daymap.jpg"
-          backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-          lineHoverPrecision={0}
-          polygonsData={countries.features.filter(
-            (d) => d.properties.ISO_A2 !== "AQ"
-          )}
-          polygonAltitude={(d) => (d === hoverD ? 0.03 : 0)}
-          // polygonCapColor={(d) =>
-          //   d === hoverD ? "steelblue" : colorScale(getVal(d))
-          // }
+      <div className={styles.flex}>
+        <Button variant="outlined" className={styles.button} onClick={backBtn}>
+          뒤로가기
+        </Button>
+        <div className={styles.head}>헤드라인</div>
+        <div>
+          {/* <span>
+            <img className={styles.img} src="/assets/earth.png" alt="배너1" />{" "}
+            KO |{" "}
+          </span>
+          <span>EN</span> */}
 
-          polygonCapColor={(d) => (d === hoverD ? "#7cc2b870" : "#ffffff00")}
-          polygonSideColor={() => "#ffffff00"}
-          polygonStrokeColor={() => "#00000080"}
-          polygonLabel={({ properties: d }) => `
-            <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
+          <ToggleButtonGroup
+            value={alignment}
+            exclusive
+            onChange={handleAlignment}
+            aria-label="text alignment"
+          >
+            <ToggleButton value="left" aria-label="left aligned">
+              KO
+              {/* <FormatAlignLeftIcon /> */}
+            </ToggleButton>
+            <ToggleButton value="center" aria-label="centered">
+              EN
+              {/* <FormatAlignCenterIcon /> */}
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+      </div>
+      <div className={styles.background}></div>
+      <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
+        {countries.features && (
+          <>
+            <PreloadImages images={images} />
+            <Globe
+              ref={globeRef}
+              height={window.innerHeight}
+              globeImageUrl="map/earthmap.jpg"
+              backgroundImageUrl="assets/angryimg.png"
+              //backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+              globeMaterial={globeMaterial}
+              lineHoverPrecision={0}
+              polygonsData={countries.features.filter(
+                (d) => d.properties.ISO_A2 !== "AQ"
+              )}
+              polygonAltitude={(d) =>
+                clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
+              }
+              polygonCapColor={(d) =>
+                // clickD 있으면
+                clickD
+                  ? d === clickD
+                    ? "#e6bb3c30"
+                    : "#ffffff00"
+                  : // clickD 없으면
+                  d === hoverD
+                  ? "#7cc2b870"
+                  : "#ffffff00"
+              }
+              polygonSideColor={(d) => (d === clickD ? "#e6bb3c" : "#00000050")}
+              polygonStrokeColor={() => "#00000080"}
+              polygonLabel={({ properties: d }) => {
+                return clickD
+                  ? ``
+                  : `
+            <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
+            <h1 style="color: #f5f5f5;
+            text-shadow:     0 1px 0 hsl(174,5%,80%),
+	                 0 2px 0 hsl(174,5%,75%),
+	                 0 3px 0 hsl(174,5%,70%),
+	                 0 4px 0 hsl(174,5%,66%),
+	                 0 5px 0 hsl(174,5%,64%),
+	                 0 6px 0 hsl(174,5%,62%),
+	                 0 7px 0 hsl(174,5%,61%),
+	                 0 8px 0 hsl(174,5%,60%),
+	
+	                 0 0 5px rgba(0,0,0,.05),
+	                0 1px 3px rgba(0,0,0,.2),
+	                0 3px 5px rgba(0,0,0,.2),
+	               0 5px 10px rgba(0,0,0,.2),
+	              0 10px 10px rgba(0,0,0,.2),
+	              0 5px 5px rgba(0,0,0,.5);">${d.ADMIN} (${d.ISO_A2})</h1>
             GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
             Population: <i>${d.POP_EST}</i>
-          `}
-          onPolygonHover={setHoverD}
-          polygonsTransitionDuration={300}
-          // onPolygonClick={clickRegion}
-        />
-      )}
+          `;
+              }}
+              polygonsTransitionDuration={300}
+              onPolygonHover={setHoverD}
+              onPolygonClick={clickRegion}
+            />
+          </>
+        )}
+      </div>
+      <div
+        style={{
+          width: `500px`,
+          right: `${sidebarD}px`,
+        }}
+        className={styles.sidebar}
+      >
+        <WorldSidebar />
+      </div>
     </>
   );
 }
