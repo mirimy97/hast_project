@@ -1,5 +1,51 @@
 {
   "header": {
     "Topic": "오늘의 토픽"
+  },
+  "nation-info": {
+    "Population": "추정 인구",
+    "people": "명",
+    "Mdollor": "M$"
+  },
+  "continent": {
+    "North America": "북아메리카",
+    "Northern America": "북아메리카",
+    "South America": "남아메리카",
+    "Central America": "중앙아메리카",
+    "Africa": "아프리카",
+    "Southern Africa": "남아프리카",
+    "Eastern Africa": "동아프리카",
+    "Middle Africa": "중앙아프리카",
+    "Northern Africa": "북아프리카",
+    "Western Africa": "서아프리카",
+    "Europe": "유럽",
+    "Southern Europe": "남유럽",
+    "Western Europe": "서유럽",
+    "Northern Europe": "북유럽",
+    "Eastern Europe": "동유럽",
+    "Asia": "아시아",
+    "Central Asia": "중앙아시아",
+    "Southern Asia": "남부아시아",
+    "South-Eastern Asia": "동남아시아",
+    "Eastern Asia": "동아시아",
+    "Oceania": "오세아니아",
+    "Melanesia": "멜라네시아",
+    "Australia and New Zealand": "호주 및 뉴질랜드"
+  },
+  "economy": {
+    "1": "G7 가입 선진국",
+    "2": "G7 미가입 선진국",
+    "3": "BRICS 가입 신흥국",
+    "4": "MIKT 가입 신흥국",
+    "5": "G20 가입 신흥국",
+    "6": "개발도상국",
+    "7": "최빈개발국"
+  },
+  "income": {
+    "1": "OECD 가입 고소득 국가",
+    "2": "OECD 미가입 고소득 국가",
+    "3": "상위 소득 국가",
+    "4": "하위 소득 국가",
+    "5": "저소득 국가"
   }
 }
