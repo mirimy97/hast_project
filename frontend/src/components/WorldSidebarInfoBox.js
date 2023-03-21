@@ -48,11 +48,12 @@ function WorldSidebarInfoBox({
         <div className={styles.flex}>
           <img className={styles.icon} src="/assets/3d/location.png"></img>
           <div className={styles.columnCenter}>
-            <p className={styles.value}>
-              {t(`continent.${CONTINENT}`)}
-              <span style={{ fontSize: "1.1rem", marginLeft: "5px" }}>
-                ({t(`continent.${SUBREGION}`)})
-              </span>
+            <p className={styles.value}>{t(`continent.${CONTINENT}`)}</p>
+            <p
+              style={{ fontSize: "1rem", marginLeft: "5px" }}
+              className={styles.value}
+            >
+              ({t(`continent.${SUBREGION}`)})
             </p>
           </div>
         </div>

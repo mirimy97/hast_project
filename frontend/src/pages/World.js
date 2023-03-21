@@ -38,18 +38,16 @@ function World() {
   }, []);
 
   //국기 불러오는 api
-  const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
+  const flagEndpoint = "/assets/flags";
   //이미지 미리 로딩
-  const images = [];
-  if (images.length === 0) {
-    //이미지 preloading
-    countries.features.map((d) => {
-      //console.log(d);
-      images.push(
-        `https://corona.lmao.ninja/assets/img/flags/${d.properties.ISO_A2.toLowerCase()}.png`
-      );
-    });
-  }
+  // const images = [];
+  // if (images.length === 0) {
+  //   //이미지 preloading
+  //   countries.features.map((d) => {
+  //     //console.log(d);
+  //     images.push(`/assets/flags/${d.properties.ISO_A2.toLowerCase()}.png`);
+  //   });
+  // }
   useEffect(() => {
     // call async function
     getGeoJson.then((data) => setCountries(data));
@@ -136,7 +134,7 @@ function World() {
       <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
         {countries.features && (
           <>
-            <PreloadImages images={images} />
+            {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
               height={window.innerHeight}
