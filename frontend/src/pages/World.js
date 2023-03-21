@@ -138,10 +138,10 @@ function World() {
             <Globe
               ref={globeRef}
               height={window.innerHeight}
-              //globeImageUrl="map/earthmap.jpg"
+              globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
               //backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-              globeMaterial={globeMaterial}
+              //globeMaterial={globeMaterial}
               lineHoverPrecision={0}
               polygonsData={countries.features.filter(
                 (d) => d.properties.ISO_A2 !== "AQ"
@@ -161,7 +161,7 @@ function World() {
                   : "#ffffff00"
               }
               polygonSideColor={(d) => (d === clickD ? "#e6bb3c" : "#00000050")}
-              polygonStrokeColor={() => "#5F5F5F"}
+              polygonStrokeColor={() => "#d1ced9"}
               polygonLabel={({ properties: d }) => {
                 return clickD
                   ? ``
