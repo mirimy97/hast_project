@@ -1,5 +1,5 @@
 .worldContainer {
-  position: relative;
+  position: fixed;
   transition: left 1s ease;
 }
 .worldContainer .scene-container {
@@ -7,8 +7,9 @@
 }
 
 .sidebar {
-  position: fixed;
+  position: absolute;
   height: 100vh;
+  overflow: scroll;
   top: 0px;
   color: #15202b;
   background-color: rgb(255, 254, 234);
@@ -16,4 +17,8 @@
   transition: right 1.1s ease;
   padding: 30px;
   border-radius: 10px 0 0 10px;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
 }

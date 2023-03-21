@@ -1,21 +1,53 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styles from "./WorldSidebar.module.css";
 import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
 function WorldSidebar({ country }) {
   const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
   const imageurl = `${flagEndpoint}/${country?.ISO_A2.toLowerCase()}.png`;
-
+  const language = useSelector((state) => state.language.value);
+  const nameKo = country?.ADMIN_Ko;
+  const nameEn = country?.NAME;
   return (
     <>
-      <p
-        style={{
-          backgroundImage: `url(${imageurl})`,
-          fontSize: country?.NAME.length >= 9 ? "4rem" : "5rem",
-        }}
-        className={styles.namefont}
-      >
-        {country?.NAME ? country?.NAME : ""}
-      </p>
+      {/* 나라이름 */}
+      {country ? (
+        language == "en" ? (
+          <p
+            style={{
+              backgroundImage: `url(${imageurl})`,
+              fontSize:
+                nameEn.length >= 9
+                  ? nameEn.length >= 14
+                    ? "3.5rem"
+                    : "4rem"
+                  : "5rem",
+            }}
+            className={styles.namefont}
+          >
+            {nameEn}
+          </p>
+        ) : (
+          <p
+            style={{
+              backgroundImage: `url(${imageurl})`,
+              fontSize:
+                nameKo.length >= 5
+                  ? nameKo.length >= 8
+                    ? "3rem"
+                    : "4rem"
+                  : "5rem",
+            }}
+            className={styles.namefont}
+          >
+            {nameKo}
+          </p>
+        )
+      ) : (
+        ""
+      )}
+
       {/* Info Box */}
       {country && (
         <WorldSidebarInfoBox
@@ -23,11 +55,16 @@ function WorldSidebar({ country }) {
           ECONOMY={country?.ECONOMY}
           INCOME_GRP={country?.INCOME_GRP}
           POP_EST={country?.POP_EST}
-          POP_RANK={country?.POP_RANK}
           CONTINENT={country?.CONTINENT}
           SUBREGION={country?.SUBREGION}
         />
       )}
+      <p>📈 한눈에 보기</p>
+      <div
+        style={{ width: "100%", height: "1000px", backgroundColor: "beige" }}
+      >
+        차트
+      </div>
     </>
   );
 }

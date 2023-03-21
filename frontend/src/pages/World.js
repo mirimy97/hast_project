@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const sidebarRef = useRef(null);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
@@ -87,7 +88,8 @@ function World() {
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
-      setSidebarD(0);
+      setSidebarD(`-${window.innerWidth * 0.2}`);
+      sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
         globeRef.current.pauseAnimation();
@@ -217,15 +219,16 @@ function World() {
             />
           </>
         )}
-      </div>
-      <div
-        style={{
-          width: `500px`,
-          right: `${sidebarD}px`,
-        }}
-        className={styles.sidebar}
-      >
-        <WorldSidebar country={clickD?.properties} />
+        <div
+          ref={sidebarRef}
+          style={{
+            width: `500px`,
+            right: `${sidebarD}px`,
+          }}
+          className={styles.sidebar}
+        >
+          <WorldSidebar country={clickD?.properties} />
+        </div>
       </div>
     </>
   );
