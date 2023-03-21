@@ -1,5 +1,20 @@
 {
   "header": {
     "Topic": "Today Topic"
+  },
+  "location": {
+    "Loca1": "HOSPITAL",
+    "Loca2": "POLICE STATION",
+    "Loca3": "EMBASSY"
+  },
+  "categoryTitle": {
+    "Title": "Browse articles by category !"
+  },
+  "categoryBtn": {
+    "Cate1": "💊 Disease",
+    "Cate2": "🚧 Accident",
+    "Cate3": "🔪 Crime",
+    "Cate4": "📜 Demonstration",
+    "Cate5": "🎤 politics"
   }
 }
