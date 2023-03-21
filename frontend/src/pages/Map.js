@@ -157,12 +157,13 @@ export default function Map(){
 
 
     // onclick 시 줌 인
-    const onClickHandler = (e) => {
-      setCenter({lat: e.lat, lng: e.lng})
-      // console.log(`원래 : ${zoom}`)
-      setZoom(13)
-      console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
-    }
+    // const onClickHandler = (e) => {
+    //   // 서클 안에 있을 때만 (조건)
+    //   setCenter({lat: e.lat, lng: e.lng})
+    //   setZoom(13)
+    //   // console.log(`원래 : ${zoom}`)
+    //   console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
+    // }
 
     const handleZoomChange = (map) => {
       // console.log(`변경되는 줌 : ${map.getZoom()}`)
@@ -173,26 +174,31 @@ export default function Map(){
     // 치안도 표시 임시 데이터
     const dangerList = [
       {
+        id: 1,
         lat: 35.907757,
         lng: 127.766922,
         score: -50
       },
       {
+        id: 2,
         lat: 38,
         lng: 128.3321,
         score: -30
       },
       {
+        id: 3,
         lat: 35.213234,
         lng: 129.23143,
         score: -25
       },
       {
+        id: 4,
         lat: 35.31,
         lng: 128.8,
         score: -10
       },
       {
+        id: 5,
         lat: 37.32567,
         lng: 129.143542,
         score: -28
@@ -200,19 +206,40 @@ export default function Map(){
     ]
 
     // 치안도 표시 apiLoaded
+    // 반경 저장하는 state
+    const [radius, setRadius] = useState(4000)
     const getDanger = (map, maps) => {
       dangerList.map(danger => {
+        const circle = new maps.Circle({
+          strokeColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
+          strokeOpacity: 0.5,
+          strokeWeight: 1,
+          fillColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
+          fillOpacity: 0.5,
+          map,
+          center: {lat: danger.lat, lng: danger.lng},
+          radius: radius,
+          id: danger.id,
+      })
+      // 각 서클에 이벤트리스너 추가
+      circle.addListener("click", () => {
+        // console.log(danger)
+        setCenter({lat: danger.lat, lng: danger.lng})
+        setZoom(13)
+      })
         return (
-          new maps.Circle({
-              strokeColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
-              strokeOpacity: 0.7,
-              strokeWeight: 1,
-              fillColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
-              fillOpacity: 0.7,
-              map,
-              center: {lat: danger.lat, lng: danger.lng},
-              radius: 8000,
-          })
+          circle
+          // new maps.Circle({
+          //     strokeColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
+          //     strokeOpacity: 0.5,
+          //     strokeWeight: 1,
+          //     fillColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
+          //     fillOpacity: 0.5,
+          //     map,
+          //     center: {lat: danger.lat, lng: danger.lng},
+          //     radius: radius,
+          //     id: danger.id,
+          // })
         )
       })
     }
@@ -249,13 +276,11 @@ export default function Map(){
             handleApiLoaded(map, maps)
             // 치안도 표시
             getDanger(map, maps)
-            // 로드 없애기
-            // mapStyles(map, maps)
             // 줌 변경될 때 변경된 zoom level 가져오게끔
             map.addListener('zoom_changed', () => handleZoomChange(map));
           }}
           // options={mapOptions} // option 때문에 나타난 현상..
-          onClick={onClickHandler}
+          // onClick={onClickHandler}
           options={mapStyles}
           // bounds={mapOptions.restriction.latLngBounds}
           // resetBoundsOnResize={true}
