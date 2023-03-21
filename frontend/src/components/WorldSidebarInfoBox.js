@@ -20,7 +20,7 @@ function WorldSidebarInfoBox({
             <p className={styles.label}>{t("nation-info.Population")}</p>
             <p className={styles.value}>
               {POP_EST}
-              <span className={styles.label}> {t("nation-info.people")}</span>
+              <span className={styles.subtext}> {t("nation-info.people")}</span>
             </p>
           </div>
         </div>
@@ -33,9 +33,9 @@ function WorldSidebarInfoBox({
               <p className={styles.label}>GDP</p>
               <p className={styles.value}>
                 {GDP}
-                <span className={styles.label}> M$</span>
+                <span className={styles.subtext}> M$</span>
               </p>
-              <p className={styles.label}>
+              <p className={styles.subtext}>
                 {t(`economy.${ECONOMY[0]}`)} , {t(`income.${INCOME_GRP[0]}`)}
               </p>
             </div>
