@@ -4,20 +4,29 @@ import { useTranslation, withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { lanen, lanko } from "../redux/language";
 import styles from "./Header.module.css";
+import { color, motion } from "framer-motion";
+import CloseIcon from "@mui/icons-material/Close";
 
 function Header(props) {
   const dispatch = useDispatch();
-  const handleEn = () => dispatch(lanen());
-  const handleKo = () => dispatch(lanko());
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
   const [language, setLanguage] = useState("ko");
 
-  const changeLanguage = (e, newAlignment) => {
-    setLanguage(newAlignment);
+  const [isKorean, setIsKorean] = useState(true);
+
+  const handleEn = () => {
+    dispatch(lanen());
+    //setLanguage(newAlignment);
+    setIsKorean(false);
     //언어변경
-    i18n.changeLanguage(newAlignment);
+    i18n.changeLanguage("en");
+  };
+  const handleKo = () => {
+    dispatch(lanko());
+    setIsKorean(true);
+    i18n.changeLanguage("ko");
   };
 
   // 뒤로가기 클릭 시 (나가기)
@@ -32,21 +41,14 @@ function Header(props) {
   };
   return (
     <div className={styles.flex}>
-      {props.clickD ? (
-        <Button variant="outlined" className={styles.button} onClick={backBtn}>
-          뒤로가기
-        </Button>
-      ) : (
-        <div></div>
-      )}
-      <div>&#128204; {t("header.Topic")}</div>
       <div>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
         </span>
         <span>EN</span> */}
-        <ToggleButtonGroup
+
+        {/* <ToggleButtonGroup
           color="primary"
           exclusive
           aria-label="text alignment"
@@ -54,15 +56,76 @@ function Header(props) {
           onChange={changeLanguage}
         >
           <ToggleButton value="ko" aria-label="centered" onClick={handleKo}>
-            🇰🇷 KO
-            {/* <FormatAlignLeftIcon /> */}
+            <img src="/assets/logo/ko.png" />
           </ToggleButton>
           <ToggleButton value="en" aria-label="centered" onClick={handleEn}>
-            🇺🇸 EN
-            {/* <FormatAlignCenterIcon /> */}
+            <img src="/assets/logo/en.png" />
           </ToggleButton>
-        </ToggleButtonGroup>
+        </ToggleButtonGroup> */}
+
+        <div className={styles.language}>
+          <img className={styles.globe} src="/assets/logo/globe.png" />
+          <div onClick={handleKo} className={styles.landiv}>
+            <motion.div
+              className="box"
+              initial={{ x: 0 }}
+              animate={{
+                x: isKorean ? 0 : 95,
+              }}
+            >
+              <p
+                className={styles.lan}
+                style={{ color: isKorean ? "" : "#7b7b7b" }}
+              >
+                Korean
+              </p>
+            </motion.div>
+          </div>
+          <div>|</div>
+          <div onClick={handleEn} className={styles.landiv}>
+            <motion.div
+              className="box"
+              initial={{ x: 0 }}
+              animate={{
+                x: isKorean ? 0 : -95,
+              }}
+            >
+              <p
+                className={styles.lan}
+                style={{ color: isKorean ? "#7b7b7b" : "" }}
+              >
+                English
+              </p>
+            </motion.div>
+          </div>
+        </div>
       </div>
+      <div>
+        {props.clickD ? (
+          <div></div>
+        ) : (
+          /* &#128204; {t("header.Topic")} */
+          <div className={styles.ticker}>
+            <div className={styles.newstitle}>{t("header.Topic")} </div>
+            <ul className={styles.ul}>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+            </ul>
+          </div>
+        )}
+      </div>
+      {props.clickD ? (
+        // <Button variant="outlined" className={styles.button} onClick={backBtn}>
+        //   뒤로가기
+        // </Button>
+        <CloseIcon onClick={backBtn} />
+      ) : (
+        <div></div>
+        // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
+      )}
     </div>
   );
 }

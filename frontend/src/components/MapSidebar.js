@@ -38,6 +38,7 @@ function MapSidebar() {
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
+      score: 3.0,
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
@@ -47,6 +48,7 @@ function MapSidebar() {
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
+      score: 3.0,
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
@@ -56,6 +58,7 @@ function MapSidebar() {
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
+      score: 3.0,
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
@@ -65,6 +68,7 @@ function MapSidebar() {
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
+      score: 3.0,
     },
   ];
 

@@ -37,6 +37,7 @@ function NewsListItem(props) {
         <a href={props.news.articleUrl} target="_blank">
           <div className={styles.headline}>{props.news.headline}</div>
         </a>
+        <div className={styles.score}>☠︎ 위험도 {props.news.score}</div>
         <span className={styles.timestamp}>{props.news.timeStamp}</span>
       </div>
       <div className={styles.imgbox}>

@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const sidebarRef = useRef(null);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
@@ -37,18 +38,16 @@ function World() {
   }, []);
 
   //국기 불러오는 api
-  const flagEndpoint = "https://corona.lmao.ninja/assets/img/flags";
+  const flagEndpoint = "/assets/flags";
   //이미지 미리 로딩
-  const images = [];
-  if (images.length === 0) {
-    //이미지 preloading
-    countries.features.map((d) => {
-      //console.log(d);
-      images.push(
-        `https://corona.lmao.ninja/assets/img/flags/${d.properties.ISO_A2.toLowerCase()}.png`
-      );
-    });
-  }
+  // const images = [];
+  // if (images.length === 0) {
+  //   //이미지 preloading
+  //   countries.features.map((d) => {
+  //     //console.log(d);
+  //     images.push(`/assets/flags/${d.properties.ISO_A2.toLowerCase()}.png`);
+  //   });
+  // }
   useEffect(() => {
     // call async function
     getGeoJson.then((data) => setCountries(data));
@@ -87,7 +86,8 @@ function World() {
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
-      setSidebarD(0);
+      setSidebarD(`-${window.innerWidth * 0.2}`);
+      sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
         globeRef.current.pauseAnimation();
@@ -134,7 +134,7 @@ function World() {
       <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
         {countries.features && (
           <>
-            <PreloadImages images={images} />
+            {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
               height={window.innerHeight}
@@ -169,44 +169,18 @@ function World() {
                   ? `
                   <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
                   <h1 style="color: #f5f5f5;
-                  text-shadow:     0 1px 0 hsl(174,5%,80%),
-                         0 2px 0 hsl(174,5%,75%),
-                         0 3px 0 hsl(174,5%,70%),
-                         0 4px 0 hsl(174,5%,66%),
-                         0 5px 0 hsl(174,5%,64%),
-                         0 6px 0 hsl(174,5%,62%),
-                         0 7px 0 hsl(174,5%,61%),
-                         0 8px 0 hsl(174,5%,60%),
-        
-                         0 0 5px rgba(0,0,0,.05),
-                        0 1px 3px rgba(0,0,0,.2),
-                        0 3px 5px rgba(0,0,0,.2),
-                       0 5px 10px rgba(0,0,0,.2),
-                      0 10px 10px rgba(0,0,0,.2),
-                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN_Ko} (${
-                      d.ISO_A2
-                    })</h1>
+                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
+                    d.ADMIN_Ko
+                  } (${d.ISO_A2})</h1>
                   GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
                   Population: <i>${d.POP_EST}</i>
                   `
                   : `
                   <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
                   <h1 style="color: #f5f5f5;
-                  text-shadow:     0 1px 0 hsl(174,5%,80%),
-                         0 2px 0 hsl(174,5%,75%),
-                         0 3px 0 hsl(174,5%,70%),
-                         0 4px 0 hsl(174,5%,66%),
-                         0 5px 0 hsl(174,5%,64%),
-                         0 6px 0 hsl(174,5%,62%),
-                         0 7px 0 hsl(174,5%,61%),
-                         0 8px 0 hsl(174,5%,60%),
-        
-                         0 0 5px rgba(0,0,0,.05),
-                        0 1px 3px rgba(0,0,0,.2),
-                        0 3px 5px rgba(0,0,0,.2),
-                       0 5px 10px rgba(0,0,0,.2),
-                      0 10px 10px rgba(0,0,0,.2),
-                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN} (${d.ISO_A2})</h1>
+                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
+                    d.ADMIN
+                  } (${d.ISO_A2})</h1>
                   GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
                   Population: <i>${d.POP_EST}</i>
                   `;
@@ -217,15 +191,16 @@ function World() {
             />
           </>
         )}
-      </div>
-      <div
-        style={{
-          width: `500px`,
-          right: `${sidebarD}px`,
-        }}
-        className={styles.sidebar}
-      >
-        <WorldSidebar />
+        <div
+          ref={sidebarRef}
+          style={{
+            width: `500px`,
+            right: `${sidebarD}px`,
+          }}
+          className={styles.sidebar}
+        >
+          <WorldSidebar country={clickD?.properties} />
+        </div>
       </div>
     </>
   );
