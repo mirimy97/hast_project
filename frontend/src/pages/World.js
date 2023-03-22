@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
-  const sidebarRef = useRef(null);
+  // const sidebarRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
@@ -105,7 +105,7 @@ function World() {
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
       setSidebarD(`-${window.innerWidth * 0.2}`);
-      sidebarRef.current.scrollTop = 0;
+      // sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
         globeRef.current.pauseAnimation();
@@ -237,7 +237,7 @@ function World() {
           </>
         )}
         <div
-          ref={sidebarRef}
+          // ref={sidebarRef}
           style={{
             width: `500px`,
             right: `${sidebarD}px`,

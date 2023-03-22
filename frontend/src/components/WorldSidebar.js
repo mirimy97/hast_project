@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import styles from "./WorldSidebar.module.css";
 import WorldSidebarChartBox from "./WorldSidebarChartBox";
@@ -6,10 +6,15 @@ import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
 function WorldSidebar({ country }) {
   const flagEndpoint = "/assets/flags";
+  const sidebarRef = useRef(null);
   const imageurl = `${flagEndpoint}/${country?.ISO_A2.toLowerCase()}.png`;
   const language = useSelector((state) => state.language.value);
   const nameKo = country?.ADMIN_Ko;
   const nameEn = country?.NAME;
+
+  useEffect(() => {
+    sidebarRef.current.scrollTop = 0;
+  }, [country]);
   return (
     <>
       {/* 나라이름 */}
@@ -48,7 +53,7 @@ function WorldSidebar({ country }) {
       ) : (
         ""
       )}
-      <div className={styles.sidebarOuterBox}>
+      <div ref={sidebarRef} className={styles.sidebarOuterBox}>
         {/* Info Box */}
         {country && (
           <WorldSidebarInfoBox
