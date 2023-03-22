@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "./WorldSidebar.module.css";
+import WorldSidebarChartBox from "./WorldSidebarChartBox";
 import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
 function WorldSidebar({ country }) {
@@ -47,24 +48,31 @@ function WorldSidebar({ country }) {
       ) : (
         ""
       )}
-
-      {/* Info Box */}
-      {country && (
-        <WorldSidebarInfoBox
-          GDP={country?.GDP_MD_EST}
-          ECONOMY={country?.ECONOMY}
-          INCOME_GRP={country?.INCOME_GRP}
-          POP_EST={country?.POP_EST}
-          CONTINENT={country?.CONTINENT}
-          SUBREGION={country?.SUBREGION}
-        />
-      )}
-      <p>📈 한눈에 보기</p>
-      <div
-        style={{ width: "100%", height: "1000px", backgroundColor: "#f6edd5" }}
-      >
-        차트
+      <div className={styles.sidebarOuterBox}>
+        {/* Info Box */}
+        {country && (
+          <WorldSidebarInfoBox
+            GDP={country?.GDP_MD_EST}
+            ECONOMY={country?.ECONOMY}
+            INCOME_GRP={country?.INCOME_GRP}
+            POP_EST={country?.POP_EST}
+            CONTINENT={country?.CONTINENT}
+            SUBREGION={country?.SUBREGION}
+          />
+        )}
+        <p>📈 한눈에 보기</p>
+        <div
+          style={{
+            width: "100%",
+            height: "1000px",
+            backgroundColor: "#f6edd5",
+          }}
+        >
+          <WorldSidebarChartBox />
+        </div>
       </div>
+
+      <button>Travel To ooo</button>
     </>
   );
 }
