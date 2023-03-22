@@ -1,0 +1,14 @@
+.selectbox {
+  border: 1px solid gray;
+  border-radius: 3px;
+  width: 20%;
+  font-size: 17px;
+}
+.selectdropdown {
+  border: 1px solid gray;
+  border-radius: 3px;
+  width: 20%;
+}
+.selectitem {
+  font-size: 17px;
+}

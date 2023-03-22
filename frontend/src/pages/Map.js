@@ -240,6 +240,7 @@ export default function Map() {
   // styledmaptype
   const mapStyles = {
     fullscreenControl: false,
+    zoomControl: false,
     styles: [
       {
         featureType: "road",

@@ -3,6 +3,8 @@ import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import styles from "./MapSidebar.module.css";
 import NewsListItem from "./NewsListItem";
+import Selectbox from "./Selectbox";
+
 function MapSidebar() {
   //(정적인) 버튼 값
   const buttons = [
@@ -121,6 +123,7 @@ function MapSidebar() {
             </button>
           </>
         ))}
+      <Selectbox />
       <div>
         {filtredNews &&
           filtredNews.map((news, index) => (

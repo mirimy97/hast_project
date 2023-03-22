@@ -16,16 +16,17 @@
   object-fit: cover;
 }
 .time {
-  font-size: 1.1rem;
+  font-size: 17px;
 }
 .score {
   font-size: 1rem;
 }
 .timestamp {
-  font-size: 1.2rem;
+  font-size: 15px;
 }
 .headline {
   font-weight: bold;
+  font-size: 20px;
 }
 a {
   text-decoration: none;
