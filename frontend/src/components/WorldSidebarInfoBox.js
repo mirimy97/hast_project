@@ -11,7 +11,7 @@ function WorldSidebarInfoBox({
 }) {
   const { t } = useTranslation();
   return (
-    <div className={styles.sidebarOuterBox}>
+    <>
       <div className={styles.infobox}>
         {/* 경제수준 */}
         <div className={styles.flex}>
@@ -28,7 +28,10 @@ function WorldSidebarInfoBox({
       {/* 인구수 */}
       <div className={styles.infobox}>
         <div className={styles.flex}>
-          <div style={{ alignItems: "center" }} className={styles.columnCenter}>
+          <div
+            style={{ alignItems: "center", marginLeft: "30px" }}
+            className={styles.columnCenter}
+          >
             <div>
               <p className={styles.label}>GDP</p>
               <p className={styles.value}>
@@ -58,7 +61,7 @@ function WorldSidebarInfoBox({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
