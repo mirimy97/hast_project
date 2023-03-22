@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
 import * as THREE from "three";
@@ -14,6 +20,7 @@ import { useSelector } from "react-redux";
 function World() {
   const globeRef = useRef();
   const sidebarRef = useRef(null);
+  const [width, setWidth] = useState(window.innerWidth);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
@@ -23,7 +30,18 @@ function World() {
     lng: 124.2,
     altitude: 2.5,
   });
-  const [sidebarD, setSidebarD] = useState(-500);
+  const [sidebarD, setSidebarD] = useState(-600);
+
+  const handleResize = useCallback(() => {
+    console.log("resize");
+    setWidth(window.innerWidth);
+  }, []);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   //redux- language 불러오기
   const language = useSelector((state) => state.language.value);
@@ -121,7 +139,7 @@ function World() {
   // }, []);
 
   return (
-    <>
+    <div style={{ width: `${width}px` }}>
       <Header
         globeRef={globeRef}
         clickD={clickD}
@@ -137,6 +155,7 @@ function World() {
             {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
+              width={width}
               height={window.innerHeight}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
@@ -169,18 +188,44 @@ function World() {
                   ? `
                   <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
                   <h1 style="color: #f5f5f5;
-                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
-                    d.ADMIN_Ko
-                  } (${d.ISO_A2})</h1>
+                  text-shadow:     0 1px 0 hsl(174,5%,80%),
+                         0 2px 0 hsl(174,5%,75%),
+                         0 3px 0 hsl(174,5%,70%),
+                         0 4px 0 hsl(174,5%,66%),
+                         0 5px 0 hsl(174,5%,64%),
+                         0 6px 0 hsl(174,5%,62%),
+                         0 7px 0 hsl(174,5%,61%),
+                         0 8px 0 hsl(174,5%,60%),
+        
+                         0 0 5px rgba(0,0,0,.05),
+                        0 1px 3px rgba(0,0,0,.2),
+                        0 3px 5px rgba(0,0,0,.2),
+                       0 5px 10px rgba(0,0,0,.2),
+                      0 10px 10px rgba(0,0,0,.2),
+                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN_Ko} (${
+                      d.ISO_A2
+                    })</h1>
                   GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
                   Population: <i>${d.POP_EST}</i>
                   `
                   : `
                   <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
                   <h1 style="color: #f5f5f5;
-                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
-                    d.ADMIN
-                  } (${d.ISO_A2})</h1>
+                  text-shadow:     0 1px 0 hsl(174,5%,80%),
+                         0 2px 0 hsl(174,5%,75%),
+                         0 3px 0 hsl(174,5%,70%),
+                         0 4px 0 hsl(174,5%,66%),
+                         0 5px 0 hsl(174,5%,64%),
+                         0 6px 0 hsl(174,5%,62%),
+                         0 7px 0 hsl(174,5%,61%),
+                         0 8px 0 hsl(174,5%,60%),
+        
+                         0 0 5px rgba(0,0,0,.05),
+                        0 1px 3px rgba(0,0,0,.2),
+                        0 3px 5px rgba(0,0,0,.2),
+                       0 5px 10px rgba(0,0,0,.2),
+                      0 10px 10px rgba(0,0,0,.2),
+                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN} (${d.ISO_A2})</h1>
                   GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
                   Population: <i>${d.POP_EST}</i>
                   `;
@@ -202,7 +247,7 @@ function World() {
           <WorldSidebar country={clickD?.properties} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

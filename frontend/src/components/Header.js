@@ -40,7 +40,7 @@ function Header(props) {
     props.setSidebarD(-500);
   };
   return (
-    <div className={styles.flex}>
+    <div className={styles.flex} style={{ padding: "0 20px 0 20px" }}>
       <div>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO

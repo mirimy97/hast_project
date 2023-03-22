@@ -66,13 +66,18 @@ function WorldSidebar({ country }) {
             width: "100%",
             height: "1000px",
             backgroundColor: "#f6edd5",
+            marginBottom: "150px",
           }}
         >
           <WorldSidebarChartBox />
         </div>
       </div>
 
-      <button>Travel To ooo</button>
+      <div>
+        <button className={styles.travelBtn}>
+          <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
+        </button>
+      </div>
     </>
   );
 }
