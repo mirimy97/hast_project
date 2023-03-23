@@ -8,8 +8,8 @@
 
 .sidebar {
   position: absolute;
-  height: 100vh;
-  /* overflow: scroll; */
+  height: 100%;
+  overflow: scroll;
   top: 0px;
   color: #15202b;
   background-color: #faf3e7;
@@ -21,8 +21,8 @@
 
 .sidebarM {
   position: absolute;
-  /* height: 100vh; */
-  /* overflow: scroll; */
+  height: 100%;
+  overflow: scroll;
   bottom: 0px;
   color: #15202b;
   background-color: #faf3e780;
@@ -31,4 +31,10 @@
   padding: 30px;
   padding-top: 60px;
   /* border-radius: 10px 10px 0 0; */
+}
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+.sidebarM::-webkit-scrollbar {
+  display: none;
 }

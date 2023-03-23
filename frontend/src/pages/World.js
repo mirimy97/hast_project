@@ -19,8 +19,8 @@ import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const sidebarRef = useRef(null);
   const isMobile = useSelector((state) => state.isMobile.isMobile);
-  // const sidebarRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const [left, setLeft] = useState(0);
@@ -111,7 +111,7 @@ function World() {
       setSidebarD(`-${window.innerWidth * 0.2}`);
       // Mobile ber
       setSidebarMbottom("0px");
-      // sidebarRef.current.scrollTop = 0;
+      sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
         globeRef.current.pauseAnimation();
@@ -216,9 +216,9 @@ function World() {
         )}
         {isMobile == true ? (
           <div
+            ref={sidebarRef}
             style={{
               width: "100%",
-              height: "100%",
               bottom: sidebarMbottom,
             }}
             className={styles.sidebarM}
@@ -227,7 +227,7 @@ function World() {
           </div>
         ) : (
           <div
-            // ref={sidebarRef}
+            ref={sidebarRef}
             style={{
               width: `500px`,
               right: `${sidebarD}px`,
