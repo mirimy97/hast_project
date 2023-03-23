@@ -17,6 +17,10 @@
     "Cate4": "📜 Demonstration",
     "Cate5": "🎤 politics"
   },
+  "filter": {
+    "Filter1": "Latest",
+    "Filter2": "Risk"
+  },
   "nation-info": {
     "Population": "Estimated Population",
     "people": "",

@@ -2,9 +2,10 @@ import { Button } from "@mui/material";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import styles from "./MapSidebar.module.css";
-import NewsListItem from "./NewsListItem";
-import Selectbox from "./Selectbox";
-
+import NewsListItem from "../NewsListItem";
+import Selectbox from "../Selectbox";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { motion } from "framer-motion";
 function MapSidebar() {
   //(정적인) 버튼 값
   const buttons = [
@@ -34,7 +35,7 @@ function MapSidebar() {
   const newslist = [
     {
       headline: "애플페이 첫날부터 '삐걱'",
-      timeStamp: "2023-03-21 13:20:30",
+      timeStamp: "2023-03-20 13:20:30",
       imgUrl:
         "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
       articleUrl:
@@ -44,13 +45,13 @@ function MapSidebar() {
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
-      timeStamp: "2023-03-21 13:20:30",
+      timeStamp: "2023-03-19 13:20:30",
       imgUrl:
         "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
-      score: 3.0,
+      score: 4.2,
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
@@ -60,17 +61,27 @@ function MapSidebar() {
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
-      score: 3.0,
+      score: 3.1,
     },
     {
       headline: "애플페이 첫날부터 '삐걱'",
-      timeStamp: "2023-03-21 17:20:10",
+      timeStamp: "2023-03-22 17:20:10",
       imgUrl:
         "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
       articleUrl:
         "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
       category: 1,
-      score: 3.0,
+      score: 4.0,
+    },
+    {
+      headline: "애플페이 첫날부터 '삐걱'2",
+      timeStamp: "2023-03-18 17:20:10",
+      imgUrl:
+        "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
+      articleUrl:
+        "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
+      category: 2,
+      score: 3.5,
     },
   ];
 
@@ -88,23 +99,35 @@ function MapSidebar() {
     return filtredCategory;
   }
 
-  const [filtredNews, setFiltredNews] = useState(null);
+  const [filteredNews, setFilteredNews] = useState(null);
   const [selectBtn, setSelectBtn] = useState(null);
 
   useEffect(() => {
-    setFiltredNews(getNews());
+    setFilteredNews(getNews());
   }, []);
 
+  //카테고리 선택
   function selectNews(cate) {
     let categoryNum = cate.substr(4, 4);
-    setFiltredNews(filterNews(categoryNum));
+    setFilteredNews(filterNews(categoryNum));
     setSelectBtn(null);
     setSelectBtn(categoryNum);
   }
+  //최신순 위험도순 정렬
+  const getFilteredNews = (news) => {
+    setFilteredNews(news);
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+  function handleOpen() {
+    setIsOpen(!isOpen);
+  }
 
   return (
-    <div className={styles.sidebar}>
-      <h3>📰 {t("categoryTitle.Title")}</h3>
+    // <div className={styles.sidebar}>
+    <>
+      {/* <KeyboardDoubleArrowRightIcon /> */}
+      <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3>
       {buttons &&
         buttons.map((news, index) => (
           <>
@@ -123,14 +146,20 @@ function MapSidebar() {
             </button>
           </>
         ))}
-      <Selectbox />
+      <div className={styles.select}>
+        <Selectbox
+          filteredNews={filteredNews}
+          getFilteredNews={getFilteredNews}
+        />
+      </div>
       <div>
-        {filtredNews &&
-          filtredNews.map((news, index) => (
+        {filteredNews &&
+          filteredNews.map((news, index) => (
             <NewsListItem key={index} news={news} />
           ))}
       </div>
-    </div>
+    </>
+    // </div>
   );
 }
 

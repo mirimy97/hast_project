@@ -8,6 +8,7 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import { Sidebar } from "./components/SideMotion/Sidebar";
 const theme = createTheme({
   typography: {
     fontFamily: `"Pretendard-Regular"`,
