@@ -194,51 +194,19 @@ function World() {
               polygonLabel={({ properties: d }) => {
                 return clickD
                   ? ``
-                  : language === "ko"
-                  ? `
-                  <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
-                  <h1 style="color: #f5f5f5;
-                  text-shadow:     0 1px 0 hsl(174,5%,80%),
-                         0 2px 0 hsl(174,5%,75%),
-                         0 3px 0 hsl(174,5%,70%),
-                         0 4px 0 hsl(174,5%,66%),
-                         0 5px 0 hsl(174,5%,64%),
-                         0 6px 0 hsl(174,5%,62%),
-                         0 7px 0 hsl(174,5%,61%),
-                         0 8px 0 hsl(174,5%,60%),
-        
-                         0 0 5px rgba(0,0,0,.05),
-                        0 1px 3px rgba(0,0,0,.2),
-                        0 3px 5px rgba(0,0,0,.2),
-                       0 5px 10px rgba(0,0,0,.2),
-                      0 10px 10px rgba(0,0,0,.2),
-                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN_Ko} (${
-                      d.ISO_A2
-                    })</h1>
-                  GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-                  Population: <i>${d.POP_EST}</i>
-                  `
-                  : `
-                  <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
-                  <h1 style="color: #f5f5f5;
-                  text-shadow:     0 1px 0 hsl(174,5%,80%),
-                         0 2px 0 hsl(174,5%,75%),
-                         0 3px 0 hsl(174,5%,70%),
-                         0 4px 0 hsl(174,5%,66%),
-                         0 5px 0 hsl(174,5%,64%),
-                         0 6px 0 hsl(174,5%,62%),
-                         0 7px 0 hsl(174,5%,61%),
-                         0 8px 0 hsl(174,5%,60%),
-        
-                         0 0 5px rgba(0,0,0,.05),
-                        0 1px 3px rgba(0,0,0,.2),
-                        0 3px 5px rgba(0,0,0,.2),
-                       0 5px 10px rgba(0,0,0,.2),
-                      0 10px 10px rgba(0,0,0,.2),
-                      0 5px 5px rgba(0,0,0,.5);">${d.ADMIN} (${d.ISO_A2})</h1>
-                  GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-                  Population: <i>${d.POP_EST}</i>
-                  `;
+                  : `<div style="display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                  <img style="width:${isMobile ? "70px" : "100px"}"
+                   src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
+                  <p style="color: #f5f5f5; margin: 0px;
+                  width:${isMobile ? "130px" : "200px"};
+                  font-size:${isMobile ? "13px" : "20px"};
+                  font-weight: 600;
+                  text-shadow: 1px 1px 0px #3d3d3d;
+                  -webkit-text-stroke-width: 0.1px;
+                  -webkit-text-stroke-color: black;">
+                  ${language == "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
+                  </p>
+                  </div>`;
               }}
               polygonsTransitionDuration={300}
               onPolygonHover={setHoverD}
