@@ -1,5 +1,6 @@
 import styles from "./WorldSidebar.module.css";
 import { useTranslation, withTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 function WorldSidebarInfoBox({
   GDP,
@@ -10,6 +11,8 @@ function WorldSidebarInfoBox({
   SUBREGION,
 }) {
   const { t } = useTranslation();
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
+
   return (
     <>
       <div className={styles.infobox}>

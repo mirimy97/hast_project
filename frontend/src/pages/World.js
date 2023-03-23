@@ -33,7 +33,6 @@ function World() {
   const [sidebarD, setSidebarD] = useState(-600);
 
   const handleResize = useCallback(() => {
-    console.log("resize");
     setWidth(window.innerWidth);
   }, []);
   useEffect(() => {
