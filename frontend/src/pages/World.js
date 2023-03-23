@@ -166,7 +166,7 @@ function World() {
             <Globe
               ref={globeRef}
               width={width}
-              height={window.innerHeight}
+              height={height}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
               //backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
