@@ -74,6 +74,7 @@
   position: relative;
   overflow: hidden;
   opacity: 0.9;
+  font-size: 18px;
 }
 .ulM {
   display: block;
