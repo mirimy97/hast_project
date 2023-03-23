@@ -217,7 +217,8 @@ function World() {
         {isMobile == true ? (
           <div
             style={{
-              width: `100%`,
+              width: "100%",
+              height: "100%",
               bottom: sidebarMbottom,
             }}
             className={styles.sidebarM}

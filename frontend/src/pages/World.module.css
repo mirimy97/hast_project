@@ -21,7 +21,7 @@
 
 .sidebarM {
   position: absolute;
-  height: 100vh;
+  /* height: 100vh; */
   /* overflow: scroll; */
   bottom: 0px;
   color: #15202b;
