@@ -1,0 +1,66 @@
+{
+  "header": {
+    "Topic": "Today Topic"
+  },
+  "location": {
+    "Loca1": "HOSPITAL",
+    "Loca2": "POLICE STATION",
+    "Loca3": "EMBASSY"
+  },
+  "categoryTitle": {
+    "Title": "Browse articles by category !"
+  },
+  "categoryBtn": {
+    "Cate1": "💊 Disease",
+    "Cate2": "🚧 Accident",
+    "Cate3": "🔪 Crime",
+    "Cate4": "📜 Demonstration",
+    "Cate5": "🎤 politics"
+  },
+  "nation-info": {
+    "Population": "Estimated Population",
+    "people": "",
+    "Mdollor": "M$"
+  },
+  "continent": {
+    "North America": "North America",
+    "Northern America": "Northern America",
+    "South America": "South America",
+    "Central America": "Central America",
+    "Africa": "Africa",
+    "Southern Africa": "Southern Africa",
+    "Eastern Africa": "Eastern Africa",
+    "Middle Africa": "Middle Africa",
+    "Northern Africa": "Northern Africa",
+    "Western Africa": "Western Africa",
+    "Europe": "Europe",
+    "Southern Europe": "Southern Europe",
+    "Western Europe": "Western Europe",
+    "Northern Europe": "Northern Europe",
+    "Eastern Europe": "Eastern Europe",
+    "Asia": "Asia",
+    "Central Asia": "Central Asia",
+    "Southern Asia": "Southern Asia",
+    "South-Eastern Asia": "South-Eastern Asia",
+    "Eastern Asia": "Eastern Asia",
+    "Oceania": "Oceania",
+    "Melanesia": "Melanesia",
+    "Australia and New Zealand": "Australia and New Zealand"
+  },
+  "economy": {
+    "1": "Developed region",
+    "2": "Developed region",
+    "3": "Emerging region",
+    "4": "Emerging region",
+    "5": "Emerging region",
+    "6": "Developing region",
+    "7": "Least developed region"
+  },
+  "income": {
+    "1": "High income",
+    "2": "High income",
+    "3": "Upper middle income",
+    "4": "Lower middle income",
+    "5": "Low income"
+  }
+}
