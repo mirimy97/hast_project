@@ -26,7 +26,7 @@ const theme = createTheme({
 function App() {
   const dispatch = useDispatch();
   // browser size에 따라 true / false 할당
-  const isMobile = useMediaQuery({ query: "(max-width: 768px" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
     dispatch(setIsMobile(isMobile));
