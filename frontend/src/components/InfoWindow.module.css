@@ -1,0 +1,40 @@
+.wrapBox {
+  position: absolute;
+  bottom: 13px;
+  left: -75px;
+  width: 180px;
+  height: fit-content;
+  padding-top: 5px;
+  padding-bottom: 7px;
+  background-color: white;
+  border-radius: 10%;
+  z-index: 999;
+}
+
+.title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.location {
+  font-size: 0.7rem;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-bottom: 3px;
+}
+
+.tri {
+  position: absolute;
+  bottom: -5px;
+  width: 0;
+  height: 0;
+  border-bottom: 10px solid transparent;
+  border-top: 10px solid white;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  z-index: 999;
+}

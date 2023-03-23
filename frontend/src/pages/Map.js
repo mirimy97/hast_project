@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios"; 
 import Toggle from "../components/Toggle";
+import Fab from '@mui/material/Fab';
+import { Marker } from "../components/Marker";
 
 export default function Map(){
     const [isLoading, setIsLoading] = useState(true)
@@ -22,25 +25,22 @@ export default function Map(){
     //   name: 'Russia'
     // }
     
+    // center, zoom state 사용
     const [center, setCenter] = useState({
       lat: countryInfo.latitude,
-      // lat: 35.907757,
       lng: countryInfo.longitude,
     })
     const [zoom, setZoom] = useState(8)
 
-    
+    // bound state 사용
     const [ne, setNe] = useState({})
     const [sw, setSw] = useState({})
-    // const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
     const [bounds, setBounds] = useState({
       nw: {lat: ne.lat, lng: sw.lng},
       se: {lat: sw.lat, lng: ne.lng}
     })
 
     const calculateZoom = (bounds) => {
-      const WORLD_DIM = { height: 256, width: 256 };
       const ZOOM_MAX = 21;
       const ZOOM_MIN = 0;
       const MAX_PIXELS = 1024;
@@ -64,34 +64,33 @@ export default function Map(){
     };
 
 
-    // // 경계값 들고오기
     const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
-    // // // 지오코딩 api 위한 url
-    // const url = "https://maps.googleapis.com/maps/api/geocode/json"
-    // const getCountryBounds = () => {
-    //   axios.get(url, {
-    //     params: {
-    //       address: countryInfo.name,
-    //       key: MyKey
-    //     }
-    //   })
-    //     .then((res) => {
-    //       // console.log(res.data.results[0].geometry.bounds) // northeast-{lat, lng}, southwest-{lat, lng}
-    //       setNe(res.data.results[0].geometry.bounds.northeast)
-    //       setSw(res.data.results[0].geometry.bounds.southwest)
-    //       const neBound = res.data.results[0].geometry.bounds.northeast
-    //       const swBound = res.data.results[0].geometry.bounds.southwest
-    //       setBounds({
-    //         nw: {lat: neBound.lat, lng: swBound.lng},
-    //         se: {lat: swBound.lat, lng: neBound.lng}
-    //       })
-    //       console.log(res.data.results[0].geometry.bounds)
-    //     })
-    //     // .then(setMapBounds(bounds))
-    //     .catch((err) => console.log(err))
-    // }
+    // // 지오코딩 api 위한 url
+    const url = "https://maps.googleapis.com/maps/api/geocode/json"
+    const getCountryBounds = () => {
+      axios.get(url, {
+        params: {
+          address: countryInfo.name,
+          key: MyKey
+        }
+      })
+        .then((res) => {
+          // console.log(res.data.results[0].geometry.bounds) // northeast-{lat, lng}, southwest-{lat, lng}
+          setNe(res.data.results[0].geometry.bounds.northeast)
+          setSw(res.data.results[0].geometry.bounds.southwest)
+          const neBound = res.data.results[0].geometry.bounds.northeast
+          const swBound = res.data.results[0].geometry.bounds.southwest
+          setBounds({
+            nw: {lat: neBound.lat, lng: swBound.lng},
+            se: {lat: swBound.lat, lng: neBound.lng}
+          })
+          console.log(res.data.results[0].geometry.bounds)
+        })
+        // .then(setMapBounds(bounds))
+        .catch((err) => console.log(err))
+    }
 
-
+    // 처음에 geocoding api로 경계값 들고오기
     useEffect(() => {
       // getCountryBounds()
       setNe({lat: 38.63400000000001, lng: 131.1603})
@@ -104,67 +103,74 @@ export default function Map(){
       })
 
     }, [])
-
+    // 바운더리에 맞춰 zoom 계산
     useEffect(() => {
       setMapBounds(bounds)
     }, [bounds])
 
-    const handleApiLoaded = (map, maps) => {
-      if (sw !== {} || sw !== undefined) {
-        const newBounds = new maps.LatLngBounds(new maps.LatLng(sw), new maps.LatLng(ne))
-        console.log(sw, ne)
-        // map.fitBounds(newBounds)
-        
-        
-        // 장소 api
-        // const service = new maps.places.PlacesService(map);
-        // const request = {
-        //   query: 'hospital',
-        //   bounds: newBounds,
-        //   location: new maps.LatLng(countryInfo.latitude, countryInfo.longitude)
-        // };
 
-        // // Send the text search request
-        // service.textSearch(request, (results, status, pagination) => {
-        //   if (status === maps.places.PlacesServiceStatus.OK) {
-        //     console.log(results); // Print the search results
+    // 장소 api
+    const [hospital, setHospital] = useState([])
+    const [embassy, setEmbassy] = useState([])
+    const [police, setPolice] = useState([])
 
-        //     if (pagination.hasNextPage) {
-        //       // Use the pagination object to retrieve the next set of results
-        //       pagination.nextPage();
-        //     }
-        //   } else {
-        //     console.log('Error:', status); // Handle the error
-        //   }
-        // });
+    const getPlaces = (map, maps, coords) => {
+      // console.log(center, zoom)
+      console.log({lat: coords.lat, lng: coords.lng})
+      console.log("places api 사용")
+      const type = ['hospital', 'embassy', 'police']
+
+      const service = new maps.places.PlacesService(map);
+
+      for (let i = 0; i < 3; i++) {
+        const request = {
+          location: {lat: coords.lat, lng: coords.lng},
+          radius: 50000,
+          type: type[i],
+          keyword: ( i===0 ? "medical center|general hospital" : ""),
+          language: language
+        };
+        // 각 type별 결과 넣을 state
+        let result = []
+
+        service.nearbySearch(request, (results, status, pagination)=> {
+          if (status === maps.places.PlacesServiceStatus.OK) {
+              console.log(results); // results.map()으로 result.geometry, result.name, results[0].geometry.location
+              const newList = results.map((res) => {
+                return (
+                  {
+                    placeId: res.place_id,
+                    lat: res.geometry.location.lat(),
+                    lng: res.geometry.location.lng(),
+                    name: res.name,
+                    rating: res.rating,
+                    address: res.vicinity
+                  }
+                )
+              })
+              result.push(...newList)
+              console.log(result)
+              if (pagination.hasNextPage) {
+                // Use the pagination object to retrieve the next set of results
+                pagination.nextPage();
+              }
+            } else {
+              console.log('Error:', status); // Handle the error
+              // Error: ZERO_RESULTS
+          }
+        });
+
+        if (i===0) {
+          setHospital(result)
+        } else if (i===1) {
+          setEmbassy(result)
+        } else {
+          setPolice(result)
+        }
       }
     };
 
-    // const mapOptions = {
-    //   restriction: {
-    //     latLngBounds: {
-    //       north: ne.lat,
-    //       south: sw.lat,
-    //       west: sw.lng,
-    //       east: ne.lng,
-    //     },
-    //     strictBounds: false,
-    //   },
-    // }
-    
-
-    // type 매개변수 - hospital (+health?), embassy, police
-
-
-    // onclick 시 줌 인
-    // const onClickHandler = (e) => {
-    //   // 서클 안에 있을 때만 (조건)
-    //   setCenter({lat: e.lat, lng: e.lng})
-    //   setZoom(13)
-    //   // console.log(`원래 : ${zoom}`)
-    //   console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
-    // }
-
+    // zoom 변경 감지
     const handleZoomChange = (map) => {
       // console.log(`변경되는 줌 : ${map.getZoom()}`)
       setZoom(map.getZoom())
@@ -206,8 +212,6 @@ export default function Map(){
     ]
 
     // 치안도 표시 apiLoaded
-    // 반경 저장하는 state
-    const [radius, setRadius] = useState(4000)
     const getDanger = (map, maps) => {
       dangerList.map(danger => {
         const circle = new maps.Circle({
@@ -218,31 +222,49 @@ export default function Map(){
           fillOpacity: 0.5,
           map,
           center: {lat: danger.lat, lng: danger.lng},
-          radius: radius,
+          radius: 3000,
           id: danger.id,
-      })
-      // 각 서클에 이벤트리스너 추가
-      circle.addListener("click", () => {
-        // console.log(danger)
-        setCenter({lat: danger.lat, lng: danger.lng})
-        setZoom(13)
-      })
+        })
+        // 각 서클에 이벤트리스너 추가
+        circle.addListener("click", () => {
+          handleCircleClick(danger)
+
+          // place api 사용해서 장소 정보 들고오기
+          // getPlaces(map, maps, danger)
+        })
         return (
           circle
-          // new maps.Circle({
-          //     strokeColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
-          //     strokeOpacity: 0.5,
-          //     strokeWeight: 1,
-          //     fillColor: (danger.score <= -40 ? '#FF0000' : '#FFFF00'),
-          //     fillOpacity: 0.5,
-          //     map,
-          //     center: {lat: danger.lat, lng: danger.lng},
-          //     radius: radius,
-          //     id: danger.id,
-          // })
         )
       })
     }
+
+
+    // 
+    const [nowCircle, setNowCircle] = useState(null)
+    const [nowDanger, setNowDanger] = useState(null)
+    const mapRef = useRef(null)
+
+    const handleCircleClick = (circle) => {
+      setCenter({ lat: circle.lat, lng: circle.lng })
+      setNowCircle(circle.id)
+      setNowDanger(circle)
+    }
+  
+    useEffect(() => {
+      if (center.lat && center.lng && nowDanger) {
+        // 클릭 한 번만 하게끔
+        console.log("달라짐")
+        setZoom(13);
+        console.log(nowCircle)
+        console.log(nowDanger)
+        
+        const {map, maps} = mapRef.current
+        // console.log(map, maps)
+        // place api 사용해서 장소 정보 들고오기
+        getPlaces(map, maps, nowDanger)
+      }
+    }, [nowCircle]);
+    
 
     // styledmaptype
     const mapStyles = {
@@ -254,9 +276,28 @@ export default function Map(){
               visibility: "off"
             }
           ]
+        },
+        {
+          featureType: "poi",
+          elementType: "labels.icon",
+          stylers: [{ visibility: "off" }]
         }
       ]
     };
+
+
+    // toggle 클릭
+    const [toggle, setToggle] = useState([])
+    const [showH, setShowH] = useState(false)
+    const [showP, setShowP] = useState(false)
+    const [showE, setShowE] = useState(false)
+
+    // Marker 클릭
+    const [target, setTarget] = useState(null)
+    const markerClicked = (key) => {
+      console.log(key)
+      setTarget(key)
+    }
 
     return (
       isLoading ? <div></div> :
@@ -273,27 +314,71 @@ export default function Map(){
           zoom={zoom}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => {
-            handleApiLoaded(map, maps)
+            // Save the map and maps variables to the ref object
+            mapRef.current = { map, maps };
             // 치안도 표시
             getDanger(map, maps)
             // 줌 변경될 때 변경된 zoom level 가져오게끔
             map.addListener('zoom_changed', () => handleZoomChange(map));
           }}
-          // options={mapOptions} // option 때문에 나타난 현상..
-          // onClick={onClickHandler}
+          onChildClick={markerClicked}
           options={mapStyles}
-          // bounds={mapOptions.restriction.latLngBounds}
-          // resetBoundsOnResize={true}
         >
-          {/* <AnyReactComponent
-            lat={countryInfo.latitude}
-            lng={countryInfo.longitude}
-            text="My Marker"
-          /> */}
+          { (zoom >= 12) && hospital && showH && hospital.map((hos) => (
+            <Marker
+              key={hos.placeId}
+              id={1}
+              lat={hos.lat}
+              lng={hos.lng}
+              place={hos}
+              target={hos.placeId === target}
+            />
+          ))}
+          { (zoom >= 12) && police && showP && police.map((pol) => (
+            <Marker
+              key={pol.placeId}
+              id={2}
+              lat={pol.lat}
+              lng={pol.lng}
+              place={pol}
+              target={pol.placeId === target}
+            />
+          ))}
+          { (zoom >= 12) && embassy && showE && embassy.map((emb) => (
+            <Marker
+              key={emb.placeId}
+              id={3}
+              lat={emb.lat}
+              lng={emb.lng}
+              place={emb}
+              target={emb.placeId === target}
+            />
+          ))}
         </GoogleMapReact>
-        <Toggle icon= "🏥" place={(language === 'ko' ? "병원" : "Hospital")} idx={1} />
-        <Toggle icon= "🚓" place={(language === 'ko' ? "경찰서" : "Police station")} idx={2} />
-        <Toggle icon= "🌐" place={(language === 'ko' ? "대사관" : "Embassy")} idx={3} />
+        { zoom >= 12 ? 
+          <div>
+            <Toggle icon= "🏥" place={(language === 'ko' ? "병원" : "Hospital")} idx={1} toggle={toggle} setToggle={setToggle} setShowPlace={setShowH}/>
+            <Toggle icon= "🚓" place={(language === 'ko' ? "경찰서" : "Police station")} idx={2} toggle={toggle} setToggle={setToggle} setShowPlace={setShowP}/>
+            <Toggle icon= "🌐" place={(language === 'ko' ? "대사관" : "Embassy")} idx={3} toggle={toggle} setToggle={setToggle} setShowPlace={setShowE}/>
+          </div>
+          : <div></div>
+        }
+        <div>
+          <Link to="/">
+            <Fab 
+              variant="extended"
+              sx={{ 
+                backgroundColor: "white", 
+                borderRadius:"10px",
+                position: 'absolute', 
+                bottom: '16px', 
+                left: '16px' 
+              }}
+              >
+              {language === 'en' ? "Back to Earth" : "뒤로가기"}
+            </Fab>
+          </Link>
+        </div>
       </div>
     );
 }

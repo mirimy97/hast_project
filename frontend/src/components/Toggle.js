@@ -2,10 +2,18 @@ import * as React from 'react';
 import Fab from '@mui/material/Fab';
 import { useState } from 'react';
 
-function Toggle({icon, place, idx}) {
-  const [toggle, setToggle] = useState(false)
-  const ToggleClick = () => {
-    setToggle(current => !current)
+function Toggle({icon, place, idx, toggle, setToggle, setShowPlace}) {
+  const ToggleClick = (idx) => {
+    if (toggle.includes(idx)) {
+      const newList = toggle.filter((item) => item !== idx)
+      setToggle(newList)
+      console.log(newList)
+      setShowPlace(false)
+    } else {
+      console.log([...toggle, idx])
+      setToggle([...toggle, idx])
+      setShowPlace(true)
+    }
   }
 
 
@@ -13,7 +21,10 @@ function Toggle({icon, place, idx}) {
     <Fab 
       variant="extended"
       sx={{ 
-        backgroundColor: (toggle === true ? "#364AB5" : "white"), 
+        backgroundColor: (toggle.includes(idx) ? "#364AB5" : "white"), 
+        "&:hover": {
+          backgroundColor: (toggle.includes(idx) ? "#364AB5" : "white")
+        },
         borderRadius:"10px", 
         width:'130px', 
         height: '52px',
@@ -23,7 +34,6 @@ function Toggle({icon, place, idx}) {
       }}
       onClick={() => ToggleClick(idx)}
     >
-      {/* <NavigationIcon sx={{ mr: 1 }} /> */}
       <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         <div style={{fontSize: (idx === 2 ? "18px" : "16px"), marginBottom: (idx === 2? "4px": 0)}} >
           {icon}
