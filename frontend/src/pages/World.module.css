@@ -18,3 +18,17 @@
   padding: 30px;
   border-radius: 10px 0 0 10px;
 }
+
+.sidebarM {
+  position: absolute;
+  height: 100vh;
+  /* overflow: scroll; */
+  bottom: 0px;
+  color: #15202b;
+  background-color: #faf3e780;
+
+  transition: bottom 0.7s ease-out;
+  padding: 30px;
+  padding-top: 60px;
+  /* border-radius: 10px 10px 0 0; */
+}

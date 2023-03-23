@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
   // const sidebarRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [left, setLeft] = useState(0);
@@ -31,6 +32,7 @@ function World() {
     altitude: 2.5,
   });
   const [sidebarD, setSidebarD] = useState(-600);
+  const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
 
   const handleResize = useCallback(() => {
     setWidth(window.innerWidth);
@@ -103,7 +105,10 @@ function World() {
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
+      // PC ver
       setSidebarD(`-${window.innerWidth * 0.2}`);
+      // Mobile ber
+      setSidebarMbottom("0px");
       // sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
@@ -138,7 +143,7 @@ function World() {
   // }, []);
 
   return (
-    <div style={{ width: `${width}px` }}>
+    <div style={{ width: "100%" }}>
       <Header
         globeRef={globeRef}
         clickD={clickD}
@@ -146,9 +151,13 @@ function World() {
         setPoint={setPoint}
         setLeft={setLeft}
         setSidebarD={setSidebarD}
+        setSidebarMbottom={setSidebarMbottom}
       />
       <div className={styles.background}></div>
-      <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
+      <div
+        style={isMobile == true ? {} : { left: `-${left}px` }}
+        className={styles.worldContainer}
+      >
         {countries.features && (
           <>
             {/* <PreloadImages images={images} /> */}
@@ -235,16 +244,28 @@ function World() {
             />
           </>
         )}
-        <div
-          // ref={sidebarRef}
-          style={{
-            width: `500px`,
-            right: `${sidebarD}px`,
-          }}
-          className={styles.sidebar}
-        >
-          <WorldSidebar country={clickD?.properties} />
-        </div>
+        {isMobile == true ? (
+          <div
+            style={{
+              width: `100%`,
+              bottom: sidebarMbottom,
+            }}
+            className={styles.sidebarM}
+          >
+            <WorldSidebar country={clickD?.properties} />
+          </div>
+        ) : (
+          <div
+            // ref={sidebarRef}
+            style={{
+              width: `500px`,
+              right: `${sidebarD}px`,
+            }}
+            className={styles.sidebar}
+          >
+            <WorldSidebar country={clickD?.properties} />
+          </div>
+        )}
       </div>
     </div>
   );
