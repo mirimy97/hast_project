@@ -22,6 +22,7 @@ function World() {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   // const sidebarRef = useRef(null);
   const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
@@ -36,6 +37,7 @@ function World() {
 
   const handleResize = useCallback(() => {
     setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
   }, []);
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -143,7 +145,7 @@ function World() {
   // }, []);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <Header
         globeRef={globeRef}
         clickD={clickD}
