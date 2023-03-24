@@ -7,6 +7,7 @@ import styles from "./Header.module.css";
 import { color, motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 function Header(props) {
   const dispatch = useDispatch();
@@ -42,9 +43,14 @@ function Header(props) {
     props.setSidebarD(-500);
     props.setSidebarMbottom("-100vh");
   };
+
+  const navigate = useNavigate();
+  const changePg = () => {
+    navigate("/game");
+  };
   return (
     <div className={styles.flex}>
-      <div>
+      <div style={isMobile ? "" : { width: "25%" }}>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
@@ -103,7 +109,7 @@ function Header(props) {
           </div>
         </div>
       </div>
-      <div>
+      <div style={isMobile ? "" : { width: "50%" }}>
         {props.clickD ? (
           <div style={{ position: "absolute" }}></div>
         ) : isMobile ? (
@@ -130,14 +136,18 @@ function Header(props) {
           </div>
         )}
       </div>
-      <div>
+      <div style={isMobile ? "" : { width: "25%" }}>
         {props.clickD ? (
           // <Button variant="outlined" className={styles.button} onClick={backBtn}>
           //   뒤로가기
           // </Button>
-          <CloseIcon onClick={backBtn} />
+          <CloseIcon onClick={backBtn} className={styles.close} />
         ) : (
-          <div></div>
+          <img
+            className={styles.card}
+            src="/assets/3d/card.png"
+            onClick={changePg}
+          ></img>
           // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
         )}
       </div>

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 0 15px;
   position: fixed;
   z-index: 5;
   width: 100%;
@@ -10,7 +10,14 @@
 .icon {
   width: 100px;
 }
-
+.close {
+  float: right;
+}
+.card {
+  width: 65px;
+  height: 65px;
+  float: right;
+}
 .language {
   display: flex;
   align-items: center;
@@ -129,10 +136,7 @@
 
 /* Custom CSS */
 .ticker {
-  position: absolute;
-  top: 20px;
-  right: 30%;
-  width: 40%;
+  width: 360px;
   margin: auto;
 }
 .ticker ul {
