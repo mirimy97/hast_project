@@ -6,14 +6,18 @@
   position: absolute;
 }
 
+.worldContainer * {
+  transition: width 1s ease;
+}
+
 .sidebar {
   position: absolute;
   height: 100%;
   overflow: scroll;
   top: 0px;
   color: #15202b;
-  background-color: #faf3e7;
-  box-shadow: -2px 1px 10px 1px #9d9d9d;
+  background-color: #ffffff80;
+  box-shadow: -2px 1px 10px 1px #3d3d3d;
   transition: right 0.7s ease;
   padding: 30px;
   border-radius: 10px 0 0 10px;
@@ -25,7 +29,7 @@
   overflow: scroll;
   bottom: 0px;
   color: #15202b;
-  background-color: #faf3e780;
+  background-color: #ffffff80;
 
   transition: bottom 0.7s ease-out;
   padding: 30px;
