@@ -8,13 +8,33 @@
 
 .sidebar {
   position: absolute;
-  height: 100vh;
-  /* overflow: scroll; */
+  height: 100%;
+  overflow: scroll;
   top: 0px;
   color: #15202b;
   background-color: #faf3e7;
   box-shadow: -2px 1px 10px 1px #9d9d9d;
-  transition: right 1.1s ease;
+  transition: right 0.7s ease;
   padding: 30px;
   border-radius: 10px 0 0 10px;
+}
+
+.sidebarM {
+  position: absolute;
+  height: 100%;
+  overflow: scroll;
+  bottom: 0px;
+  color: #15202b;
+  background-color: #faf3e780;
+
+  transition: bottom 0.7s ease-out;
+  padding: 30px;
+  padding-top: 60px;
+  /* border-radius: 10px 10px 0 0; */
+}
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+.sidebarM::-webkit-scrollbar {
+  display: none;
 }

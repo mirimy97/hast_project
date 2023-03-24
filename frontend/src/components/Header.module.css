@@ -22,26 +22,30 @@
 .line {
   font-size: 17px;
 }
+
 .globe {
   width: 20px;
   height: 20px;
 }
 .landiv {
-  margin: 0 8px;
+  margin: 3px;
   cursor: pointer;
+  font-size: 20px;
 }
 
 /*뉴스 관련 CSS*/
 .ticker {
   background-color: #fff;
   overflow: auto;
+  width: 30px;
   height: 35px;
   vertical-align: middle;
-  width: 100%;
+
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
   opacity: 0.9;
+  font-size: 20px;
 }
 .ul {
   display: block;
@@ -60,6 +64,40 @@
   margin-left: 20px;
   font-size: 18px;
 }
+
+/* 오늘의 토픽 모바일 ver */
+.tickerM {
+  position: fixed;
+  top: 0px;
+  right: 10px;
+  background-color: #fff;
+  overflow: auto;
+  height: 40px;
+  vertical-align: middle;
+  width: calc(100% - 120px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  opacity: 0.9;
+  font-size: 18px;
+}
+.ulM {
+  display: block;
+  padding: 0px;
+  line-height: 40px;
+  vertical-align: middle;
+  margin: 0 20px 0 20px;
+  list-style: none;
+  white-space: nowrap;
+  animation: scroll 7s linear 0s infinite;
+  position: absolute;
+}
+.tickerM ul li {
+  display: inline-block;
+  white-space: normal;
+  margin-left: 20px;
+}
+
 .newstitle {
   background-color: rgb(142 129 123);
   color: #fff;
@@ -70,6 +108,7 @@
   top: 0;
   display: block;
   height: 35px;
+  width: 135px;
   vertical-align: middle;
   line-height: 35px;
   padding-left: 10px;
@@ -90,7 +129,10 @@
 
 /* Custom CSS */
 .ticker {
-  width: 400px;
+  position: absolute;
+  top: 20px;
+  right: 30%;
+  width: 40%;
   margin: auto;
 }
 .ticker ul {

@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
 import * as THREE from "three";
@@ -14,6 +20,9 @@ import { useSelector } from "react-redux";
 function World() {
   const globeRef = useRef();
   const sidebarRef = useRef(null);
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
   const [left, setLeft] = useState(0);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
@@ -23,7 +32,19 @@ function World() {
     lng: 124.2,
     altitude: 2.5,
   });
-  const [sidebarD, setSidebarD] = useState(-500);
+  const [sidebarD, setSidebarD] = useState(-600);
+  const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
+
+  const handleResize = useCallback(() => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  }, []);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   //redux- language 불러오기
   const language = useSelector((state) => state.language.value);
@@ -86,7 +107,10 @@ function World() {
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(window.innerWidth * 0.2);
+      // PC ver
       setSidebarD(`-${window.innerWidth * 0.2}`);
+      // Mobile ber
+      setSidebarMbottom("0px");
       sidebarRef.current.scrollTop = 0;
 
       setTimeout(function () {
@@ -121,7 +145,7 @@ function World() {
   // }, []);
 
   return (
-    <>
+    <div style={{ width: "100%", height: "100%" }}>
       <Header
         globeRef={globeRef}
         clickD={clickD}
@@ -129,15 +153,20 @@ function World() {
         setPoint={setPoint}
         setLeft={setLeft}
         setSidebarD={setSidebarD}
+        setSidebarMbottom={setSidebarMbottom}
       />
       <div className={styles.background}></div>
-      <div style={{ left: `-${left}px` }} className={styles.worldContainer}>
+      <div
+        style={isMobile == true ? {} : { left: `-${left}px` }}
+        className={styles.worldContainer}
+      >
         {countries.features && (
           <>
             {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
-              height={window.innerHeight}
+              width={width}
+              height={height}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
               //backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
@@ -165,25 +194,19 @@ function World() {
               polygonLabel={({ properties: d }) => {
                 return clickD
                   ? ``
-                  : language === "ko"
-                  ? `
-                  <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
-                  <h1 style="color: #f5f5f5;
-                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
-                    d.ADMIN_Ko
-                  } (${d.ISO_A2})</h1>
-                  GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-                  Population: <i>${d.POP_EST}</i>
-                  `
-                  : `
-                  <img style="width:100px" src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
-                  <h1 style="color: #f5f5f5;
-                  text-shadow: 0 10px 10px rgba(255, 153, 0, 0.5), 0 5px 5px rgba(0, 0, 0, 0.8);">${
-                    d.ADMIN
-                  } (${d.ISO_A2})</h1>
-                  GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-                  Population: <i>${d.POP_EST}</i>
-                  `;
+                  : `<div style="display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                  <img style="width:${isMobile ? "70px" : "100px"}"
+                   src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
+                  <p style="color: #f5f5f5; margin: 0px;
+                  width:${isMobile ? "130px" : "200px"};
+                  font-size:${isMobile ? "13px" : "20px"};
+                  font-weight: 600;
+                  text-shadow: 1px 1px 0px #3d3d3d;
+                  -webkit-text-stroke-width: 0.1px;
+                  -webkit-text-stroke-color: black;">
+                  ${language == "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
+                  </p>
+                  </div>`;
               }}
               polygonsTransitionDuration={300}
               onPolygonHover={setHoverD}
@@ -191,18 +214,31 @@ function World() {
             />
           </>
         )}
-        <div
-          ref={sidebarRef}
-          style={{
-            width: `500px`,
-            right: `${sidebarD}px`,
-          }}
-          className={styles.sidebar}
-        >
-          <WorldSidebar country={clickD?.properties} />
-        </div>
+        {isMobile == true ? (
+          <div
+            ref={sidebarRef}
+            style={{
+              width: "100%",
+              bottom: sidebarMbottom,
+            }}
+            className={styles.sidebarM}
+          >
+            <WorldSidebar country={clickD?.properties} />
+          </div>
+        ) : (
+          <div
+            ref={sidebarRef}
+            style={{
+              width: `500px`,
+              right: `${sidebarD}px`,
+            }}
+            className={styles.sidebar}
+          >
+            <WorldSidebar country={clickD?.properties} />
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 

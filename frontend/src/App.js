@@ -1,3 +1,4 @@
+import { useMediaQuery } from "react-responsive";
 import { Canvas } from "@react-three/fiber";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Earth from "./pages/Earth";
@@ -8,7 +9,10 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { Sidebar } from "./components/SideMotion/Sidebar";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setIsMobile } from "./redux/isMobile";
+
 const theme = createTheme({
   typography: {
     fontFamily: `"Pretendard-Regular"`,
@@ -20,24 +24,15 @@ const theme = createTheme({
 });
 
 function App() {
+  const dispatch = useDispatch();
+  // browser size에 따라 true / false 할당
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+  useEffect(() => {
+    dispatch(setIsMobile(isMobile));
+  }, [isMobile, dispatch]);
+
   return (
-    // <Canvas
-    //   style={{
-    //     background:
-    //       "linear-gradient(180deg, #000000, #000000, #1b004f, #2a005e, #3c006c)",
-    //     width: "100vw",
-    //     height: "100vh",
-    //   }}
-    // >
-    //   <pointLight position={[10, 10, 10]} />
-    //   <mesh>
-    //     {/* 구 형상 생성 */}
-    //     {/* <sphereBufferGeometry /> */}
-    //     {/* 표면 생상, 재질 지정 */}
-    //     {/* <meshStandardMaterial color="yellow" /> */}
-    //   </mesh>
-    //   <Earth />
-    // </Canvas>
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <CssBaseline />

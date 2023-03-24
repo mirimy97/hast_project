@@ -6,9 +6,11 @@ import { lanen, lanko } from "../redux/language";
 import styles from "./Header.module.css";
 import { color, motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
 
 function Header(props) {
   const dispatch = useDispatch();
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
@@ -38,10 +40,11 @@ function Header(props) {
     });
     props.setLeft(0);
     props.setSidebarD(-500);
+    props.setSidebarMbottom("-100vh");
   };
   return (
     <div className={styles.flex}>
-      <div style={{ width: "25%" }}>
+      <div>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
@@ -70,14 +73,14 @@ function Header(props) {
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : 75,
+                x: isKorean ? 0 : isMobile ? 35 : 78,
               }}
             >
               <p
                 className={styles.lan}
                 style={{ color: isKorean ? "" : "#7b7b7b" }}
               >
-                Korean
+                {isMobile ? "Ko" : "Korean"}
               </p>
             </motion.div>
           </div>
@@ -87,22 +90,42 @@ function Header(props) {
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : -75,
+                x: isKorean ? 0 : isMobile ? -35 : -78,
               }}
             >
               <p
                 className={styles.lan}
                 style={{ color: isKorean ? "#7b7b7b" : "" }}
               >
-                English
+                {isMobile ? "En" : "English"}
               </p>
             </motion.div>
           </div>
         </div>
       </div>
-      <div style={{ width: "50%" }}>
+      <div>
+        {
+          props.clickD && (
+            // <Button variant="outlined" className={styles.button} onClick={backBtn}>
+            //   뒤로가기
+            // </Button>
+            <CloseIcon onClick={backBtn} />
+          )
+
+          // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
+        }
         {props.clickD ? (
-          <div></div>
+          <div style={{ position: "absolute" }}></div>
+        ) : isMobile ? (
+          <div className={styles.tickerM}>
+            <ul className={styles.ulM}>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+              <li>Hello News!</li>
+            </ul>
+          </div>
         ) : (
           /* &#128204; {t("header.Topic")} */
           <div className={styles.ticker}>
@@ -117,12 +140,12 @@ function Header(props) {
           </div>
         )}
       </div>
-      <div style={{ width: "25%" }}>
+      <div>
         {props.clickD ? (
           // <Button variant="outlined" className={styles.button} onClick={backBtn}>
           //   뒤로가기
           // </Button>
-          <CloseIcon onClick={backBtn} style={{ float: "right" }} />
+          <CloseIcon onClick={backBtn} />
         ) : (
           <div></div>
           // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
