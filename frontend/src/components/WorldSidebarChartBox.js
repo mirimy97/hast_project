@@ -1,5 +1,6 @@
 import { scaleLinear, scalePoint, select, max, line } from "d3";
 import { useEffect, useRef } from "react";
+import RadarChartExample from "./WorldSidebarRadarChart";
 
 function WorldSidebarChartBox() {
   const data = [
@@ -42,7 +43,7 @@ function WorldSidebarChartBox() {
 
   return (
     <>
-      <div style={{ width: "100%", height: "500px" }}></div>
+      <RadarChartExample />
     </>
   );
 }
