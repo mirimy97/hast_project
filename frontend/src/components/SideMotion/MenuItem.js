@@ -28,7 +28,6 @@ const variants = {
 export const MenuItem = ({ i }) => {
   return (
     <motion.li variants={variants} className={styles.li}>
-      \
       <MapSidebar />
     </motion.li>
   );

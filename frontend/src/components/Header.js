@@ -41,7 +41,7 @@ function Header(props) {
   };
   return (
     <div className={styles.flex}>
-      <div>
+      <div style={{ width: "25%" }}>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
@@ -70,7 +70,7 @@ function Header(props) {
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : 95,
+                x: isKorean ? 0 : 75,
               }}
             >
               <p
@@ -81,13 +81,13 @@ function Header(props) {
               </p>
             </motion.div>
           </div>
-          <div>|</div>
+          <div className={styles.line}>|</div>
           <div onClick={handleEn} className={styles.landiv}>
             <motion.div
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : -95,
+                x: isKorean ? 0 : -75,
               }}
             >
               <p
@@ -100,7 +100,7 @@ function Header(props) {
           </div>
         </div>
       </div>
-      <div>
+      <div style={{ width: "50%" }}>
         {props.clickD ? (
           <div></div>
         ) : (
@@ -117,15 +117,17 @@ function Header(props) {
           </div>
         )}
       </div>
-      {props.clickD ? (
-        // <Button variant="outlined" className={styles.button} onClick={backBtn}>
-        //   뒤로가기
-        // </Button>
-        <CloseIcon onClick={backBtn} />
-      ) : (
-        <div></div>
-        // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
-      )}
+      <div style={{ width: "25%" }}>
+        {props.clickD ? (
+          // <Button variant="outlined" className={styles.button} onClick={backBtn}>
+          //   뒤로가기
+          // </Button>
+          <CloseIcon onClick={backBtn} style={{ float: "right" }} />
+        ) : (
+          <div></div>
+          // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
+        )}
+      </div>
     </div>
   );
 }

@@ -267,6 +267,7 @@ export default function Map() {
   const mapStyles = {
     fullscreenControl: false,
     zoomControl: false,
+    gestureHandling: "greedy",
     styles: [
       {
         featureType: "road",
