@@ -50,7 +50,7 @@ function Header(props) {
   };
   return (
     <div className={styles.flex}>
-      <div style={isMobile ? "" : { width: "25%" }}>
+      <div style={isMobile ? {} : { width: "25%" }}>
         {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
@@ -109,7 +109,7 @@ function Header(props) {
           </div>
         </div>
       </div>
-      <div style={isMobile ? "" : { width: "50%" }}>
+      <div style={isMobile ? {} : { width: "50%" }}>
         {props.clickD ? (
           <div style={{ position: "absolute" }}></div>
         ) : isMobile ? (
@@ -136,7 +136,7 @@ function Header(props) {
           </div>
         )}
       </div>
-      <div style={isMobile ? "" : { width: "25%" }}>
+      <div style={isMobile ? {} : { width: "25%" }}>
         {props.clickD ? (
           // <Button variant="outlined" className={styles.button} onClick={backBtn}>
           //   뒤로가기
