@@ -159,7 +159,7 @@ function World() {
               width={width + 500}
               height={height}
               globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-              backgroundImageUrl="/assets/sky.png"
+              backgroundImageUrl="/assets/dark.png"
               // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
               //globeMaterial={globeMaterial}
               lineHoverPrecision={0}
