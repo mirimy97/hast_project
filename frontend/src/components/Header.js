@@ -104,16 +104,6 @@ function Header(props) {
         </div>
       </div>
       <div>
-        {
-          props.clickD && (
-            // <Button variant="outlined" className={styles.button} onClick={backBtn}>
-            //   뒤로가기
-            // </Button>
-            <CloseIcon onClick={backBtn} />
-          )
-
-          // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
-        }
         {props.clickD ? (
           <div style={{ position: "absolute" }}></div>
         ) : isMobile ? (
