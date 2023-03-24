@@ -92,7 +92,7 @@ function WorldSidebar({ country }) {
           style={{
             width: "100%",
             height: "500px",
-            backgroundColor: "#f6edd5",
+            backgroundColor: "#dcdcdc",
             marginBottom: "50px",
           }}
         >
