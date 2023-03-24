@@ -23,7 +23,7 @@ function World() {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
-  const [left, setLeft] = useState(0);
+  const [left, setLeft] = useState(-250);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [clickD, setClickD] = useState(null);
@@ -32,7 +32,7 @@ function World() {
     lng: 124.2,
     altitude: 2.5,
   });
-  const [sidebarD, setSidebarD] = useState(-600);
+  const [sidebarD, setSidebarD] = useState(-500);
   const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
 
   const handleResize = useCallback(() => {
@@ -110,9 +110,9 @@ function World() {
 
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
-      setLeft(window.innerWidth * 0.2);
+      setLeft(-500);
       // PC ver
-      setSidebarD(`-${window.innerWidth * 0.2}`);
+      setSidebarD(`0`);
       // Mobile ber
       setSidebarMbottom("0px");
       sidebarRef.current.scrollTop = 0;
@@ -148,7 +148,7 @@ function World() {
       />
       <div className={styles.background}></div>
       <div
-        style={isMobile == true ? {} : { left: `-${left}px` }}
+        style={isMobile == true ? { left: "-250px" } : { left: `${left}px` }}
         className={styles.worldContainer}
       >
         {countries.features && (
@@ -156,7 +156,7 @@ function World() {
             {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
-              width={width}
+              width={width + 500}
               height={height}
               globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
               backgroundImageUrl="/assets/sky.png"
@@ -206,11 +206,12 @@ function World() {
             />
           </>
         )}
-        {isMobile == true ? (
+        {isMobile ? (
           <div
             ref={sidebarRef}
             style={{
-              width: "100%",
+              width: width,
+              left: "250px",
               bottom: sidebarMbottom,
             }}
             className={styles.sidebarM}

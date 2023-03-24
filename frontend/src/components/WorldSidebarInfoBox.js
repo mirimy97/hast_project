@@ -22,7 +22,7 @@ function WorldSidebarInfoBox({
           <div className={styles.columnCenter}>
             <p className={styles.label}>{t("nation-info.Population")}</p>
             <p className={styles.value}>
-              {POP_EST}
+              {POP_EST.toLocaleString("en-US")}
               <span className={styles.subtext}> {t("nation-info.people")}</span>
             </p>
           </div>
@@ -38,7 +38,7 @@ function WorldSidebarInfoBox({
             <div>
               <p className={styles.label}>GDP</p>
               <p className={styles.value}>
-                {GDP}
+                {GDP.toLocaleString("en-US")}
                 <span className={styles.subtext}> M$</span>
               </p>
               <p className={styles.subtext}>
