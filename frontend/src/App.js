@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Earth from "./pages/Earth";
 import World from "./pages/World";
+import Game from "./pages/Game";
 import WorldDetail from "./pages/WorldDetail";
 import Map from "./pages/Map";
 import * as React from "react";
@@ -44,6 +45,8 @@ function App() {
             <Route path="/worlddetail" element={<WorldDetail />} />
             {/* 지도 페이지 */}
             <Route path="/map" element={<Map />} />
+            {/* 게임 페이지 */}
+            <Route path="/game" element={<Game />} />
           </Routes>
         </Router>
       </React.Fragment>
