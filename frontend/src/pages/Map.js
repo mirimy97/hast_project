@@ -8,6 +8,7 @@ import Fab from "@mui/material/Fab";
 import { Marker } from "../components/Marker";
 import MapSidebar from "../components/MapSidebar";
 import { useSelector } from "react-redux";
+import MapDrawer from "../components/MapDrawer";
 
 export default function Map() {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
@@ -452,7 +453,7 @@ export default function Map() {
           </Link>
         </div>
       }
-      {/* <MapSidebar /> */}
+      {isMobile ? <MapDrawer/> : <MapSidebar/>}
     </div>
   );
 }
