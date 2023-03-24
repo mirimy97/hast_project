@@ -5,46 +5,68 @@ import WorldSidebarChartBox from "./WorldSidebarChartBox";
 import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
 function WorldSidebar({ country }) {
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
   const flagEndpoint = "/assets/flags";
-  const sidebarRef = useRef(null);
+
   const imageurl = `${flagEndpoint}/${country?.ISO_A2.toLowerCase()}.png`;
   const language = useSelector((state) => state.language.value);
   const nameKo = country?.ADMIN_Ko;
   const nameEn = country?.NAME;
 
-  useEffect(() => {
-    sidebarRef.current.scrollTop = 0;
-  }, [country]);
   return (
     <>
       {/* 나라이름 */}
       {country ? (
         language == "en" ? (
           <p
-            style={{
-              backgroundImage: `url(${imageurl})`,
-              fontSize:
-                nameEn.length >= 9
-                  ? nameEn.length >= 14
-                    ? "3rem"
-                    : "3.5rem"
-                  : "4rem",
-            }}
+            style={
+              isMobile
+                ? {
+                    backgroundImage: `url(${imageurl})`,
+                    fontSize:
+                      nameEn.length >= 8
+                        ? nameEn.length >= 12
+                          ? "2rem"
+                          : "2.5rem"
+                        : "3.5rem",
+                  }
+                : {
+                    backgroundImage: `url(${imageurl})`,
+                    fontSize:
+                      nameEn.length >= 9
+                        ? nameEn.length >= 14
+                          ? "3rem"
+                          : "3.5rem"
+                        : "4rem",
+                  }
+            }
             className={styles.namefont}
           >
             {nameEn}
           </p>
         ) : (
           <p
-            style={{
-              backgroundImage: `url(${imageurl})`,
-              fontSize:
-                nameKo.length >= 5
-                  ? nameKo.length >= 8
-                    ? "3rem"
-                    : "3.5rem"
-                  : "4rem",
-            }}
+            style={
+              isMobile
+                ? {
+                    backgroundImage: `url(${imageurl})`,
+                    fontSize:
+                      nameKo.length >= 5
+                        ? nameKo.length >= 8
+                          ? "2rem"
+                          : "2.5rem"
+                        : "3rem",
+                  }
+                : {
+                    backgroundImage: `url(${imageurl})`,
+                    fontSize:
+                      nameKo.length >= 5
+                        ? nameKo.length >= 8
+                          ? "3rem"
+                          : "3.5rem"
+                        : "4rem",
+                  }
+            }
             className={styles.namefont}
           >
             {nameKo}
@@ -53,7 +75,7 @@ function WorldSidebar({ country }) {
       ) : (
         ""
       )}
-      <div ref={sidebarRef} className={styles.sidebarOuterBox}>
+      <div className={styles.sidebarOuterBox}>
         {/* Info Box */}
         {country && (
           <WorldSidebarInfoBox
@@ -69,20 +91,18 @@ function WorldSidebar({ country }) {
         <div
           style={{
             width: "100%",
-            height: "1000px",
+            height: "500px",
             backgroundColor: "#f6edd5",
-            marginBottom: "150px",
+            marginBottom: "50px",
           }}
         >
           <WorldSidebarChartBox />
         </div>
       </div>
 
-      <div>
-        <button className={styles.travelBtn}>
-          <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
-        </button>
-      </div>
+      <button className={styles.travelBtn}>
+        <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
+      </button>
     </>
   );
 }

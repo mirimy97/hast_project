@@ -14,8 +14,12 @@
     "Cate1": "💊 Disease",
     "Cate2": "🚧 Accident",
     "Cate3": "🔪 Crime",
-    "Cate4": "📜 Demonstration",
-    "Cate5": "🎤 politics"
+    "Cate4": "📜 Demo",
+    "Cate5": "🎤 Politics"
+  },
+  "filter": {
+    "Filter1": "Latest",
+    "Filter2": "Risk"
   },
   "nation-info": {
     "Population": "Estimated Population",
@@ -62,5 +66,8 @@
     "3": "Upper middle income",
     "4": "Lower middle income",
     "5": "Low income"
+  },
+  "goMain": {
+    "Title": "Go Main"
   }
 }

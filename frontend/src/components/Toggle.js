@@ -6,19 +6,18 @@ import { useSelector } from "react-redux";
 
 function Toggle({icon, place, idx, toggle, setToggle, setShowPlace}) {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
-
   const ToggleClick = (idx) => {
     if (toggle.includes(idx)) {
-      const newList = toggle.filter((item) => item !== idx)
-      setToggle(newList)
-      console.log(newList)
-      setShowPlace(false)
+      const newList = toggle.filter((item) => item !== idx);
+      setToggle(newList);
+      console.log(newList);
+      setShowPlace(false);
     } else {
-      console.log([...toggle, idx])
-      setToggle([...toggle, idx])
-      setShowPlace(true)
+      console.log([...toggle, idx]);
+      setToggle([...toggle, idx]);
+      setShowPlace(true);
     }
-  }
+  };
 
   return (
     <Fab

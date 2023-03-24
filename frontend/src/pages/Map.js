@@ -6,9 +6,15 @@ import axios from "axios";
 import Toggle from "../components/Toggle";
 import Fab from "@mui/material/Fab";
 import { Marker } from "../components/Marker";
-import MapSidebar from "../components/MapSidebar";
+// import MapSidebar from "../components/MapSidebar";
 import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
+import { motion, useCycle } from "framer-motion";
+import { Navigation } from "../components/SideMotion/Navigation";
+import { MenuToggle } from "../components/SideMotion/MenuToggle";
+import { useDimensions } from "../components/SideMotion/use-dimensions";
+import { Sidebar } from "../components/SideMotion/Sidebar";
+import { t } from "i18next";
 
 export default function Map() {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
@@ -262,6 +268,7 @@ export default function Map() {
   const mapStyles = {
     fullscreenControl: false,
     zoomControl: false,
+    gestureHandling: "greedy",
     styles: [
       {
         featureType: "road",
@@ -417,7 +424,7 @@ export default function Map() {
                     fontWeight: "bold",
                     color: "grey",
                   }}
-                >메인화면으로</div>
+                >{t("goMain.Title")}</div>
               </div> 
             </Link>
           </div>
@@ -448,12 +455,12 @@ export default function Map() {
                     fontWeight: "bold",
                     color: "grey",
                   }}
-                >메인화면으로</div>
+                >{t("goMain.Title")}</div>
             </div>
           </Link>
         </div>
       }
-      {isMobile ? <MapDrawer/> : <MapSidebar/>}
+      {isMobile ? <MapDrawer/> : <Sidebar/>}
     </div>
   );
 }

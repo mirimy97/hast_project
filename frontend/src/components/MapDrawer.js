@@ -9,8 +9,10 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { t } from 'i18next';
+import MapSidebar from './SideMotion/MapSidebar';
 
-const drawerBleeding = 40;
+const drawerBleeding = 45;
 
 const Root = styled('div')(({ theme }) => ({
   height: '100%',
@@ -74,17 +76,19 @@ function MapDrawer() {
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, color: 'text.secondary', fontSize: "14px", fontWeight: "bold", lineHeight: "16px"}}>기사 보기</Typography>
+          <Typography sx={{ p: 2, color: 'text.secondary', fontSize: "14px", fontWeight: "bold", lineHeight: "20px"}}>📰 {t("categoryTitle.Title")}</Typography>
         </StyledBox>
         <StyledBox
           sx={{
             px: 2,
+            pt: 2,
             pb: 2,
             height: '100%',
             overflow: 'auto',
           }}
         >
-          <Skeleton variant="rectangular" height="100%" />
+          <MapSidebar />
+          {/* <Skeleton variant="rectangular" height="100%" /> */}
         </StyledBox>
       </SwipeableDrawer>
     </Root>

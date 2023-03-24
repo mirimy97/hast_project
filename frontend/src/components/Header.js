@@ -43,16 +43,15 @@ function Header(props) {
     props.setSidebarMbottom("-100vh");
   };
   return (
-    <>
-      <div className={styles.flex} style={{ padding: "0 20px 0 20px" }}>
-        <div>
-          {/* <span>
+    <div className={styles.flex}>
+      <div>
+        {/* <span>
           <img className={styles.img} src="/assets/earth.png" alt="배너1" /> KO
           |{" "}
         </span>
         <span>EN</span> */}
 
-          {/* <ToggleButtonGroup
+        {/* <ToggleButtonGroup
           color="primary"
           exclusive
           aria-label="text alignment"
@@ -67,54 +66,44 @@ function Header(props) {
           </ToggleButton>
         </ToggleButtonGroup> */}
 
-          <div className={styles.language}>
-            <img className={styles.globe} src="/assets/logo/globe.png" />
-            <div onClick={handleKo} className={styles.landiv}>
-              <motion.div
-                className="box"
-                initial={{ x: 0 }}
-                animate={{
-                  x: isKorean ? 0 : isMobile ? 35 : 78,
-                }}
+        <div className={styles.language}>
+          <img className={styles.globe} src="/assets/logo/globe.png" />
+          <div onClick={handleKo} className={styles.landiv}>
+            <motion.div
+              className="box"
+              initial={{ x: 0 }}
+              animate={{
+                x: isKorean ? 0 : isMobile ? 35 : 78,
+              }}
+            >
+              <p
+                className={styles.lan}
+                style={{ color: isKorean ? "" : "#7b7b7b" }}
               >
-                <p
-                  className={styles.lan}
-                  style={{ color: isKorean ? "" : "#7b7b7b" }}
-                >
-                  {isMobile ? "Ko" : "Korean"}
-                </p>
-              </motion.div>
-            </div>
-            <div>|</div>
-            <div onClick={handleEn} className={styles.landiv}>
-              <motion.div
-                className="box"
-                initial={{ x: 0 }}
-                animate={{
-                  x: isKorean ? 0 : isMobile ? -35 : -78,
-                }}
+                {isMobile ? "Ko" : "Korean"}
+              </p>
+            </motion.div>
+          </div>
+          <div className={styles.line}>|</div>
+          <div onClick={handleEn} className={styles.landiv}>
+            <motion.div
+              className="box"
+              initial={{ x: 0 }}
+              animate={{
+                x: isKorean ? 0 : isMobile ? -35 : -78,
+              }}
+            >
+              <p
+                className={styles.lan}
+                style={{ color: isKorean ? "#7b7b7b" : "" }}
               >
-                <p
-                  className={styles.lan}
-                  style={{ color: isKorean ? "#7b7b7b" : "" }}
-                >
-                  {isMobile ? "En" : "English"}
-                </p>
-              </motion.div>
-            </div>
+                {isMobile ? "En" : "English"}
+              </p>
+            </motion.div>
           </div>
         </div>
-
-        {
-          props.clickD && (
-            // <Button variant="outlined" className={styles.button} onClick={backBtn}>
-            //   뒤로가기
-            // </Button>
-            <CloseIcon onClick={backBtn} />
-          )
-
-          // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
-        }
+      </div>
+      <div>
         {props.clickD ? (
           <div style={{ position: "absolute" }}></div>
         ) : isMobile ? (
@@ -141,7 +130,18 @@ function Header(props) {
           </div>
         )}
       </div>
-    </>
+      <div>
+        {props.clickD ? (
+          // <Button variant="outlined" className={styles.button} onClick={backBtn}>
+          //   뒤로가기
+          // </Button>
+          <CloseIcon onClick={backBtn} />
+        ) : (
+          <div></div>
+          // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
+        )}
+      </div>
+    </div>
   );
 }
 
