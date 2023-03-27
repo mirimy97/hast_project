@@ -77,6 +77,11 @@
   justify-content: center;
 }
 
+.titleFont {
+  margin-top: 50px;
+  font-weight: 600;
+}
+
 .icon {
   width: 100px;
   height: 100px;
