@@ -99,10 +99,14 @@ export default function Map() {
   // 처음에 geocoding api로 경계값 들고오기
   useEffect(() => {
     // getCountryBounds()
-    setNe({ lat: 38.63400000000001, lng: 131.1603 });
-    setSw({ lat: 33.0041, lng: 124.5863 });
-    const neBound = { lat: 38.63400000000001, lng: 131.1603 };
-    const swBound = { lat: 33.0041, lng: 124.5863 };
+    setNe({ lat: 38.612243, lng: 129.468304 });
+    setSw({ lat: 34.390046, lng: 126.117398 });
+    const neBound = { lat: 38.612243, lng: 129.468304 };
+    const swBound = { lat: 34.390046, lng: 126.117398 };
+    // setNe({ lat: 38.63400000000001, lng: 131.1603 });
+    // setSw({ lat: 33.0041, lng: 124.5863 });
+    // const neBound = { lat: 38.63400000000001, lng: 131.1603 };
+    // const swBound = { lat: 33.0041, lng: 124.5863 };
     setBounds({
       nw: { lat: neBound.lat, lng: swBound.lng },
       se: { lat: swBound.lat, lng: neBound.lng },
