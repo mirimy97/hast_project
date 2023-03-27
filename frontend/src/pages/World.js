@@ -34,7 +34,9 @@ function World() {
   });
   const [sidebarD, setSidebarD] = useState(-500);
   const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
+  const [isDpChart, setIsDpChart] = useState(false);
 
+  // 브라우저 창 크기 변화 이벤트 -> globe 리사이징
   const handleResize = useCallback(() => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -45,6 +47,24 @@ function World() {
       window.removeEventListener("resize", handleResize);
     };
   }, [handleResize]);
+
+  // 스크롤 이벤트 -> 차트 나타내기 효과
+  const displayChart = () => {
+    // console.log("scroll", sidebarRef.current.scrollTop);
+    // console.log(isDpChart);
+    if (!isDpChart && sidebarRef.current.scrollTop > 185) {
+      setIsDpChart(true);
+      console.log("실행ㅇㅇㅇ");
+    }
+  };
+  useEffect(() => {
+    console.log("isDpChart", isDpChart);
+    console.log("sidebar", sidebarRef);
+    sidebarRef.current.addEventListener("scroll", displayChart);
+    return () => {
+      sidebarRef.current.removeEventListener("scroll", displayChart);
+    };
+  }, [isDpChart, sidebarRef]);
 
   //redux- language 불러오기
   const language = useSelector((state) => state.language.value);
@@ -216,7 +236,7 @@ function World() {
             }}
             className={styles.sidebarM}
           >
-            <WorldSidebar country={clickD?.properties} />
+            <WorldSidebar country={clickD?.properties} bbox={clickD?.bbox} />
           </div>
         ) : (
           <div
@@ -227,7 +247,7 @@ function World() {
             }}
             className={styles.sidebar}
           >
-            <WorldSidebar country={clickD?.properties} />
+            <WorldSidebar country={clickD?.properties} isDpChart={isDpChart} />
           </div>
         )}
       </div>

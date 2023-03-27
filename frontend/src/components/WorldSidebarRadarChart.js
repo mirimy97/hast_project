@@ -51,7 +51,7 @@ const data = [
 export default class RadarChartExample extends PureComponent {
   render() {
     return (
-      <ResponsiveContainer width="100%" height="50%">
+      <ResponsiveContainer width="100%" height="80%">
         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
@@ -62,6 +62,10 @@ export default class RadarChartExample extends PureComponent {
             stroke="#8884d8"
             fill="#8884d8"
             fillOpacity={0.6}
+            isAnimationActive={true}
+            animationBegin={0}
+            animationDuration={500}
+            animationEasing="ease-out"
           />
           <Radar
             name="Lily"
@@ -69,6 +73,10 @@ export default class RadarChartExample extends PureComponent {
             stroke="#82ca9d"
             fill="#82ca9d"
             fillOpacity={0.6}
+            isAnimationActive={true}
+            animationBegin={0}
+            animationDuration={500}
+            animationEasing="ease-out"
           />
           <Legend />
         </RadarChart>

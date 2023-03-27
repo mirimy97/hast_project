@@ -1,8 +1,9 @@
 import { scaleLinear, scalePoint, select, max, line } from "d3";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import RadarChartExample from "./WorldSidebarRadarChart";
+import styles from "./WorldSidebar.module.css";
 
-function WorldSidebarChartBox() {
+function WorldSidebarChartBox({ isDpChart }) {
   const data = [
     { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
     { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
@@ -12,39 +13,17 @@ function WorldSidebarChartBox() {
     { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
     { name: "Page G", uv: 3490, pv: 4300, amt: 2100 },
   ];
-  // const data = [5, 10, 15, 20, 25];
-
-  // ---------------------------------------------------
-  const svgRef = useRef();
-
   useEffect(() => {
-    const svg = select(svgRef.current);
-
-    // const xScale = scalePoint()
-    //   .domain(data.map((d) => d.name))
-    //   .range([0, 5000]);
-
-    // const yScale = scaleLinear()
-    //   .domain([0, max(data, (d) => d.uv)])
-    //   .range([5000, 0]);
-
-    // const line = line()
-    //   .x((d) => xScale(d.name))
-    //   .y((d) => yScale(d.uv));
-
-    // svg
-    //   .append("path")
-    //   .datum(data)
-    //   .attr("fill", "none")
-    //   .attr("stroke", "blue")
-    //   .attr("stroke-width", 2)
-    //   .attr("d", line);
-  }, []);
+    isDpChart && console.log("isDpchart", isDpChart);
+  }, [isDpChart]);
 
   return (
-    <>
-      <RadarChartExample />
-    </>
+    <div
+      style={{ height: "300px", marginBottom: "50px", fontSize: "15px" }}
+      className={styles.infobox}
+    >
+      {isDpChart && <RadarChartExample />}
+    </div>
   );
 }
 
