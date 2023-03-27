@@ -13,16 +13,22 @@ import styles from "./WorldGame.module.css";
 import { motion } from "framer-motion";
 import HeaderGame from "../components/HeaderGame";
 import GameBox from "../components/GamePage/GameBox";
+import CapitalGame from "../components/GamePage/CapitalGame";
 
 function World() {
+  const globeRef = useRef();
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
-
+  const [point, setPoint] = useState({
+    lat: 37.6,
+    lng: 124.2,
+    altitude: 2.5,
+  });
   useEffect(() => {
     // load data
-    fetch("geojson/ne_110m_admin_0_countries.geojson")
-      .then((res) => res.json())
-      .then(setCountries);
+    axios
+      .get("geojson/ne_110m_admin_0_countries.geojson")
+      .then((res) => setCountries(res.data));
   }, []);
 
   const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
@@ -30,12 +36,12 @@ function World() {
   // GDP per capita (avoiding countries with small pop)
   const getVal = (feat) =>
     feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
-  console.log(getVal);
+  //console.log(getVal);
   const maxVal = useMemo(
     () => Math.max(...countries.features.map(getVal)),
     [countries]
   );
-  console.log(maxVal);
+  //console.log(maxVal);
   colorScale.domain([0, maxVal]);
 
   //지구본 왼쪽으로 보내기
@@ -43,6 +49,31 @@ function World() {
   const shiftFactor = 0.4;
   const shiftAmmount = shiftFactor * w;
 
+  useEffect(() => {
+    globeRef.current.pointOfView(point);
+    if (hoverD) {
+      console.log(hoverD);
+      const bbox = hoverD.bbox;
+      //console.log(bbox);
+      // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
+      const lat = (bbox[1] + bbox[3]) / 2;
+      const lng = (bbox[0] + bbox[2]) / 2;
+
+      setPoint({
+        lat: lat,
+        lng: lng,
+        // altitude:
+        //   bbox[2] - bbox[0] < 300
+        //     ? bbox[2] - bbox[0] < 40
+        //       ? bbox[2] - bbox[0] < 8
+        //         ? 0.25
+        //         : 0.5
+        //       : 1
+        //     : 2,
+      });
+    }
+  }, [globeRef, point, hoverD]);
+  //console.log("hoverD", hoverD);
   return (
     <div
       style={{
@@ -63,26 +94,25 @@ function World() {
             className={styles.worldContainer}
           >
             <Globe
+              ref={globeRef}
               width={w + shiftAmmount}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
               lineHoverPrecision={0}
-              //   polygonsData={countries.features.filter(
-              //     (d) => d.properties.ISO_A2 !== "AQ"
-              //   )}
-              polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
+              polygonsData={countries.features.filter(
+                (d) => d.properties.ISO_A2 !== "AQ"
+              )}
+              // polygonAltitude={(d) =>
+              //   clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
+              // }
               polygonCapColor={(d) =>
-                d === hoverD ? "steelblue" : colorScale(getVal(d))
+                d === hoverD ? "#fff59a" : "transparent"
               }
-              polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
-              polygonStrokeColor={() => "#111"}
-              polygonLabel={({ properties: d }) => `
-          <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
-          GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-          Population: <i>${d.POP_EST}</i>
-        `}
-              onPolygonHover={setHoverD}
+              //colorScale(getVal(d))
+              polygonSideColor={() => "#00000050"}
+              polygonStrokeColor={() => "	#FFFFFF"}
               polygonsTransitionDuration={300}
+              // onPolygonHover={setHoverD}
             />
           </div>
         </div>
@@ -93,7 +123,9 @@ function World() {
             marginTop: `${w * 0.03}px`,
           }}
         >
-          <GameBox />
+          {countries.features.length !== 0 && (
+            <CapitalGame countries={countries} setHoverD={setHoverD} />
+          )}
         </div>
       </motion.div>
     </div>

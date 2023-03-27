@@ -80,12 +80,12 @@ function World() {
 
   // 클릭시 카메라 point 재설정
   const clickRegion = (d) => {
-    console.log(d);
+    //console.log(d);
     // clickD에 해당 구역 할당
     setClickD(d);
 
     const bbox = d.bbox;
-    console.log(bbox);
+    //console.log(bbox);
     // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
     const lat = (bbox[1] + bbox[3]) / 2;
     const lng = (bbox[0] + bbox[2]) / 2;
