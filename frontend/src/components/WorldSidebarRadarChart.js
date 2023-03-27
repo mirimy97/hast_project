@@ -63,8 +63,8 @@ export default class RadarChartExample extends PureComponent {
             fill="#8884d8"
             fillOpacity={0.6}
             isAnimationActive={true}
-            animationBegin={0}
-            animationDuration={500}
+            animationBegin={400}
+            animationDuration={1200}
             animationEasing="ease-out"
           />
           <Radar
@@ -74,8 +74,8 @@ export default class RadarChartExample extends PureComponent {
             fill="#82ca9d"
             fillOpacity={0.6}
             isAnimationActive={true}
-            animationBegin={0}
-            animationDuration={500}
+            animationBegin={900}
+            animationDuration={1600}
             animationEasing="ease-out"
           />
           <Legend />

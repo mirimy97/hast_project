@@ -35,10 +35,6 @@ function WorldSidebar({ country, isDpChart, bbox }) {
     navigate("/map", { state: { countryInfo: countryInfo } });
   };
 
-  useEffect(() => {
-    console.log("test", isDpChart);
-  }, [isDpChart]);
-
   return (
     <>
       {/* 나라이름 */}
@@ -101,7 +97,10 @@ function WorldSidebar({ country, isDpChart, bbox }) {
       ) : (
         ""
       )}
-      <div className={styles.sidebarOuterBox}>
+      <div
+        className={styles.sidebarOuterBox}
+        style={isMobile ? {} : { marginTop: "50px" }}
+      >
         {/* Info Box */}
         {country && (
           <WorldSidebarInfoBox
@@ -113,9 +112,14 @@ function WorldSidebar({ country, isDpChart, bbox }) {
             SUBREGION={country?.SUBREGION}
           />
         )}
-        <p className={styles.titleFont}>📈 한눈에 보기</p>
-
-        <WorldSidebarChartBox isDpChart={isDpChart} />
+        {isDpChart ? (
+          <>
+            <p className={styles.titleFont}>📈 한눈에 보기</p>
+            <WorldSidebarChartBox isDpChart={isDpChart} />
+          </>
+        ) : (
+          <div style={{ height: "100px" }}></div>
+        )}
       </div>
 
       <button className={styles.travelBtn} onClick={clickTravelBtn}>

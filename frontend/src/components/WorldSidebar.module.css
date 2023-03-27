@@ -37,6 +37,7 @@
   /* height: 100%; */
   flex-direction: column;
   align-items: center;
+  margin-bottom: 50px;
   /* overflow: scroll; */
 }
 
@@ -80,6 +81,17 @@
 .titleFont {
   margin-top: 50px;
   font-weight: 600;
+  animation: fontSlide 1s ease-out;
+}
+@keyframes fontSlide {
+  from {
+    margin-top: 150px;
+    opacity: 0;
+  }
+  to {
+    margin-top: 50px;
+    opacity: 1;
+  }
 }
 
 .icon {

@@ -52,9 +52,11 @@ function World() {
   const displayChart = () => {
     // console.log("scroll", sidebarRef.current.scrollTop);
     // console.log(isDpChart);
-    if (!isDpChart && sidebarRef.current.scrollTop > 185) {
+    if (isMobile && !isDpChart && sidebarRef.current.scrollTop > 140) {
       setIsDpChart(true);
-      console.log("실행ㅇㅇㅇ");
+      // console.log("실행ㅇㅇㅇ");
+    } else if (!isMobile && !isDpChart && sidebarRef.current.scrollTop > 5) {
+      setIsDpChart(true);
     }
   };
   useEffect(() => {
@@ -165,6 +167,7 @@ function World() {
         setLeft={setLeft}
         setSidebarD={setSidebarD}
         setSidebarMbottom={setSidebarMbottom}
+        setIsDpChart={setIsDpChart}
       />
       <div className={styles.background}></div>
       <div
@@ -234,9 +237,15 @@ function World() {
               left: "250px",
               bottom: sidebarMbottom,
             }}
-            className={styles.sidebarM}
+            className={
+              clickD ? styles.sidebarM : `${styles.sidebarM} ${styles.hidden}`
+            }
           >
-            <WorldSidebar country={clickD?.properties} bbox={clickD?.bbox} />
+            <WorldSidebar
+              country={clickD?.properties}
+              isDpChart={isDpChart}
+              bbox={clickD?.bbox}
+            />
           </div>
         ) : (
           <div
@@ -247,7 +256,11 @@ function World() {
             }}
             className={styles.sidebar}
           >
-            <WorldSidebar country={clickD?.properties} isDpChart={isDpChart} />
+            <WorldSidebar
+              country={clickD?.properties}
+              isDpChart={isDpChart}
+              bbox={clickD?.bbox}
+            />
           </div>
         )}
       </div>

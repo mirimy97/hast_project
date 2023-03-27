@@ -18,8 +18,8 @@ import { t } from "i18next";
 
 export default function Map() {
   // countryInfo 값 받아오기
-  // const location = useLocation();
-  // console.log(location.state?.countryInfo);
+  const location = useLocation();
+  console.log(location.state?.countryInfo);
 
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   const [isLoading, setIsLoading] = useState(true);

@@ -42,3 +42,17 @@
 .sidebarM::-webkit-scrollbar {
   display: none;
 }
+
+.hidden * {
+  animation: hide 1s ease-out;
+  opacity: 0;
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

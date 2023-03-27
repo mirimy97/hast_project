@@ -13,13 +13,10 @@ function WorldSidebarChartBox({ isDpChart }) {
     { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
     { name: "Page G", uv: 3490, pv: 4300, amt: 2100 },
   ];
-  useEffect(() => {
-    isDpChart && console.log("isDpchart", isDpChart);
-  }, [isDpChart]);
 
   return (
     <div
-      style={{ height: "300px", marginBottom: "50px", fontSize: "15px" }}
+      style={{ height: "300px", fontSize: "15px" }}
       className={styles.infobox}
     >
       {isDpChart && <RadarChartExample />}

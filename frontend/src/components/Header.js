@@ -42,6 +42,7 @@ function Header(props) {
     props.setSidebarD(-500);
     props.setSidebarMbottom("-100vh");
     props.setLeft(-250);
+    props.setIsDpChart(false);
   };
 
   const navigate = useNavigate();
