@@ -6,11 +6,12 @@ import styles from "./Header.module.css";
 import { motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 function Header(props) {
   const dispatch = useDispatch();
   const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const location   = useLocation()
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
@@ -145,6 +146,7 @@ function Header(props) {
           <img
             className={styles.card}
             src="/assets/3d/card.png"
+            alt="game"
             onClick={changePg}
           ></img>
           // <img className={styles.icon} src="/assets/3d/airplane.png"></img>

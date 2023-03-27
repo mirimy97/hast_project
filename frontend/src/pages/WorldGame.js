@@ -12,7 +12,9 @@ import axios from "axios";
 import styles from "./WorldGame.module.css";
 import { motion } from "framer-motion";
 import HeaderGame from "../components/HeaderGame";
+import GameButton from "../components/GamePage/GameButton";
 import GameBox from "../components/GamePage/GameBox";
+
 
 function World() {
   const [countries, setCountries] = useState({ features: [] });
@@ -92,8 +94,17 @@ function World() {
             marginRight: `${w * 0.1}px`,
             marginTop: `${w * 0.03}px`,
           }}
-        >
-          <GameBox />
+        > 
+          <div
+            style={{position: "absolute", top: "38%", left: "28%"}}
+          >
+            <GameButton label="국기 맞추기 게임" id="1"/>
+          </div>
+          <div
+            style={{position: "absolute", top: "55%", left: "28%"}}
+          >
+            <GameButton label="수도 맞추기 게임" id="2"/>
+          </div>
         </div>
       </motion.div>
     </div>

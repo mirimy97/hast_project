@@ -3,10 +3,15 @@
 }
 .gamebox {
   height: 100px;
-  background-color: rgb(255, 234, 226);
+  /* background-color: rgb(255, 234, 226); */
   width: 40rem;
   height: 40rem;
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.gameButton {
+  background-color: aqua;
+  padding: "3px"
 }
