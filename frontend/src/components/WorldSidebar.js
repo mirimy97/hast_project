@@ -17,7 +17,7 @@ function WorldSidebar({ country }) {
     <>
       {/* 나라이름 */}
       {country ? (
-        language == "en" ? (
+        language === "en" ? (
           <p
             style={
               isMobile
@@ -101,7 +101,7 @@ function WorldSidebar({ country }) {
       </div>
 
       <button className={styles.travelBtn}>
-        <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
+        <span>{language === "en" ? "TRAVEL" : "여행떠나기"}</span>
       </button>
     </>
   );

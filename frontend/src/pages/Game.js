@@ -38,7 +38,7 @@ function World() {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <div
-        // style={isMobile == true ? {} : { left: `-${left}px` }}
+        // style={isMobile === true ? {} : { left: `-${left}px` }}
         className={styles.worldContainer}
       >
         <Globe

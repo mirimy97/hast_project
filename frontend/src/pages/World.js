@@ -148,7 +148,7 @@ function World() {
       />
       <div className={styles.background}></div>
       <div
-        style={isMobile == true ? { left: "-250px" } : { left: `${left}px` }}
+        style={isMobile === true ? { left: "-250px" } : { left: `${left}px` }}
         className={styles.worldContainer}
       >
         {countries.features && (
@@ -196,7 +196,7 @@ function World() {
                   text-shadow: 1px 1px 0px #3d3d3d;
                   -webkit-text-stroke-width: 0.1px;
                   -webkit-text-stroke-color: black;">
-                  ${language == "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
+                  ${language === "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
                   </p>
                   </div>`;
               }}

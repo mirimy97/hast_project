@@ -73,7 +73,7 @@ export default function Map() {
     }
   };
 
-  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8";
+  const MyKey = process.env.REACT_APP_MAP_API;
   // // 지오코딩 api 위한 url
   const url = "https://maps.googleapis.com/maps/api/geocode/json";
   const getCountryBounds = () => {
