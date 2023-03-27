@@ -1,10 +1,9 @@
-import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { useState } from "react";
 import { useTranslation, withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { lanen, lanko } from "../redux/language";
 import styles from "./Header.module.css";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
