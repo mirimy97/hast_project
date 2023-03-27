@@ -62,7 +62,9 @@ function World() {
     console.log("sidebar", sidebarRef);
     sidebarRef.current.addEventListener("scroll", displayChart);
     return () => {
-      sidebarRef.current.removeEventListener("scroll", displayChart);
+      if (sidebarRef.current) {
+        sidebarRef.current.removeEventListener("scroll", displayChart);
+      }
     };
   }, [isDpChart, sidebarRef]);
 
@@ -105,7 +107,7 @@ function World() {
     setClickD(d);
 
     const bbox = d.bbox;
-    console.log(bbox);
+    console.log("여기",bbox);
     // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
     const lat = (bbox[1] + bbox[3]) / 2;
     const lng = (bbox[0] + bbox[2]) / 2;
@@ -236,7 +238,7 @@ function World() {
             }}
             className={styles.sidebarM}
           >
-            <WorldSidebar country={clickD?.properties} bbox={clickD?.bbox} />
+            <WorldSidebar country={clickD?.properties} isDpChart={isDpChart} bbox={clickD?.bbox} />
           </div>
         ) : (
           <div
@@ -247,7 +249,7 @@ function World() {
             }}
             className={styles.sidebar}
           >
-            <WorldSidebar country={clickD?.properties} isDpChart={isDpChart} />
+            <WorldSidebar country={clickD?.properties} isDpChart={isDpChart} bbox={clickD?.bbox}/>
           </div>
         )}
       </div>

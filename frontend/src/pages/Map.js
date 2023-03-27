@@ -18,20 +18,14 @@ import { t } from "i18next";
 
 export default function Map() {
   // countryInfo 값 받아오기
-  // const location = useLocation();
-  // console.log(location.state?.countryInfo);
+  const location = useLocation();
 
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
   // 받아올 정보 (임시데이터)
-  const countryInfo = {
-    country: "KR",
-    latitude: 35.907757,
-    longitude: 127.766922,
-    name: "South Korea",
-  };
+  const countryInfo = location.state?.countryInfo
   // const countryInfo = {
   //   country: 'RU',
   //   latitude: 61.52401,
@@ -41,17 +35,14 @@ export default function Map() {
 
   // center, zoom state 사용
   const [center, setCenter] = useState({
-    lat: countryInfo.latitude,
-    lng: countryInfo.longitude,
+    lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
+    lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
   });
   const [zoom, setZoom] = useState(8);
 
-  // bound state 사용
-  const [ne, setNe] = useState({});
-  const [sw, setSw] = useState({});
   const [bounds, setBounds] = useState({
-    nw: { lat: ne.lat, lng: sw.lng },
-    se: { lat: sw.lat, lng: ne.lng },
+    nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
+    se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
   });
 
   const calculateZoom = (bounds) => {
@@ -69,54 +60,17 @@ export default function Map() {
   };
 
   const setMapBounds = (bounds) => {
-    if (bounds.nw.lat !== undefined) {
-      const zoom = calculateZoom(bounds);
-      console.log(zoom);
-      setZoom(zoom);
-      setIsLoading(false);
-    }
+    // if (bounds.nw.lat !== undefined) {
+    const zoom = calculateZoom(bounds);
+    console.log(zoom);
+    setZoom(zoom);
+    setIsLoading(false);
+    // }
   };
 
-  const MyKey = process.env.REACT_APP_MAP_API;
-  // // 지오코딩 api 위한 url
-  const url = "https://maps.googleapis.com/maps/api/geocode/json";
-  const getCountryBounds = () => {
-    axios
-      .get(url, {
-        params: {
-          address: countryInfo.name,
-          key: MyKey,
-        },
-      })
-      .then((res) => {
-        // console.log(res.data.results[0].geometry.bounds) // northeast-{lat, lng}, southwest-{lat, lng}
-        setNe(res.data.results[0].geometry.bounds.northeast);
-        setSw(res.data.results[0].geometry.bounds.southwest);
-        const neBound = res.data.results[0].geometry.bounds.northeast;
-        const swBound = res.data.results[0].geometry.bounds.southwest;
-        setBounds({
-          nw: { lat: neBound.lat, lng: swBound.lng },
-          se: { lat: swBound.lat, lng: neBound.lng },
-        });
-        console.log(res.data.results[0].geometry.bounds);
-      })
-      // .then(setMapBounds(bounds))
-      .catch((err) => console.log(err));
-  };
+  // const MyKey = process.env.REACT_APP_MAP_API;
+  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
 
-  // 처음에 geocoding api로 경계값 들고오기
-  useEffect(() => {
-    // getCountryBounds()
-    setNe({ lat: 38.63400000000001, lng: 131.1603 });
-    setSw({ lat: 33.0041, lng: 124.5863 });
-    const neBound = { lat: 38.63400000000001, lng: 131.1603 };
-    const swBound = { lat: 33.0041, lng: 124.5863 };
-    setBounds({
-      nw: { lat: neBound.lat, lng: swBound.lng },
-      se: { lat: swBound.lat, lng: neBound.lng },
-    });
-  }, []);
-  // 바운더리에 맞춰 zoom 계산
   useEffect(() => {
     setMapBounds(bounds);
   }, [bounds]);

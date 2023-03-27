@@ -13,7 +13,7 @@ function WorldSidebar({ country, isDpChart, bbox }) {
   const nameKo = country?.ADMIN_Ko;
   const nameEn = country?.NAME;
   const [countryInfo, setCountryInfo] = useState("");
-
+  
   useEffect(() => {
     if (country && bbox) {
       setCountryInfo({
@@ -118,8 +118,8 @@ function WorldSidebar({ country, isDpChart, bbox }) {
         <WorldSidebarChartBox isDpChart={isDpChart} />
       </div>
 
-      <button className={styles.travelBtn} onClick={clickTravelBtn}>
-        <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
+      <button className={styles.travelBtn} onClick={() => clickTravelBtn()}>
+        <span>{language === "en" ? "TRAVEL" : "여행떠나기"}</span>
       </button>
     </>
   );
