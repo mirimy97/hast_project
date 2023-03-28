@@ -27,6 +27,7 @@ function World() {
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [clickD, setClickD] = useState(null);
+  const [sidebarC, setSidebarC] = useState(null);
   const [point, setPoint] = useState({
     lat: 37.6,
     lng: 124.2,
@@ -55,7 +56,7 @@ function World() {
     if (isMobile && !isDpChart && sidebarRef.current.scrollTop > 140) {
       setIsDpChart(true);
       // console.log("실행ㅇㅇㅇ");
-    } else if (!isMobile && !isDpChart && sidebarRef.current.scrollTop > 5) {
+    } else if (!isMobile && !isDpChart && sidebarRef.current.scrollTop > 1) {
       setIsDpChart(true);
     }
   };
@@ -105,6 +106,7 @@ function World() {
     console.log(d);
     // clickD에 해당 구역 할당
     setClickD(d);
+    setSidebarC(d);
 
     const bbox = d.bbox;
     console.log(bbox);
@@ -163,6 +165,7 @@ function World() {
         globeRef={globeRef}
         clickD={clickD}
         setClickD={setClickD}
+        setSidebarC={setSidebarC}
         setPoint={setPoint}
         setLeft={setLeft}
         setSidebarD={setSidebarD}
@@ -237,14 +240,12 @@ function World() {
               left: "250px",
               bottom: sidebarMbottom,
             }}
-            className={
-              clickD ? styles.sidebarM : `${styles.sidebarM} ${styles.hidden}`
-            }
+            className={styles.sidebarM}
           >
             <WorldSidebar
-              country={clickD?.properties}
+              country={sidebarC?.properties}
               isDpChart={isDpChart}
-              bbox={clickD?.bbox}
+              bbox={sidebarC?.bbox}
             />
           </div>
         ) : (
@@ -257,9 +258,9 @@ function World() {
             className={styles.sidebar}
           >
             <WorldSidebar
-              country={clickD?.properties}
+              country={sidebarC?.properties}
               isDpChart={isDpChart}
-              bbox={clickD?.bbox}
+              bbox={sidebarC?.bbox}
             />
           </div>
         )}

@@ -35,14 +35,17 @@ function Header(props) {
   // 뒤로가기 클릭 시 (나가기)
   const backBtn = () => {
     props.globeRef.current.resumeAnimation();
-    props.setClickD(null);
     props.setPoint({
       altitude: 2.5,
     });
     props.setSidebarD(-500);
     props.setSidebarMbottom("-100vh");
     props.setLeft(-250);
-    props.setIsDpChart(false);
+    props.setClickD(null);
+    setTimeout(function () {
+      props.setIsDpChart(false);
+      props.setSidebarC(null);
+    }, 500);
   };
 
   const navigate = useNavigate();
