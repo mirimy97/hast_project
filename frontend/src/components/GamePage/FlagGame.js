@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CapitalGame.module.css";
-function CapitalGame({ countries, setHoverD }) {
+const FlagGame = ({ countries, setHoverD }) => {
   const [answers, setAnswers] = useState([0, 0, 0, 0]);
-  const [quizData, setQuizData] = useState({ country: "", capital: "" });
+  const [quizData, setQuizData] = useState({ country: "", flag: "" });
 
   const [showResult, setShowResult] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -15,20 +15,21 @@ function CapitalGame({ countries, setHoverD }) {
     wrongAnswers: 0,
   });
 
-  // useEffect(() => {
-  //   settingQuizData();
-  // }, []);
+  let flagArray = countries.features.map((country) => {
+    if (country.properties.ISO_A2)
+      return Object.assign(country, {
+        country: country.properties.ADMIN_Ko,
+        flag: country.properties.ISO_A2.toLowerCase(),
+      });
+  });
+
+  useEffect(() => {
+    settingQuizData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //퀴즈에 필요한 데이터 불러오기
-  const settingQuizData = useCallback(async () => {
-    let capitalArray = countries.features.map((country) => {
-      if (country.properties.CAPITAL_Ko)
-        return Object.assign(country, {
-          country: country.properties.ADMIN_Ko,
-          capital: country.properties.CAPITAL_Ko,
-        });
-    });
-
+  const settingQuizData = () => {
     let array = [];
     for (let i = 0; i < 4; i++) {
       let random = Math.floor(Math.random() * 177);
@@ -40,31 +41,31 @@ function CapitalGame({ countries, setHoverD }) {
     }
 
     let random = Math.floor(Math.random() * 4);
-    let questionData = capitalArray[array[random]];
+    let questionData = flagArray[array[random]];
     setHoverD(questionData);
     setQuizData({
       country: questionData.country,
-      capital: questionData.capital,
+      flag: questionData.flag,
     });
     setAnswers([
       {
-        country: capitalArray[array[0]].country,
-        capital: capitalArray[array[0]].capital,
+        country: flagArray[array[0]].country,
+        flag: flagArray[array[0]].flag,
       },
       {
-        country: capitalArray[array[1]].country,
-        capital: capitalArray[array[1]].capital,
+        country: flagArray[array[1]].country,
+        flag: flagArray[array[1]].flag,
       },
       {
-        country: capitalArray[array[2]].country,
-        capital: capitalArray[array[2]].capital,
+        country: flagArray[array[2]].country,
+        flag: flagArray[array[2]].flag,
       },
       {
-        country: capitalArray[array[3]].country,
-        capital: capitalArray[array[3]].capital,
+        country: flagArray[array[3]].country,
+        flag: flagArray[array[3]].flag,
       },
     ]);
-  }, []);
+  };
 
   const addLeadingZero = (number) => (number > 9 ? number : `0${number}`);
 
@@ -104,6 +105,7 @@ function CapitalGame({ countries, setHoverD }) {
       }
     }, 800);
   };
+  const imgUrl = "assets/flags/" + quizData.flag + ".png";
   return (
     <div className={styles.quiz_container}>
       {!showResult ? (
@@ -114,7 +116,8 @@ function CapitalGame({ countries, setHoverD }) {
             </span>
             <span className={styles.total_question}>/{addLeadingZero(10)}</span>
           </div>
-          <h2 className={styles.question}>❓ {quizData.country}의 수도 ❓</h2>
+          <h2 className={styles.question}>❓ 이 국기의 나라는 ❓</h2>
+          <img src={imgUrl} alt="flag" className={styles.img} />
           <ul>
             {answers.map((answer, index) => (
               <li
@@ -130,7 +133,7 @@ function CapitalGame({ countries, setHoverD }) {
                     : null
                 }
               >
-                {answer.capital}
+                {answer.country}
               </li>
             ))}
           </ul>
@@ -143,20 +146,20 @@ function CapitalGame({ countries, setHoverD }) {
               <div>💬</div>
             )}
             {/* <button
-              onClick={onClickNext}
-              disabled={selectedAnswerIndex === null}
-            >
-              {activeQuestion === 9 ? "Finish" : "Next"}
-            </button> */}
+                onClick={onClickNext}
+                disabled={selectedAnswerIndex === null}
+              >
+                {activeQuestion === 9 ? "Finish" : "Next"}
+              </button> */}
           </div>
         </div>
       ) : (
         <div className={styles.result}>
-          <h2>수도 퀴즈 결과</h2>
+          <h2>국기 퀴즈 결과</h2>
           <h2>{result.score}점 👊</h2>
           <div>
             {result.score > 80 ? (
-              <span>당신은 수도천재 !</span>
+              <span>당신은 국기천재 !</span>
             ) : result.score > 60 ? (
               <span>나쁘지 않은 점수 !</span>
             ) : (
@@ -167,6 +170,6 @@ function CapitalGame({ countries, setHoverD }) {
       )}
     </div>
   );
-}
+};
 
-export default CapitalGame;
+export default FlagGame;

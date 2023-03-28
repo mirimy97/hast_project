@@ -15,6 +15,8 @@ import HeaderGame from "../components/HeaderGame";
 import GameButton from "../components/GamePage/GameButton";
 import GameBox from "../components/GamePage/GameBox";
 import CapitalGame from "../components/GamePage/CapitalGame";
+import { getImageListItemBarUtilityClass } from "@mui/material";
+import FlagGame from "../components/GamePage/FlagGame";
 
 function World() {
   const globeRef = useRef();
@@ -53,7 +55,7 @@ function World() {
   useEffect(() => {
     globeRef.current.pointOfView(point);
     if (hoverD) {
-      console.log(hoverD);
+      //console.log(hoverD);
       const bbox = hoverD.bbox;
       //console.log(bbox);
       // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
@@ -75,6 +77,8 @@ function World() {
     }
   }, [globeRef, point, hoverD]);
   //console.log("hoverD", hoverD);
+
+  const [gameName, setGameName] = useState("");
   return (
     <div
       style={{
@@ -99,7 +103,7 @@ function World() {
               width={w + shiftAmmount}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
-              lineHoverPrecision={0}
+              //lineHoverPrecision={0}
               polygonsData={countries.features.filter(
                 (d) => d.properties.ISO_A2 !== "AQ"
               )}
@@ -124,20 +128,33 @@ function World() {
             marginTop: `${w * 0.03}px`,
           }}
         >
-          {countries.features.length !== 0 && (
+          {/* {countries.features.length !== 0 && (
             <CapitalGame countries={countries} setHoverD={setHoverD} />
+          )} */}
+          {gameName === "" ? (
+            <>
+              <div style={{ position: "absolute", top: "38%", left: "28%" }}>
+                <GameButton
+                  label="국기 맞추기 게임"
+                  id="1"
+                  setGameName={setGameName}
+                />
+              </div>
+              <div style={{ position: "absolute", top: "55%", left: "28%" }}>
+                <GameButton
+                  label="수도 맞추기 게임"
+                  id="2"
+                  setGameName={setGameName}
+                />
+              </div>
+            </>
+          ) : gameName === "1" ? (
+            <FlagGame countries={countries} setHoverD={setHoverD} />
+          ) : gameName === "2" ? (
+            <CapitalGame countries={countries} setHoverD={setHoverD} />
+          ) : (
+            <div>왜 안돼</div>
           )}
-
-          {/* <div
-            style={{position: "absolute", top: "38%", left: "28%"}}
-          >
-            <GameButton label="국기 맞추기 게임" id="1"/>
-          </div>
-          <div
-            style={{position: "absolute", top: "55%", left: "28%"}}
-          >
-            <GameButton label="수도 맞추기 게임" id="2"/>
-          </div> */}
         </div>
       </motion.div>
     </div>
