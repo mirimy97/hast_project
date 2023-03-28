@@ -1,18 +1,12 @@
 import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
-import Fab from "@mui/material/Fab";
 import { Marker } from "../components/Marker";
-// import MapSidebar from "../components/MapSidebar";
 import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
-import { motion, useCycle } from "framer-motion";
-import { Navigation } from "../components/SideMotion/Navigation";
-import { MenuToggle } from "../components/SideMotion/MenuToggle";
-import { useDimensions } from "../components/SideMotion/use-dimensions";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
 
@@ -24,26 +18,45 @@ export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
-  // 받아올 정보 (임시데이터)
-  const countryInfo = location.state?.countryInfo
-  // const countryInfo = {
-  //   country: 'RU',
-  //   latitude: 61.52401,
-  //   longitude: 105.318756,
-  //   name: 'Russia'
-  // }
+  // Globe로부터 받아올 정보
+  const [countryInfo, setCountryInfo] = useState(null);
+  
+  useEffect(() => {
+    console.log(location)
+    if (location.state === null) {
+      const savedCountryInfo = localStorage.getItem("countryInfo");
+      console.log(JSON.parse(savedCountryInfo))
+      setCountryInfo(JSON.parse(savedCountryInfo));
+    }
+    else {
+      console.log(location.state?.countryInfo)
+      setCountryInfo(location.state?.countryInfo)
+    }
+  }, [])
 
-  // center, zoom state 사용
-  const [center, setCenter] = useState({
-    lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
-    lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
-  });
+
+  useEffect(() => {
+    console.log(countryInfo)
+    if (countryInfo !== null) {
+      console.log('null아님')
+      localStorage.setItem("countryInfo", JSON.stringify(countryInfo));
+      setCenter({
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
+      })
+      setBounds({
+        nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
+        se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
+      })
+    }
+  }, [countryInfo]);
+
+
+  // center, zoom, bound state 사용
+  const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
+  const [bounds, setBounds] = useState(null);
 
-  const [bounds, setBounds] = useState({
-    nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
-    se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
-  });
 
   const calculateZoom = (bounds) => {
     const ZOOM_MAX = 21;
@@ -60,16 +73,16 @@ export default function Map() {
   };
 
   const setMapBounds = (bounds) => {
-    // if (bounds.nw.lat !== undefined) {
-    const zoom = calculateZoom(bounds);
-    console.log(zoom);
-    setZoom(zoom);
-    setIsLoading(false);
-    // }
+    if (bounds !== null) {
+      const zoom = calculateZoom(bounds);
+      console.log(zoom);
+      setZoom(zoom);
+      setIsLoading(false);
+    }
   };
 
-  // const MyKey = process.env.REACT_APP_MAP_API;
-  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
+  const MyKey = process.env.REACT_APP_MAP_API;
+  // const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -208,17 +221,19 @@ export default function Map() {
   };
 
   useEffect(() => {
-    if (center.lat && center.lng && nowDanger) {
-      // 클릭 한 번만 하게끔
-      console.log("달라짐");
-      setZoom(13);
-      console.log(nowCircle);
-      console.log(nowDanger);
-
-      const { map, maps } = mapRef.current;
-      // console.log(map, maps)
-      // place api 사용해서 장소 정보 들고오기
-      // getPlaces(map, maps, nowDanger);
+    if (center !== null) {
+      if (center.lat && center.lng && nowDanger) {
+        // 클릭 한 번만 하게끔
+        console.log("달라짐");
+        setZoom(13);
+        console.log(nowCircle);
+        console.log(nowDanger);
+  
+        const { map, maps } = mapRef.current;
+        // console.log(map, maps)
+        // place api 사용해서 장소 정보 들고오기
+        // getPlaces(map, maps, nowDanger);
+      }
     }
   }, [nowCircle]);
 

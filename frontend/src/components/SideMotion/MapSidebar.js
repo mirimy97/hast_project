@@ -29,6 +29,10 @@ function MapSidebar() {
       name: "categoryBtn",
       value: "Cate5",
     },
+    {
+      name: "categoryBtn",
+      value: "Cate6",
+    }
   ];
 
   //뉴스 리스트 불러오기
