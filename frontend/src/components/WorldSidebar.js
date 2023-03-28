@@ -18,6 +18,7 @@ function WorldSidebar({ country, isDpChart, bbox }) {
     if (country && bbox) {
       setCountryInfo({
         country: country.ISO_A2,
+        FIPS: country.FIPS_10_,
         ne: {
           lat: bbox[3],
           lng: bbox[2],
