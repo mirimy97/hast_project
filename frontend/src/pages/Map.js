@@ -51,6 +51,23 @@ export default function Map() {
     }
   }, [countryInfo]);
 
+  // 기사 조회
+  const [newslist, setNewsList] = useState([]);
+  // countryInfo.FIPS
+  useEffect(() => {
+    axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/KS`).then((res) => {
+      if (res.data.resultCode === "SUCCESS") {
+        setNewsList(res.data.result);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (newslist.length !== 0) {
+      console.log("뉴스받아오기 성공")
+      setIsLoading(false);
+    }
+  }, [newslist])
 
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
@@ -77,12 +94,12 @@ export default function Map() {
       const zoom = calculateZoom(bounds);
       console.log(zoom);
       setZoom(zoom);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
-  const MyKey = process.env.REACT_APP_MAP_API;
-  // const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
+  // const MyKey = process.env.REACT_APP_MAP_API;
+  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -154,59 +171,62 @@ export default function Map() {
   };
 
   // 치안도 표시 임시 데이터
-  const dangerList = [
-    {
-      id: 1,
-      lat: 35.907757,
-      lng: 127.766922,
-      score: -50,
-    },
-    {
-      id: 2,
-      lat: 38,
-      lng: 128.3321,
-      score: -30,
-    },
-    {
-      id: 3,
-      lat: 35.213234,
-      lng: 129.23143,
-      score: -25,
-    },
-    {
-      id: 4,
-      lat: 35.31,
-      lng: 128.8,
-      score: -10,
-    },
-    {
-      id: 5,
-      lat: 37.32567,
-      lng: 129.143542,
-      score: -28,
-    },
-  ];
+  // const dangerList = [
+  //   {
+  //     id: 1,
+  //     lat: 35.907757,
+  //     lng: 127.766922,
+  //     score: -50,
+  //   },
+  //   {
+  //     id: 2,
+  //     lat: 38,
+  //     lng: 128.3321,
+  //     score: -30,
+  //   },
+  //   {
+  //     id: 3,
+  //     lat: 35.213234,
+  //     lng: 129.23143,
+  //     score: -25,
+  //   },
+  //   {
+  //     id: 4,
+  //     lat: 35.31,
+  //     lng: 128.8,
+  //     score: -10,
+  //   },
+  //   {
+  //     id: 5,
+  //     lat: 37.32567,
+  //     lng: 129.143542,
+  //     score: -28,
+  //   },
+  // ];
 
   // 치안도 표시 apiLoaded
   const getDanger = (map, maps) => {
-    dangerList.map((danger) => {
-      const circle = new maps.Circle({
-        strokeColor: danger.score <= -40 ? "#FF0000" : "#FFFF00",
-        strokeOpacity: 0.5,
-        strokeWeight: 1,
-        fillColor: danger.score <= -40 ? "#FF0000" : "#FFFF00",
-        fillOpacity: 0.5,
-        map,
-        center: { lat: danger.lat, lng: danger.lng },
-        radius: 3000,
-        id: danger.id,
+    console.log(newslist)
+    if (newslist.length !== 0) {
+      newslist.map((news) => {
+        const circle = new maps.Circle({
+          strokeColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
+          strokeOpacity: 0.5,
+          strokeWeight: 1,
+          fillColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
+          fillOpacity: 0.5,
+          map,
+          center: { lat: news.latitude, lng: news.longitude },
+          radius: 3000,
+          id: news.id,
+        });
+        // 각 서클에 이벤트리스너 추가
+        circle.addListener("click", () => {
+          handleCircleClick(news);
+        });
+        return circle;
       });
-      // 각 서클에 이벤트리스너 추가
-      circle.addListener("click", () => {
-        handleCircleClick(danger);
-      });
-      return circle;
-    });
+    }
   };
 
   //
@@ -215,6 +235,7 @@ export default function Map() {
   const mapRef = useRef(null);
 
   const handleCircleClick = (circle) => {
+    console.log(circle)
     setCenter({ lat: circle.lat, lng: circle.lng });
     setNowCircle(circle.id);
     setNowDanger(circle);
@@ -448,7 +469,7 @@ export default function Map() {
           </Link>
         </div>
       )}
-      {isMobile ? <MapDrawer /> : <Sidebar />}
+      {isMobile ? <MapDrawer /> : <Sidebar newslist={newslist}/>}
     </div>
   );
 }
