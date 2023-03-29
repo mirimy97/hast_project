@@ -9,45 +9,48 @@ import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
+import Loading from "./Loading";
 
 export default function Map() {
   // countryInfo 값 받아오기
   const location = useLocation();
-
   const isMobile = useSelector((state) => state.isMobile.isMobile);
+
+  const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
   // Globe로부터 받아올 정보
   const [countryInfo, setCountryInfo] = useState(null);
-  
+
   useEffect(() => {
-    console.log(location)
+    console.log(location);
+    setTimeout(() => {
+      setLodingPage(false);
+    }, 2000);
     if (location.state === null) {
       const savedCountryInfo = localStorage.getItem("countryInfo");
-      console.log(JSON.parse(savedCountryInfo))
+      console.log(JSON.parse(savedCountryInfo));
       setCountryInfo(JSON.parse(savedCountryInfo));
+    } else {
+      console.log(location.state?.countryInfo);
+      setCountryInfo(location.state?.countryInfo);
     }
-    else {
-      console.log(location.state?.countryInfo)
-      setCountryInfo(location.state?.countryInfo)
-    }
-  }, [])
-
+  }, []);
 
   useEffect(() => {
-    console.log(countryInfo)
+    console.log(countryInfo);
     if (countryInfo !== null) {
-      console.log('null아님')
+      console.log("null아님");
       localStorage.setItem("countryInfo", JSON.stringify(countryInfo));
       setCenter({
-        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
-        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
-      })
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat) / 2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng) / 2,
+      });
       setBounds({
         nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
         se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
-      })
+      });
     }
   }, [countryInfo]);
 
@@ -64,16 +67,15 @@ export default function Map() {
 
   useEffect(() => {
     if (newslist.length !== 0) {
-      console.log("뉴스받아오기 성공")
+      console.log("뉴스받아오기 성공");
       setIsLoading(false);
     }
-  }, [newslist])
+  }, [newslist]);
 
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
   const [bounds, setBounds] = useState(null);
-
 
   const calculateZoom = (bounds) => {
     const ZOOM_MAX = 21;
@@ -101,7 +103,7 @@ export default function Map() {
   };
 
   // const MyKey = process.env.REACT_APP_MAP_API;
-  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
+  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8";
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -208,7 +210,7 @@ export default function Map() {
 
   // 치안도 표시 apiLoaded
   const getDanger = (map, maps) => {
-    console.log(newslist)
+    console.log(newslist);
     if (newslist.length !== 0) {
       newslist.map((news) => {
         const circle = new maps.Circle({
@@ -237,7 +239,7 @@ export default function Map() {
   const mapRef = useRef(null);
 
   const handleCircleClick = (circle) => {
-    console.log(circle)
+    console.log(circle);
     setCenter({ lat: circle.lat, lng: circle.lng });
     setNowCircle(circle.id);
     setNowDanger(circle);
@@ -251,7 +253,7 @@ export default function Map() {
         setZoom(13);
         console.log(nowCircle);
         console.log(nowDanger);
-  
+
         const { map, maps } = mapRef.current;
         // console.log(map, maps)
         // place api 사용해서 장소 정보 들고오기
@@ -295,8 +297,8 @@ export default function Map() {
     setTarget(key);
   };
 
-  return isLoading ? (
-    <div></div>
+  return loadingPage ? (
+    <Loading />
   ) : (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       <GoogleMapReact
@@ -471,7 +473,7 @@ export default function Map() {
           </Link>
         </div>
       )}
-      {isMobile ? <MapDrawer /> : <Sidebar newslist={newslist}/>}
+      {isMobile ? <MapDrawer /> : <Sidebar newslist={newslist} />}
     </div>
   );
 }

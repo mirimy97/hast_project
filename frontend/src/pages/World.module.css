@@ -1,3 +1,30 @@
+.logoPC {
+  position: absolute;
+  width: 40%;
+  top: 30%;
+  left: 30%;
+}
+
+.logoM {
+  position: absolute;
+  width: 80%;
+  top: 30%;
+  left: 10%;
+}
+
+.ani {
+  animation: logo 1s;
+}
+
+@keyframes logo {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .worldContainer {
   position: fixed;
   transition: left 1s ease;
