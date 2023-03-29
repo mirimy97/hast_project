@@ -11,7 +11,7 @@ function WorldSidebarInfoBox({
   SUBREGION,
 }) {
   const { t } = useTranslation();
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   return (
     <>

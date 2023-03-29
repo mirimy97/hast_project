@@ -12,7 +12,7 @@ import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setIsMobile } from "./redux/isMobile";
+import { setIsMobile } from "./redux/status";
 
 const theme = createTheme({
   typography: {

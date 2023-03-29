@@ -14,7 +14,7 @@ import Loading from "./Loading";
 export default function Map() {
   // countryInfo 값 받아오기
   const location = useLocation();
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);

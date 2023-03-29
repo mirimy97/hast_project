@@ -15,14 +15,17 @@ import { Color } from "three";
 
 import WorldSidebar from "../components/WorldSidebar";
 import Header from "../components/Header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
+import { setIsLogo } from "../redux/status";
 
 function World() {
+  const dispatch = useDispatch();
   const globeRef = useRef();
   const sidebarRef = useRef(null);
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
-  const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useSelector((state) => state.status.isMobile);
+  const isLogo = useSelector((state) => state.status.isLogo);
+  // const [isLoading, setIsLoading] = useState(true);
   const [ani, setAni] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
@@ -31,11 +34,19 @@ function World() {
   const [hoverD, setHoverD] = useState();
   const [clickD, setClickD] = useState(null);
   const [sidebarC, setSidebarC] = useState(null);
-  const [point, setPoint] = useState({
-    lat: 0,
-    lng: 0,
-    altitude: 50,
-  });
+  const [point, setPoint] = useState(
+    isLogo
+      ? {
+          lat: 0,
+          lng: 0,
+          altitude: 50,
+        }
+      : {
+          lat: 0,
+          lng: 0,
+          altitude: 2.5,
+        }
+  );
   const [sidebarD, setSidebarD] = useState(-500);
   const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
   const [isDpChart, setIsDpChart] = useState(false);
@@ -103,7 +114,7 @@ function World() {
       });
     }, 2000);
     setTimeout(() => {
-      setIsLoading(false);
+      dispatch(setIsLogo(false));
     }, 3000);
   }, []);
 
@@ -287,7 +298,7 @@ function World() {
           )}
         </div>
       </div>
-      {isLoading && (
+      {isLogo && (
         <img
           className={
             isMobile

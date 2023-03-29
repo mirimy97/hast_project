@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styles from "./Loading.module.css";
 
 function Loading() {
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
   const [text, setText] = useState("");
   useState(() => {
     setText("H");

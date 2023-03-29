@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 
 function Header(props) {
   const dispatch = useDispatch();
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
