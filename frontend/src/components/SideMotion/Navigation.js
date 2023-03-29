@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { MenuItem } from "./MenuItem.js";
 import styles from "./SideMotion.module.css";
 import MapSidebar from "./MapSidebar.js";
+import { t } from "i18next";
 
 const variants = {
   open: {
@@ -17,6 +18,7 @@ const variants = {
 
 export const Navigation = () => (
   <motion.ul variants={variants} className={styles.ul}>
+    <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3>
     <MapSidebar />
   </motion.ul>
 );

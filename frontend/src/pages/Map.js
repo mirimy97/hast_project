@@ -1,19 +1,27 @@
 import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
 import Fab from "@mui/material/Fab";
 import { Marker } from "../components/Marker";
-import MapSidebar from "../components/SideMotion/MapSidebar";
+// import MapSidebar from "../components/MapSidebar";
+import { useSelector } from "react-redux";
+import MapDrawer from "../components/MapDrawer";
 import { motion, useCycle } from "framer-motion";
 import { Navigation } from "../components/SideMotion/Navigation";
 import { MenuToggle } from "../components/SideMotion/MenuToggle";
 import { useDimensions } from "../components/SideMotion/use-dimensions";
 import { Sidebar } from "../components/SideMotion/Sidebar";
+import { t } from "i18next";
 
 export default function Map() {
+  // countryInfo 값 받아오기
+  const location = useLocation();
+  console.log(location.state?.countryInfo);
+
+  const isMobile = useSelector((state) => state.isMobile.isMobile);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
@@ -69,7 +77,7 @@ export default function Map() {
     }
   };
 
-  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8";
+  const MyKey = process.env.REACT_APP_MAP_API;
   // // 지오코딩 api 위한 url
   const url = "https://maps.googleapis.com/maps/api/geocode/json";
   const getCountryBounds = () => {
@@ -233,9 +241,6 @@ export default function Map() {
       // 각 서클에 이벤트리스너 추가
       circle.addListener("click", () => {
         handleCircleClick(danger);
-
-        // place api 사용해서 장소 정보 들고오기
-        // getPlaces(map, maps, danger)
       });
       return circle;
     });
@@ -263,7 +268,7 @@ export default function Map() {
       const { map, maps } = mapRef.current;
       // console.log(map, maps)
       // place api 사용해서 장소 정보 들고오기
-      getPlaces(map, maps, nowDanger);
+      // getPlaces(map, maps, nowDanger);
     }
   }, [nowCircle]);
 
@@ -401,23 +406,84 @@ export default function Map() {
       ) : (
         <div></div>
       )}
-      <div>
-        <Link to="/">
-          <Fab
-            variant="extended"
-            sx={{
-              backgroundColor: "white",
-              borderRadius: "10px",
-              position: "absolute",
-              bottom: "16px",
-              left: "16px",
-            }}
-          >
-            {language === "en" ? "Back to Earth" : "뒤로가기"}
-          </Fab>
-        </Link>
-      </div>
-      <Sidebar />
+      {isMobile ? (
+        zoom < 12 ? (
+          <div>
+            <Link to="/">
+              <div
+                style={{
+                  position: "absolute",
+                  top: "8px",
+                  left: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "14px",
+                }}
+              >
+                <img
+                  src="/assets/back.png"
+                  alt="뒤로가기"
+                  width={50}
+                  style={{ zIndex: 10 }}
+                />
+                <div
+                  style={{
+                    position: "relative",
+                    left: "-20px",
+                    backgroundColor: "white",
+                    borderRadius: "8px",
+                    padding: "3px 8px 3px 15px",
+                    // paddingLeft: "10px",
+                    fontWeight: "bold",
+                    color: "grey",
+                  }}
+                >
+                  {t("goMain.Title")}
+                </div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <></>
+        )
+      ) : (
+        <div>
+          <Link to="/">
+            <div
+              style={{
+                position: "absolute",
+                bottom: "3px",
+                left: "8px",
+                display: "flex",
+                alignItems: "center",
+                fontSize: "1.2rem",
+              }}
+            >
+              <img
+                src="/assets/back.png"
+                alt="뒤로가기"
+                width={100}
+                style={{ zIndex: 10 }}
+              />
+              <div
+                style={{
+                  position: "relative",
+                  left: "-40px",
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  padding: "3px 8px 3px 20px",
+                  // paddingLeft: "10px",
+                  fontWeight: "bold",
+                  color: "grey",
+                }}
+              >
+                {t("goMain.Title")}
+              </div>
+            </div>
+          </Link>
+        </div>
+      )}
+      {isMobile ? <MapDrawer /> : <Sidebar />}
     </div>
   );
 }

@@ -136,7 +136,7 @@ function MapSidebar() {
     // <div className={styles.sidebar}>
     <>
       {/* <KeyboardDoubleArrowRightIcon /> */}
-      <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3>
+      {/* <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3> */}
       {buttons &&
         buttons.map((news, index) => (
           <>
@@ -144,7 +144,7 @@ function MapSidebar() {
               key={index}
               className={`${styles.button}  
                 ${
-                  selectBtn == news.value.substr(4, 4)
+                  selectBtn === news.value.substr(4, 4)
                     ? styles.buttonSelect
                     : ""
                 }`}

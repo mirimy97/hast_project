@@ -1,10 +1,14 @@
 .quiz_container {
   max-width: 500px;
-  min-width: 250px;
-  background: #ffffff;
-  border-radius: 4px;
-  margin-top: 80px;
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
   padding: 30px 60px;
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  flex-direction: column;
 }
 
 .quiz_container .active_question_no {
@@ -16,7 +20,7 @@
 .quiz_container .total_question {
   font-size: 16px;
   font-weight: 500;
-  color: #e0dee3;
+  color: #8f8f8f;
 }
 
 .quiz_container h2 {
@@ -75,32 +79,19 @@
   justify-content: center;
   height: 38px;
 }
-
-.result h3 {
-  font-size: 24px;
-  letter-spacing: 1.4px;
-  text-align: center;
-}
-
-.result p {
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.result p span {
-  color: #002280;
-  font-size: 22px;
-}
 .correctText {
-  color: #002280;
+  /* color: #002280; */
+  color: #3d3d3d;
   font-size: 18px;
   font-weight: bold;
 }
 .errorText {
-  color: #ec2700;
+  /* color: #ec2700; */
+  color: #3d3d3d;
   font-size: 18px;
   font-weight: bold;
 }
 .img {
   width: 150px;
+  border: 1px solid #8d8d8d;
 }

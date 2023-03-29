@@ -1,23 +1,46 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styles from "./WorldSidebar.module.css";
 import WorldSidebarChartBox from "./WorldSidebarChartBox";
 import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
-function WorldSidebar({ country }) {
+function WorldSidebar({ country, isDpChart, bbox }) {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   const flagEndpoint = "/assets/flags";
-
   const imageurl = `${flagEndpoint}/${country?.ISO_A2.toLowerCase()}.png`;
   const language = useSelector((state) => state.language.value);
   const nameKo = country?.ADMIN_Ko;
   const nameEn = country?.NAME;
+  const [countryInfo, setCountryInfo] = useState("");
+
+  useEffect(() => {
+    if (country && bbox) {
+      setCountryInfo({
+        country: country.ISO_A2,
+        FIPS: country.FIPS_10_,
+        ne: {
+          lat: bbox[3],
+          lng: bbox[2],
+        },
+        sw: {
+          lat: bbox[1],
+          lng: bbox[0],
+        },
+      });
+    }
+  }, [country, bbox]);
+
+  const navigate = useNavigate();
+  const clickTravelBtn = () => {
+    navigate("/map", { state: { countryInfo: countryInfo } });
+  };
 
   return (
     <>
       {/* 나라이름 */}
       {country ? (
-        language == "en" ? (
+        language === "en" ? (
           <p
             style={
               isMobile
@@ -75,7 +98,10 @@ function WorldSidebar({ country }) {
       ) : (
         ""
       )}
-      <div className={styles.sidebarOuterBox}>
+      <div
+        className={styles.sidebarOuterBox}
+        style={isMobile ? {} : { marginTop: "50px" }}
+      >
         {/* Info Box */}
         {country && (
           <WorldSidebarInfoBox
@@ -87,20 +113,17 @@ function WorldSidebar({ country }) {
             SUBREGION={country?.SUBREGION}
           />
         )}
-        <p>📈 한눈에 보기</p>
-        <div
-          style={{
-            width: "100%",
-            height: "500px",
-            backgroundColor: "#f6edd5",
-            marginBottom: "50px",
-          }}
-        >
-          <WorldSidebarChartBox />
-        </div>
+        {isDpChart ? (
+          <>
+            <p className={styles.titleFont}>📈 한눈에 보기</p>
+            <WorldSidebarChartBox isDpChart={isDpChart} />
+          </>
+        ) : (
+          <div style={{ height: "100px" }}></div>
+        )}
       </div>
 
-      <button className={styles.travelBtn}>
+      <button className={styles.travelBtn} onClick={clickTravelBtn}>
         <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
       </button>
     </>

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import styles from "./CapitalGame.module.css";
-function CapitalGame({ countries, setHoverD }) {
+import styles from "./Game.module.css";
+import GameResult from "./GameResult";
+function CapitalGame({ countries, changeHover }) {
   const [answers, setAnswers] = useState([0, 0, 0, 0]);
   const [quizData, setQuizData] = useState({ country: "", capital: "" });
-
   const [showResult, setShowResult] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
@@ -15,12 +15,8 @@ function CapitalGame({ countries, setHoverD }) {
     wrongAnswers: 0,
   });
 
-  // useEffect(() => {
-  //   settingQuizData();
-  // }, []);
-
   //퀴즈에 필요한 데이터 불러오기
-  const settingQuizData = useCallback(async () => {
+  const settingQuizData = useCallback(() => {
     let capitalArray = countries.features.map((country) => {
       if (country.properties.CAPITAL_Ko)
         return Object.assign(country, {
@@ -41,7 +37,7 @@ function CapitalGame({ countries, setHoverD }) {
 
     let random = Math.floor(Math.random() * 4);
     let questionData = capitalArray[array[random]];
-    setHoverD(questionData);
+    changeHover(questionData);
     setQuizData({
       country: questionData.country,
       capital: questionData.capital,
@@ -64,6 +60,10 @@ function CapitalGame({ countries, setHoverD }) {
         capital: capitalArray[array[3]].capital,
       },
     ]);
+  }, []);
+
+  useEffect(() => {
+    settingQuizData();
   }, []);
 
   const addLeadingZero = (number) => (number > 9 ? number : `0${number}`);
@@ -114,7 +114,7 @@ function CapitalGame({ countries, setHoverD }) {
             </span>
             <span className={styles.total_question}>/{addLeadingZero(10)}</span>
           </div>
-          <h2 className={styles.question}>❓ {quizData.country}의 수도 ❓</h2>
+          <h2 className={styles.question}>{quizData.country}의 수도 ❓</h2>
           <ul>
             {answers.map((answer, index) => (
               <li
@@ -136,9 +136,9 @@ function CapitalGame({ countries, setHoverD }) {
           </ul>
           <div className={styles.flex_center}>
             {selectedAnswer && onClick ? (
-              <div className={styles.correctText}>⭕ 정답입니다 ⭕</div>
+              <div className={styles.correctText}>정답입니다 😍</div>
             ) : onClick ? (
-              <div className={styles.errorText}>❌ 오답입니다 ❌</div>
+              <div className={styles.errorText}>오답입니다 😥</div>
             ) : (
               <div>💬</div>
             )}
@@ -151,19 +151,7 @@ function CapitalGame({ countries, setHoverD }) {
           </div>
         </div>
       ) : (
-        <div className={styles.result}>
-          <h2>수도 퀴즈 결과</h2>
-          <h2>{result.score}점 👊</h2>
-          <div>
-            {result.score > 80 ? (
-              <span>당신은 수도천재 !</span>
-            ) : result.score > 60 ? (
-              <span>나쁘지 않은 점수 !</span>
-            ) : (
-              <span>공부하세요 !</span>
-            )}
-          </div>
-        </div>
+        <GameResult option="수도" result={result} />
       )}
     </div>
   );

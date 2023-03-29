@@ -37,6 +37,7 @@
   /* height: 100%; */
   flex-direction: column;
   align-items: center;
+  margin-bottom: 50px;
   /* overflow: scroll; */
 }
 
@@ -56,8 +57,8 @@
 }
 .infobox {
   width: 95%;
-  background-color: #f6edd5;
-  border: 1px solid #e5d1c5;
+  background-color: #dcdcdc;
+  border: 1px solid #b8b8b8;
   border-radius: 10px;
   padding: 15px 0 15px 0;
   margin-top: 15px;
@@ -75,6 +76,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.titleFont {
+  margin-top: 50px;
+  font-weight: 600;
+  animation: fontSlide 1s ease-out;
+}
+@keyframes fontSlide {
+  from {
+    margin-top: 150px;
+    opacity: 0;
+  }
+  to {
+    margin-top: 50px;
+    opacity: 1;
+  }
 }
 
 .icon {
@@ -105,9 +122,9 @@
   bottom: 0px;
   left: calc(50% - 100px);
   border-radius: 4px;
-  background-color: #e5d1c580;
-  border: 2px solid #e5d1c5;
-  color: #00000090;
+  background-color: #3b396380;
+  border: 2px solid #3b3963;
+  color: #ffffff90;
   text-align: center;
   font-size: 20px;
   padding: 15px 20px 10px 20px;
@@ -121,8 +138,8 @@
 }
 
 .travelBtn:hover {
-  background-color: #d6baa8;
-  color: #000000;
+  background-color: #3b3963;
+  color: #e5e5e5;
   transition: all 0.1s;
 }
 

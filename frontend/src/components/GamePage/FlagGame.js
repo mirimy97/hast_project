@@ -1,5 +1,7 @@
+import { useStepContext } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import styles from "./CapitalGame.module.css";
+import styles from "./Game.module.css";
+import GameResult from "./GameResult";
 const FlagGame = ({ countries, setHoverD }) => {
   const [answers, setAnswers] = useState([0, 0, 0, 0]);
   const [quizData, setQuizData] = useState({ country: "", flag: "" });
@@ -116,7 +118,7 @@ const FlagGame = ({ countries, setHoverD }) => {
             </span>
             <span className={styles.total_question}>/{addLeadingZero(10)}</span>
           </div>
-          <h2 className={styles.question}>❓ 이 국기의 나라는 ❓</h2>
+          <h2 className={styles.question}>이 국기의 나라는 ❓</h2>
           <img src={imgUrl} alt="flag" className={styles.img} />
           <ul>
             {answers.map((answer, index) => (
@@ -139,9 +141,9 @@ const FlagGame = ({ countries, setHoverD }) => {
           </ul>
           <div className={styles.flex_center}>
             {selectedAnswer && onClick ? (
-              <div className={styles.correctText}>⭕ 정답입니다 ⭕</div>
+              <div className={styles.correctText}>정답입니다 😍</div>
             ) : onClick ? (
-              <div className={styles.errorText}>❌ 오답입니다 ❌</div>
+              <div className={styles.errorText}>오답입니다 😥</div>
             ) : (
               <div>💬</div>
             )}
@@ -154,19 +156,7 @@ const FlagGame = ({ countries, setHoverD }) => {
           </div>
         </div>
       ) : (
-        <div className={styles.result}>
-          <h2>국기 퀴즈 결과</h2>
-          <h2>{result.score}점 👊</h2>
-          <div>
-            {result.score > 80 ? (
-              <span>당신은 국기천재 !</span>
-            ) : result.score > 60 ? (
-              <span>나쁘지 않은 점수 !</span>
-            ) : (
-              <span>공부하세요 !</span>
-            )}
-          </div>
-        </div>
+        <GameResult option="국기" result={result} />
       )}
     </div>
   );

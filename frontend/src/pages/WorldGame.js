@@ -47,11 +47,6 @@ function World() {
   //console.log(maxVal);
   colorScale.domain([0, maxVal]);
 
-  //지구본 왼쪽으로 보내기
-  const w = window.innerWidth;
-  const shiftFactor = 0.4;
-  const shiftAmmount = shiftFactor * w;
-
   useEffect(() => {
     globeRef.current.pointOfView(point);
     if (hoverD) {
@@ -78,7 +73,16 @@ function World() {
   }, [globeRef, point, hoverD]);
   //console.log("hoverD", hoverD);
 
+  //지구본 왼쪽으로 보내기
+  const w = window.innerWidth;
+  const shiftFactor = 0.4;
+  const shiftAmmount = shiftFactor * w;
+
   const [gameName, setGameName] = useState("");
+
+  const changeHover = (propHover) => {
+    setHoverD(propHover);
+  };
   return (
     <div
       style={{
@@ -121,26 +125,22 @@ function World() {
             />
           </div>
         </div>
-        <div
-          className={styles.gamebox}
-          style={{
-            marginRight: `${w * 0.1}px`,
-            marginTop: `${w * 0.03}px`,
-          }}
-        >
+        <div className={styles.gamebox}>
           {/* {countries.features.length !== 0 && (
             <CapitalGame countries={countries} setHoverD={setHoverD} />
           )} */}
           {gameName === "" ? (
             <>
-              <div style={{ position: "absolute", top: "38%", left: "28%" }}>
+              <h1 className={styles.gameTitle}>
+                Let's Play <br />
+                The Game
+              </h1>
+              <div className={styles.btnFlex}>
                 <GameButton
                   label="국기 맞추기 게임"
                   id="1"
                   setGameName={setGameName}
                 />
-              </div>
-              <div style={{ position: "absolute", top: "55%", left: "28%" }}>
                 <GameButton
                   label="수도 맞추기 게임"
                   id="2"
@@ -149,11 +149,11 @@ function World() {
               </div>
             </>
           ) : gameName === "1" ? (
-            <FlagGame countries={countries} setHoverD={setHoverD} />
+            <FlagGame countries={countries} changeHover={changeHover} />
           ) : gameName === "2" ? (
-            <CapitalGame countries={countries} setHoverD={setHoverD} />
+            <CapitalGame countries={countries} changeHover={changeHover} />
           ) : (
-            <div>왜 안돼</div>
+            ""
           )}
         </div>
       </motion.div>

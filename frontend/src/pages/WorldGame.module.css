@@ -2,16 +2,26 @@
   position: fixed;
 }
 .gamebox {
-  height: 100px;
-  /* background-color: rgb(255, 234, 226); */
-  width: 40rem;
-  height: 40rem;
   position: absolute;
   top: 0;
   right: 0;
+  width: 60%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
-
-.gameButton {
-  background-color: aqua;
-  padding: "3px";
+.btnFlex {
+  display: flex;
+}
+.gameTitle {
+  transform: skew(-12deg) rotate(-12deg);
+  grid-area: text;
+  font-family: "Sarpanch", sans-serif;
+  font-size: 10vmin;
+  margin: 0;
+  padding-bottom: 50px;
+  color: #1e88e5;
+  text-shadow: 0.5vmin 0.5vmin 0 #e79c10, -0.5vmin -0.5vmin 0 #d53a33;
 }

@@ -39,9 +39,10 @@ function Header(props) {
     props.setPoint({
       altitude: 2.5,
     });
-    props.setLeft(0);
     props.setSidebarD(-500);
     props.setSidebarMbottom("-100vh");
+    props.setLeft(-250);
+    props.setIsDpChart(false);
   };
 
   const navigate = useNavigate();
@@ -73,18 +74,18 @@ function Header(props) {
         </ToggleButtonGroup> */}
 
         <div className={styles.language}>
-          <img className={styles.globe} src="/assets/logo/globe.png" />
+          <img className={styles.globe} src="/assets/logo/globe2.jpg" />
           <div onClick={handleKo} className={styles.landiv}>
             <motion.div
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : isMobile ? 35 : 78,
+                x: isKorean ? 0 : isMobile ? 32 : 70,
               }}
             >
               <p
                 className={styles.lan}
-                style={{ color: isKorean ? "" : "#7b7b7b" }}
+                style={{ color: isKorean ? "#e5e5e5" : "#7b7b7b" }}
               >
                 {isMobile ? "Ko" : "Korean"}
               </p>
@@ -96,12 +97,12 @@ function Header(props) {
               className="box"
               initial={{ x: 0 }}
               animate={{
-                x: isKorean ? 0 : isMobile ? -35 : -78,
+                x: isKorean ? 0 : isMobile ? -32 : -70,
               }}
             >
               <p
                 className={styles.lan}
-                style={{ color: isKorean ? "#7b7b7b" : "" }}
+                style={{ color: isKorean ? "#7b7b7b" : "#e5e5e5" }}
               >
                 {isMobile ? "En" : "English"}
               </p>
@@ -109,7 +110,7 @@ function Header(props) {
           </div>
         </div>
       </div>
-      <div style={isMobile ? {} : { width: "50%" }}>
+      <div style={isMobile ? { width: "100%" } : { width: "50%" }}>
         {props.clickD ? (
           <div style={{ position: "absolute" }}></div>
         ) : isMobile ? (
@@ -136,7 +137,7 @@ function Header(props) {
           </div>
         )}
       </div>
-      <div style={isMobile ? {} : { width: "25%" }}>
+      <div style={isMobile ? { width: "65px" } : { width: "25%" }}>
         {props.clickD ? (
           // <Button variant="outlined" className={styles.button} onClick={backBtn}>
           //   뒤로가기

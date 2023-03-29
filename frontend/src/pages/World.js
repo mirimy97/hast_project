@@ -23,7 +23,7 @@ function World() {
   const isMobile = useSelector((state) => state.isMobile.isMobile);
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
-  const [left, setLeft] = useState(0);
+  const [left, setLeft] = useState(-250);
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [clickD, setClickD] = useState(null);
@@ -32,9 +32,11 @@ function World() {
     lng: 124.2,
     altitude: 2.5,
   });
-  const [sidebarD, setSidebarD] = useState(-600);
+  const [sidebarD, setSidebarD] = useState(-500);
   const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
+  const [isDpChart, setIsDpChart] = useState(false);
 
+  // 브라우저 창 크기 변화 이벤트 -> globe 리사이징
   const handleResize = useCallback(() => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
@@ -45,6 +47,26 @@ function World() {
       window.removeEventListener("resize", handleResize);
     };
   }, [handleResize]);
+
+  // 스크롤 이벤트 -> 차트 나타내기 효과
+  const displayChart = () => {
+    // console.log("scroll", sidebarRef.current.scrollTop);
+    // console.log(isDpChart);
+    if (isMobile && !isDpChart && sidebarRef.current.scrollTop > 140) {
+      setIsDpChart(true);
+      // console.log("실행ㅇㅇㅇ");
+    } else if (!isMobile && !isDpChart && sidebarRef.current.scrollTop > 5) {
+      setIsDpChart(true);
+    }
+  };
+  useEffect(() => {
+    console.log("isDpChart", isDpChart);
+    console.log("sidebar", sidebarRef);
+    sidebarRef.current.addEventListener("scroll", displayChart);
+    return () => {
+      sidebarRef.current?.removeEventListener("scroll", displayChart);
+    };
+  }, [isDpChart, sidebarRef]);
 
   //redux- language 불러오기
   const language = useSelector((state) => state.language.value);
@@ -110,9 +132,9 @@ function World() {
 
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
-      setLeft(window.innerWidth * 0.2);
+      setLeft(-500);
       // PC ver
-      setSidebarD(`-${window.innerWidth * 0.2}`);
+      setSidebarD(`0`);
       // Mobile ber
       setSidebarMbottom("0px");
       sidebarRef.current.scrollTop = 0;
@@ -145,10 +167,11 @@ function World() {
         setLeft={setLeft}
         setSidebarD={setSidebarD}
         setSidebarMbottom={setSidebarMbottom}
+        setIsDpChart={setIsDpChart}
       />
       <div className={styles.background}></div>
       <div
-        style={isMobile == true ? {} : { left: `-${left}px` }}
+        style={isMobile === true ? { left: "-250px" } : { left: `${left}px` }}
         className={styles.worldContainer}
       >
         {countries.features && (
@@ -156,11 +179,11 @@ function World() {
             {/* <PreloadImages images={images} /> */}
             <Globe
               ref={globeRef}
-              width={width}
+              width={width + 500}
               height={height}
               globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-              //backgroundImageUrl="assets/angryimg.png"
-              backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+              backgroundImageUrl="/assets/dark.png"
+              // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
               //globeMaterial={globeMaterial}
               lineHoverPrecision={0}
               polygonsData={countries.features.filter(
@@ -196,7 +219,7 @@ function World() {
                   text-shadow: 1px 1px 0px #3d3d3d;
                   -webkit-text-stroke-width: 0.1px;
                   -webkit-text-stroke-color: black;">
-                  ${language == "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
+                  ${language === "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
                   </p>
                   </div>`;
               }}
@@ -206,16 +229,23 @@ function World() {
             />
           </>
         )}
-        {isMobile == true ? (
+        {isMobile ? (
           <div
             ref={sidebarRef}
             style={{
-              width: "100%",
+              width: width,
+              left: "250px",
               bottom: sidebarMbottom,
             }}
-            className={styles.sidebarM}
+            className={
+              clickD ? styles.sidebarM : `${styles.sidebarM} ${styles.hidden}`
+            }
           >
-            <WorldSidebar country={clickD?.properties} />
+            <WorldSidebar
+              country={clickD?.properties}
+              isDpChart={isDpChart}
+              bbox={clickD?.bbox}
+            />
           </div>
         ) : (
           <div
@@ -226,7 +256,11 @@ function World() {
             }}
             className={styles.sidebar}
           >
-            <WorldSidebar country={clickD?.properties} />
+            <WorldSidebar
+              country={clickD?.properties}
+              isDpChart={isDpChart}
+              bbox={clickD?.bbox}
+            />
           </div>
         )}
       </div>

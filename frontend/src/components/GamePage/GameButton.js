@@ -8,6 +8,7 @@ function GameButton({ label, id, setGameName }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        padding: "0px 10px",
       }}
     >
       <img
