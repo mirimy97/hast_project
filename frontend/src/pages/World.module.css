@@ -59,8 +59,8 @@
   background-color: #ffffff80;
 
   transition: bottom 0.7s ease-out;
-  padding: 30px;
-  padding-top: 60px;
+  padding: 60px 20px 30px 20px;
+  /* padding-top: 60px; */
   /* border-radius: 10px 10px 0 0; */
 }
 .sidebar::-webkit-scrollbar {
