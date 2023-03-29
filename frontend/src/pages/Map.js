@@ -51,28 +51,23 @@ export default function Map() {
     }
   }, [countryInfo]);
 
-  // 기사 조회
-  const [newslist, setNewsList] = useState([]);
-  // countryInfo.FIPS
+  // 기사 조회해서 하위 컴포넌트에 넘겨주기
+  // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
+  const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
-    axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/KS`).then((res) => {
+    axios.get("http://j8e106.p.ssafy.io:8080/api/info/dots").then((res) => {
       if (res.data.resultCode === "SUCCESS") {
-        setNewsList(res.data.result);
+        setDangerList(res.data.result);
       }
     });
   }, []);
 
-  useEffect(() => {
-    if (newslist.length !== 0) {
-      console.log("뉴스받아오기 성공")
-      setIsLoading(false);
-    }
-  }, [newslist])
 
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
   const [bounds, setBounds] = useState(null);
+  const [initialZoom, setInitialZoom] = useState(null)
 
 
   const calculateZoom = (bounds) => {
@@ -94,14 +89,15 @@ export default function Map() {
       const zoom = calculateZoom(bounds);
       console.log(zoom);
       setZoom(zoom);
-      if (newslist.length === 0) {
-        setIsLoading(false);
-      }
+      setInitialZoom(zoom)
+      // if (dangerList.length === 0) {
+      //   setIsLoading(false);
+      // }
     }
   };
 
   // const MyKey = process.env.REACT_APP_MAP_API;
-  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8"
+  const MyKey = "AIzaSyAv04v10IdfrHgjK_fTlrQw84nhHSzIQM8"
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -172,93 +168,85 @@ export default function Map() {
     setZoom(map.getZoom());
   };
 
-  // 치안도 표시 임시 데이터
-  // const dangerList = [
-  //   {
-  //     id: 1,
-  //     lat: 35.907757,
-  //     lng: 127.766922,
-  //     score: -50,
-  //   },
-  //   {
-  //     id: 2,
-  //     lat: 38,
-  //     lng: 128.3321,
-  //     score: -30,
-  //   },
-  //   {
-  //     id: 3,
-  //     lat: 35.213234,
-  //     lng: 129.23143,
-  //     score: -25,
-  //   },
-  //   {
-  //     id: 4,
-  //     lat: 35.31,
-  //     lng: 128.8,
-  //     score: -10,
-  //   },
-  //   {
-  //     id: 5,
-  //     lat: 37.32567,
-  //     lng: 129.143542,
-  //     score: -28,
-  //   },
-  // ];
-
-  // 치안도 표시 apiLoaded
-  const getDanger = (map, maps) => {
-    console.log(newslist)
-    if (newslist.length !== 0) {
-      newslist.map((news) => {
-        const circle = new maps.Circle({
-          strokeColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
-          strokeOpacity: 0.5,
-          strokeWeight: 1,
-          fillColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
-          fillOpacity: 0.5,
-          map,
-          center: { lat: news.latitude, lng: news.longitude },
-          radius: 3000,
-          id: news.id,
-        });
-        // 각 서클에 이벤트리스너 추가
-        circle.addListener("click", () => {
-          handleCircleClick(news);
-        });
-        return circle;
-      });
-    }
-  };
-
-  //
-  const [nowCircle, setNowCircle] = useState(null);
-  const [nowDanger, setNowDanger] = useState(null);
-  const mapRef = useRef(null);
-
-  const handleCircleClick = (circle) => {
-    console.log(circle)
-    setCenter({ lat: circle.lat, lng: circle.lng });
-    setNowCircle(circle.id);
-    setNowDanger(circle);
-  };
+  
+  const [test, setTest] = useState(null)
 
   useEffect(() => {
-    if (center !== null) {
-      if (center.lat && center.lng && nowDanger) {
-        // 클릭 한 번만 하게끔
-        console.log("달라짐");
-        setZoom(13);
-        console.log(nowCircle);
-        console.log(nowDanger);
-  
-        const { map, maps } = mapRef.current;
-        // console.log(map, maps)
-        // place api 사용해서 장소 정보 들고오기
-        // getPlaces(map, maps, nowDanger);
-      }
+    if (dangerList.length !== 0) {
+      const newDangerList = dangerList.map((danger) => {
+        return {
+          lat: danger.latitude,
+          lng: danger.longitude,
+          weight: danger.score
+        }
+      })
+      setTest({
+        positions: newDangerList,
+        options: {
+          radius: 20,
+          opacity: 0.6,
+        }
+      })
     }
-  }, [nowCircle]);
+  }, [dangerList])
+
+
+  useEffect(() => {
+    if (test !== null) {
+      setIsLoading(false)
+    }
+  }, [test])
+
+
+
+  // const customList = () => {
+  //   const newDangerList = dangerList.map((danger) => {
+  //     return {
+  //       lat: danger.latitude,
+  //       lng: danger.longitude,
+  //       weight: danger.score
+  //     }
+  //   })
+  //   console.log(newDangerList)
+  //   setTest({
+  //     position: newDangerList,
+  //     options: {
+  //       radius: 200,
+  //       opacity: 0.6,
+  //     }
+  //   })
+  // }
+
+
+  // const heatMapData = {
+  //   positions: [
+  //     {lat: 35.907757, lng: 127.766922, weight: 0.5},
+  //     {lat: 35, lng: 127, weight: 10},
+  //     {lat: 35.777, lng: 128.1, weight: 20},
+  //     {lat: 38.777, lng: 129, weight: 5},
+  //     {lat: 38.5, lng: 128.6, weight: 7},
+  //   ],
+  //   options: {
+  //     radius: 20,
+  //     opacity: 0.6,
+  //     // gradient: [
+  //     //   'rgba(0, 255, 0, 0)', // green
+  //     //   'rgba(255, 255, 0, 1)', // yellow
+  //     //   'rgba(255, 0, 0, 1)' // red
+  //     // ],
+  //   }
+  // }
+
+  const onClickHandler = (e) => {
+    setCenter({lat: e.lat, lng: e.lng})
+    // console.log(`원래 : ${zoom}`)
+    setZoom(13)
+    console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
+    // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
+  }
+
+
+  const mapRef = useRef(null);
 
   // styledmaptype
   const mapStyles = {
@@ -295,6 +283,17 @@ export default function Map() {
     setTarget(key);
   };
 
+  // initialize => 초기 나라 좌표로 이동
+  const Initialize = () => {
+    if ((center.lat !== (countryInfo.ne.lat + countryInfo.sw.lat)/2 && center.lng !== (countryInfo.ne.lng + countryInfo.sw.lng)/2) || zoom !== initialZoom) {
+      setCenter({
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
+      })
+      setZoom(initialZoom)
+    }
+  }
+
   return isLoading ? (
     <div></div>
   ) : (
@@ -316,13 +315,15 @@ export default function Map() {
         onGoogleApiLoaded={({ map, maps }) => {
           // Save the map and maps variables to the ref object
           mapRef.current = { map, maps };
-          // 치안도 표시
-          getDanger(map, maps);
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
         }}
         onChildClick={markerClicked}
+        onClick={onClickHandler}
         options={mapStyles}
+        // 히트맵으로 변경
+        heatmapLibrary={true}
+        heatmap={test}
       >
         {zoom >= 12 &&
           hospital &&
@@ -394,47 +395,73 @@ export default function Map() {
       ) : (
         <div></div>
       )}
-      {isMobile ? (
-        zoom < 12 ? (
-          <div>
-            <Link to="/">
-              <div
-                style={{
-                  position: "absolute",
-                  top: "8px",
-                  left: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "14px",
-                }}
-              >
-                <img
-                  src="/assets/back.png"
-                  alt="뒤로가기"
-                  width={50}
-                  style={{ zIndex: 10 }}
-                />
-                <div
-                  style={{
-                    position: "relative",
-                    left: "-20px",
-                    backgroundColor: "white",
-                    borderRadius: "8px",
-                    padding: "3px 8px 3px 15px",
-                    // paddingLeft: "10px",
-                    fontWeight: "bold",
-                    color: "grey",
-                  }}
-                >
-                  {t("goMain.Title")}
-                </div>
+
+      {/* 반응형 */}
+      { isMobile ? 
+        <div>
+          {
+            zoom < 12 ? (
+              <div>
+                <Link to="/">
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "8px",
+                      left: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "14px",
+                    }}
+                  >
+                    <img
+                      src="/assets/back.png"
+                      alt="뒤로가기"
+                      width={50}
+                      style={{ zIndex: 10 }}
+                    />
+                    <div
+                      style={{
+                        position: "relative",
+                        left: "-20px",
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        padding: "3px 8px 3px 15px",
+                        // paddingLeft: "10px",
+                        fontWeight: "bold",
+                        color: "grey",
+                      }}
+                    >
+                      {t("goMain.Title")}
+                    </div>
+                  </div>
+                </Link> 
               </div>
-            </Link>
+            ) : (<></>)
+          }
+          <div
+            style={{
+              position: "absolute",
+              bottom: "50px",
+              right: "10px",
+              display: "flex",
+              alignItems: "center",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              padding: "3px",
+              backgroundColor: "#FFFFFF90",
+              borderRadius: "50px"
+            }}
+            onClick={Initialize}
+            >
+            <img 
+              src="/assets/reset.png"
+              alt="reset"
+              width="25px"
+            />
           </div>
-        ) : (
-          <></>
-        )
-      ) : (
+          <MapDrawer /> 
+        </div>
+      : 
         <div>
           <Link to="/">
             <div
@@ -469,9 +496,30 @@ export default function Map() {
               </div>
             </div>
           </Link>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "20px",
+              right: "6px",
+              display: "flex",
+              alignItems: "center",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+              padding: "3px",
+              backgroundColor: "#FFFFFF90",
+              // borderRadius: "50px"
+            }}
+            onClick={Initialize}
+            >
+            <img 
+              src="/assets/reset.png"
+              alt="reset"
+              width="30px"
+            />
+          </div>
+          <Sidebar />
         </div>
-      )}
-      {isMobile ? <MapDrawer /> : <Sidebar newslist={newslist}/>}
+      }
     </div>
   );
 }
