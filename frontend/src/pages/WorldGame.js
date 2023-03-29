@@ -48,7 +48,6 @@ function World() {
   colorScale.domain([0, maxVal]);
 
   useEffect(() => {
-    globeRef.current.pointOfView(point);
     if (hoverD) {
       //console.log(hoverD);
       const bbox = hoverD.bbox;
@@ -70,9 +69,12 @@ function World() {
         //     : 2,
       });
     }
-  }, [globeRef, point, hoverD]);
+  }, [globeRef, hoverD]);
   //console.log("hoverD", hoverD);
 
+  useEffect(() => {
+    globeRef.current.pointOfView(point);
+  }, [point]);
   //지구본 왼쪽으로 보내기
   const w = window.innerWidth;
   const shiftFactor = 0.4;
@@ -82,6 +84,7 @@ function World() {
 
   const changeHover = (propHover) => {
     setHoverD(propHover);
+    console.log(propHover);
   };
   return (
     <div
@@ -149,9 +152,17 @@ function World() {
               </div>
             </>
           ) : gameName === "1" ? (
-            <FlagGame countries={countries} changeHover={changeHover} />
+            <FlagGame
+              countries={countries}
+              changeHover={changeHover}
+              hoverD={hoverD}
+            />
           ) : gameName === "2" ? (
-            <CapitalGame countries={countries} changeHover={changeHover} />
+            <CapitalGame
+              countries={countries}
+              changeHover={changeHover}
+              hoverD={hoverD}
+            />
           ) : (
             ""
           )}

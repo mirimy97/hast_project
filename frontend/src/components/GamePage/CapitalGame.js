@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styles from "./Game.module.css";
 import GameResult from "./GameResult";
-function CapitalGame({ countries, changeHover }) {
+function CapitalGame({ countries, hoverD, changeHover }) {
   const [answers, setAnswers] = useState([0, 0, 0, 0]);
   const [quizData, setQuizData] = useState({ country: "", capital: "" });
   const [showResult, setShowResult] = useState(false);
@@ -16,7 +16,7 @@ function CapitalGame({ countries, changeHover }) {
   });
 
   //퀴즈에 필요한 데이터 불러오기
-  const settingQuizData = useCallback(() => {
+  const settingQuizData = () => {
     let capitalArray = countries.features.map((country) => {
       if (country.properties.CAPITAL_Ko)
         return Object.assign(country, {
@@ -60,7 +60,7 @@ function CapitalGame({ countries, changeHover }) {
         capital: capitalArray[array[3]].capital,
       },
     ]);
-  }, []);
+  };
 
   useEffect(() => {
     settingQuizData();
@@ -114,7 +114,7 @@ function CapitalGame({ countries, changeHover }) {
             </span>
             <span className={styles.total_question}>/{addLeadingZero(10)}</span>
           </div>
-          <h2 className={styles.question}>{quizData.country}의 수도 ❓</h2>
+          <h2 className={styles.question}>{quizData.country}의 수도는 ❓</h2>
           <ul>
             {answers.map((answer, index) => (
               <li

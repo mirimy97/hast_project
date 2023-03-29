@@ -1,8 +1,7 @@
-import { useStepContext } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styles from "./Game.module.css";
 import GameResult from "./GameResult";
-const FlagGame = ({ countries, setHoverD }) => {
+const FlagGame = ({ countries, hoverD, changeHover }) => {
   const [answers, setAnswers] = useState([0, 0, 0, 0]);
   const [quizData, setQuizData] = useState({ country: "", flag: "" });
 
@@ -25,11 +24,6 @@ const FlagGame = ({ countries, setHoverD }) => {
       });
   });
 
-  useEffect(() => {
-    settingQuizData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   //퀴즈에 필요한 데이터 불러오기
   const settingQuizData = () => {
     let array = [];
@@ -43,8 +37,9 @@ const FlagGame = ({ countries, setHoverD }) => {
     }
 
     let random = Math.floor(Math.random() * 4);
+
     let questionData = flagArray[array[random]];
-    setHoverD(questionData);
+    changeHover(questionData);
     setQuizData({
       country: questionData.country,
       flag: questionData.flag,
@@ -68,6 +63,11 @@ const FlagGame = ({ countries, setHoverD }) => {
       },
     ]);
   };
+
+  useEffect(() => {
+    settingQuizData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const addLeadingZero = (number) => (number > 9 ? number : `0${number}`);
 
@@ -108,6 +108,7 @@ const FlagGame = ({ countries, setHoverD }) => {
     }, 800);
   };
   const imgUrl = "assets/flags/" + quizData.flag + ".png";
+
   return (
     <div className={styles.quiz_container}>
       {!showResult ? (
