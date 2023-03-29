@@ -94,7 +94,9 @@ export default function Map() {
       const zoom = calculateZoom(bounds);
       console.log(zoom);
       setZoom(zoom);
-      // setIsLoading(false);
+      if (newslist.length === 0) {
+        setIsLoading(false);
+      }
     }
   };
 
