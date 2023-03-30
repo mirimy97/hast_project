@@ -1,3 +1,8 @@
+.header {
+  z-index: 5;
+  position: relative;
+}
+
 .flex {
   display: flex;
   justify-content: space-between;
@@ -17,6 +22,9 @@
   width: 65px;
   height: 65px;
   float: right;
+}
+.cardmargin {
+  margin-right: 15px;
 }
 .language {
   display: flex;

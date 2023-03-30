@@ -6,7 +6,7 @@ import NewsListItem from "../NewsListItem";
 import Selectbox from "../Selectbox";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { motion } from "framer-motion";
-function MapSidebar({newslist}) {
+function MapSidebar({ newslist }) {
   //(정적인) 버튼 값
   const buttons = [
     {
@@ -32,7 +32,7 @@ function MapSidebar({newslist}) {
     {
       name: "categoryBtn",
       value: "Cate6",
-    }
+    },
   ];
 
   //뉴스 리스트 불러오기
@@ -100,7 +100,7 @@ function MapSidebar({newslist}) {
   //뉴스 카테고리별 필터링
   function filterNews(categoryNum) {
     let filtredCategory = getNews().filter(
-      (news) =>   news.category == categoryNum
+      (news) => news.category == categoryNum
     );
     return filtredCategory;
   }

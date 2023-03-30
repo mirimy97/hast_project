@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Earth from "./pages/Earth";
 import World from "./pages/World";
-import Game from "./pages/Game";
+import Game from "./pages/WorldGame";
 import WorldDetail from "./pages/WorldDetail";
 import Map from "./pages/Map";
 import * as React from "react";

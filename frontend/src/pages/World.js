@@ -98,6 +98,13 @@ function World() {
   //   // call async function
   //   getGeoJson.then((data) => setCountries(data));
   // }, [getGeoJson]);
+
+  //marker 불러오기
+  // const [marker, setMarker] = useState([]);
+  // axios
+  //     .get("http://j8e106.p.ssafy.io:8080/api//info/dots")
+  //     .then((res) => setMarker(res.result.data));
+
   useEffect(() => {
     // load data
     fetch("geojson/ne_110m_admin_0_countries.geojson")
@@ -132,13 +139,13 @@ function World() {
 
   // 클릭시 카메라 point 재설정
   const clickRegion = (d) => {
-    console.log(d);
+    //console.log(d);
     // clickD에 해당 구역 할당
     setClickD(d);
     setSidebarC(d);
 
     const bbox = d.bbox;
-    console.log("여기", bbox);
+    //console.log(bbox);
     // bbox = [경도시작(왼) 위도시작(위) 경도끝(오) 위도끝(밑)]
     const lat = (bbox[1] + bbox[3]) / 2;
     const lng = (bbox[0] + bbox[2]) / 2;

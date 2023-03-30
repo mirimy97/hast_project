@@ -4,11 +4,11 @@ import { useTranslation, withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { lanen, lanko } from "../redux/language";
 import styles from "./Header.module.css";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router";
 
 function Header(props) {
   const dispatch = useDispatch();
@@ -162,6 +162,7 @@ function Header(props) {
           <img
             className={styles.card}
             src="/assets/3d/card.png"
+            alt="game"
             onClick={changePg}
           ></img>
           // <img className={styles.icon} src="/assets/3d/airplane.png"></img>
