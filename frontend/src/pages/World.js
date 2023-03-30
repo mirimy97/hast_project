@@ -81,11 +81,19 @@ function World() {
   //   // call async function
   //   getGeoJson.then((data) => setCountries(data));
   // }, [getGeoJson]);
+
+  //marker 불러오기
+  // const [marker, setMarker] = useState([]);
+  // axios
+  //     .get("http://j8e106.p.ssafy.io:8080/api//info/dots")
+  //     .then((res) => setMarker(res.result.data));
+
   useEffect(() => {
     // load data
     fetch("geojson/ne_110m_admin_0_countries.geojson")
       .then((res) => res.json())
       .then(setCountries);
+    // load data
   }, []);
 
   //국기 불러오는 api
@@ -226,6 +234,14 @@ function World() {
               polygonsTransitionDuration={300}
               onPolygonHover={setHoverD}
               onPolygonClick={clickRegion}
+              //marker
+              //labelsData={marker}
+              // labelLat={(m) => m.latitude}
+              // labelLng={(m) => m.longitude}
+              // //labelText={(m) => d.properties.name}
+              // labelSize={(m) => Math.sqrt(m.count) * 4e-4}
+              // labelDotRadius={(m) => Math.sqrt(m.count) * 4e-4}
+              // labelColor={() => "rgba(255, 165, 0, 0.75)"}
             />
           </>
         )}
