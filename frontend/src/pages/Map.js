@@ -1,58 +1,81 @@
 import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
-import Fab from "@mui/material/Fab";
 import { Marker } from "../components/Marker";
-// import MapSidebar from "../components/MapSidebar";
 import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
-import { motion, useCycle } from "framer-motion";
-import { Navigation } from "../components/SideMotion/Navigation";
-import { MenuToggle } from "../components/SideMotion/MenuToggle";
-import { useDimensions } from "../components/SideMotion/use-dimensions";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
+import Loading from "./Loading";
 
 export default function Map() {
   // countryInfo 값 받아오기
   const location = useLocation();
-  console.log(location.state?.countryInfo);
+  const isMobile = useSelector((state) => state.status.isMobile);
 
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
-  // 받아올 정보 (임시데이터)
-  const countryInfo = {
-    country: "KR",
-    latitude: 35.907757,
-    longitude: 127.766922,
-    name: "South Korea",
-  };
-  // const countryInfo = {
-  //   country: 'RU',
-  //   latitude: 61.52401,
-  //   longitude: 105.318756,
-  //   name: 'Russia'
-  // }
+  // Globe로부터 받아올 정보
+  const [countryInfo, setCountryInfo] = useState(null);
 
-  // center, zoom state 사용
-  const [center, setCenter] = useState({
-    lat: countryInfo.latitude,
-    lng: countryInfo.longitude,
-  });
+  useEffect(() => {
+    console.log(location);
+    setTimeout(() => {
+      setLodingPage(false);
+    }, 2000);
+    if (location.state === null) {
+      const savedCountryInfo = localStorage.getItem("countryInfo");
+      console.log(JSON.parse(savedCountryInfo));
+      setCountryInfo(JSON.parse(savedCountryInfo));
+    } else {
+      console.log(location.state?.countryInfo);
+      setCountryInfo(location.state?.countryInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(countryInfo);
+    if (countryInfo !== null) {
+      console.log("null아님");
+      localStorage.setItem("countryInfo", JSON.stringify(countryInfo));
+      setCenter({
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat) / 2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng) / 2,
+      });
+      setBounds({
+        nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
+        se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
+      });
+    }
+  }, [countryInfo]);
+
+  // 기사 조회
+  const [newslist, setNewsList] = useState([]);
+  // countryInfo.FIPS
+  useEffect(() => {
+    axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/KS`).then((res) => {
+      if (res.data.resultCode === "SUCCESS") {
+        setNewsList(res.data.result);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (newslist.length !== 0) {
+      console.log("뉴스받아오기 성공");
+      setIsLoading(false);
+    }
+  }, [newslist]);
+
+  // center, zoom, bound state 사용
+  const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
-
-  // bound state 사용
-  const [ne, setNe] = useState({});
-  const [sw, setSw] = useState({});
-  const [bounds, setBounds] = useState({
-    nw: { lat: ne.lat, lng: sw.lng },
-    se: { lat: sw.lat, lng: ne.lng },
-  });
+  const [bounds, setBounds] = useState(null);
 
   const calculateZoom = (bounds) => {
     const ZOOM_MAX = 21;
@@ -69,58 +92,19 @@ export default function Map() {
   };
 
   const setMapBounds = (bounds) => {
-    if (bounds.nw.lat !== undefined) {
+    if (bounds !== null) {
       const zoom = calculateZoom(bounds);
       console.log(zoom);
       setZoom(zoom);
-      setIsLoading(false);
+      if (newslist.length === 0) {
+        setIsLoading(false);
+      }
     }
   };
 
-  const MyKey = process.env.REACT_APP_MAP_API;
-  // // 지오코딩 api 위한 url
-  const url = "https://maps.googleapis.com/maps/api/geocode/json";
-  const getCountryBounds = () => {
-    axios
-      .get(url, {
-        params: {
-          address: countryInfo.name,
-          key: MyKey,
-        },
-      })
-      .then((res) => {
-        // console.log(res.data.results[0].geometry.bounds) // northeast-{lat, lng}, southwest-{lat, lng}
-        setNe(res.data.results[0].geometry.bounds.northeast);
-        setSw(res.data.results[0].geometry.bounds.southwest);
-        const neBound = res.data.results[0].geometry.bounds.northeast;
-        const swBound = res.data.results[0].geometry.bounds.southwest;
-        setBounds({
-          nw: { lat: neBound.lat, lng: swBound.lng },
-          se: { lat: swBound.lat, lng: neBound.lng },
-        });
-        console.log(res.data.results[0].geometry.bounds);
-      })
-      // .then(setMapBounds(bounds))
-      .catch((err) => console.log(err));
-  };
+  // const MyKey = process.env.REACT_APP_MAP_API;
+  const MyKey = "AIzaSyD9tQAFGqDK-O6YrVeUQgpd9upyF474zI8";
 
-  // 처음에 geocoding api로 경계값 들고오기
-  useEffect(() => {
-    // getCountryBounds()
-    setNe({ lat: 38.612243, lng: 129.468304 });
-    setSw({ lat: 34.390046, lng: 126.117398 });
-    const neBound = { lat: 38.612243, lng: 129.468304 };
-    const swBound = { lat: 34.390046, lng: 126.117398 };
-    // setNe({ lat: 38.63400000000001, lng: 131.1603 });
-    // setSw({ lat: 33.0041, lng: 124.5863 });
-    // const neBound = { lat: 38.63400000000001, lng: 131.1603 };
-    // const swBound = { lat: 33.0041, lng: 124.5863 };
-    setBounds({
-      nw: { lat: neBound.lat, lng: swBound.lng },
-      se: { lat: swBound.lat, lng: neBound.lng },
-    });
-  }, []);
-  // 바운더리에 맞춰 zoom 계산
   useEffect(() => {
     setMapBounds(bounds);
   }, [bounds]);
@@ -191,59 +175,62 @@ export default function Map() {
   };
 
   // 치안도 표시 임시 데이터
-  const dangerList = [
-    {
-      id: 1,
-      lat: 35.907757,
-      lng: 127.766922,
-      score: -50,
-    },
-    {
-      id: 2,
-      lat: 38,
-      lng: 128.3321,
-      score: -30,
-    },
-    {
-      id: 3,
-      lat: 35.213234,
-      lng: 129.23143,
-      score: -25,
-    },
-    {
-      id: 4,
-      lat: 35.31,
-      lng: 128.8,
-      score: -10,
-    },
-    {
-      id: 5,
-      lat: 37.32567,
-      lng: 129.143542,
-      score: -28,
-    },
-  ];
+  // const dangerList = [
+  //   {
+  //     id: 1,
+  //     lat: 35.907757,
+  //     lng: 127.766922,
+  //     score: -50,
+  //   },
+  //   {
+  //     id: 2,
+  //     lat: 38,
+  //     lng: 128.3321,
+  //     score: -30,
+  //   },
+  //   {
+  //     id: 3,
+  //     lat: 35.213234,
+  //     lng: 129.23143,
+  //     score: -25,
+  //   },
+  //   {
+  //     id: 4,
+  //     lat: 35.31,
+  //     lng: 128.8,
+  //     score: -10,
+  //   },
+  //   {
+  //     id: 5,
+  //     lat: 37.32567,
+  //     lng: 129.143542,
+  //     score: -28,
+  //   },
+  // ];
 
   // 치안도 표시 apiLoaded
   const getDanger = (map, maps) => {
-    dangerList.map((danger) => {
-      const circle = new maps.Circle({
-        strokeColor: danger.score <= -40 ? "#FF0000" : "#FFFF00",
-        strokeOpacity: 0.5,
-        strokeWeight: 1,
-        fillColor: danger.score <= -40 ? "#FF0000" : "#FFFF00",
-        fillOpacity: 0.5,
-        map,
-        center: { lat: danger.lat, lng: danger.lng },
-        radius: 3000,
-        id: danger.id,
+    console.log(newslist);
+    if (newslist.length !== 0) {
+      newslist.map((news) => {
+        const circle = new maps.Circle({
+          strokeColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
+          strokeOpacity: 0.5,
+          strokeWeight: 1,
+          fillColor: news.score >= 80 ? "#FF0000" : "#FFFF00",
+          fillOpacity: 0.5,
+          map,
+          center: { lat: news.latitude, lng: news.longitude },
+          radius: 3000,
+          id: news.id,
+        });
+        // 각 서클에 이벤트리스너 추가
+        circle.addListener("click", () => {
+          handleCircleClick(news);
+        });
+        return circle;
       });
-      // 각 서클에 이벤트리스너 추가
-      circle.addListener("click", () => {
-        handleCircleClick(danger);
-      });
-      return circle;
-    });
+    }
   };
 
   //
@@ -252,23 +239,26 @@ export default function Map() {
   const mapRef = useRef(null);
 
   const handleCircleClick = (circle) => {
+    console.log(circle);
     setCenter({ lat: circle.lat, lng: circle.lng });
     setNowCircle(circle.id);
     setNowDanger(circle);
   };
 
   useEffect(() => {
-    if (center.lat && center.lng && nowDanger) {
-      // 클릭 한 번만 하게끔
-      console.log("달라짐");
-      setZoom(13);
-      console.log(nowCircle);
-      console.log(nowDanger);
+    if (center !== null) {
+      if (center.lat && center.lng && nowDanger) {
+        // 클릭 한 번만 하게끔
+        console.log("달라짐");
+        setZoom(13);
+        console.log(nowCircle);
+        console.log(nowDanger);
 
-      const { map, maps } = mapRef.current;
-      // console.log(map, maps)
-      // place api 사용해서 장소 정보 들고오기
-      // getPlaces(map, maps, nowDanger);
+        const { map, maps } = mapRef.current;
+        // console.log(map, maps)
+        // place api 사용해서 장소 정보 들고오기
+        // getPlaces(map, maps, nowDanger);
+      }
     }
   }, [nowCircle]);
 
@@ -307,8 +297,8 @@ export default function Map() {
     setTarget(key);
   };
 
-  return isLoading ? (
-    <div></div>
+  return loadingPage ? (
+    <Loading />
   ) : (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
       <GoogleMapReact
@@ -483,7 +473,7 @@ export default function Map() {
           </Link>
         </div>
       )}
-      {isMobile ? <MapDrawer /> : <Sidebar />}
+      {isMobile ? <MapDrawer /> : <Sidebar newslist={newslist} />}
     </div>
   );
 }

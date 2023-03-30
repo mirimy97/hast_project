@@ -6,8 +6,7 @@ import NewsListItem from "../NewsListItem";
 import Selectbox from "../Selectbox";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { motion } from "framer-motion";
-import axios from "axios";
-function MapSidebar() {
+function MapSidebar({ newslist }) {
   //(정적인) 버튼 값
   const buttons = [
     {
@@ -89,36 +88,26 @@ function MapSidebar() {
   //     score: 3.5,
   //   },
   // ];
-  const [newslist, setNewsList] = useState([]);
-  const [filteredNews, setFilteredNews] = useState([]);
-  const [selectBtn, setSelectBtn] = useState(null);
 
-  useEffect(() => {
-    axios.get("http://j8e106.p.ssafy.io:8080/api/articles/KO").then((res) => {
-      if (res.data.resultCode === "SUCCESS") {
-        setNewsList(res.data.result);
-        setFilteredNews(res.data.result);
-      }
-    });
-  }, []);
+  const [filteredNews, setFilteredNews] = useState(null);
+  const [selectBtn, setSelectBtn] = useState(null);
 
   //모든 뉴스 리스트 불러오기
   function getNews() {
     const newsList = newslist;
     return newsList;
   }
-
   //뉴스 카테고리별 필터링
   function filterNews(categoryNum) {
     let filtredCategory = getNews().filter(
-      (news) => news.category === categoryNum
+      (news) => news.category == categoryNum
     );
     return filtredCategory;
   }
 
-  // useEffect(() => {
-  //   setFilteredNews(getNews());
-  // }, []);
+  useEffect(() => {
+    setFilteredNews(getNews());
+  }, []);
 
   //카테고리 선택
   function selectNews(cate) {

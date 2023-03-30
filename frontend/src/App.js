@@ -12,8 +12,7 @@ import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setIsMobile } from "./redux/isMobile";
-import GameResult from "./components/GamePage/GameResult";
+import { setIsMobile } from "./redux/status";
 
 const theme = createTheme({
   typography: {
@@ -48,8 +47,6 @@ function App() {
             <Route path="/map" element={<Map />} />
             {/* 게임 페이지 */}
             <Route path="/game" element={<Game />} />
-            {/* 결과 페이지 */}
-            <Route path="/gameresult" element={<GameResult />} />
           </Routes>
         </Router>
       </React.Fragment>

@@ -2,6 +2,11 @@ import React from "react";
 import styles from "./NewsListItem.module.css";
 
 function NewsListItem(props) {
+  const language = 'en'
+  // 언어에 따른 키워드
+  const keyword = (language === 'en' ? "engKeyword" : "korKeyword")
+
+
   //방금전, ~분전, ~시간전 설정
   function timeForToday(value) {
     const today = new Date();
@@ -34,8 +39,10 @@ function NewsListItem(props) {
     <div className={styles.flex}>
       <div>
         <span className={styles.time}>🕛 {timebefore} </span>
-        <a href={props.news.articleUrl} target="_blank">
-          <div className={styles.headline}>{props.news.headline}</div>
+        <a href={props.news.url} target="_blank">
+          <div className={styles.headline}>
+            {language === 'en' ? props.news.engKeyword : props.news.korKeyword}
+          </div>
         </a>
         <div className={styles.score}>☠︎ 위험도 {props.news.score}</div>
         <span className={styles.timestamp}>{props.news.timeStamp}</span>

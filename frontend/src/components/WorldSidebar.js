@@ -6,7 +6,7 @@ import WorldSidebarChartBox from "./WorldSidebarChartBox";
 import WorldSidebarInfoBox from "./WorldSidebarInfoBox";
 
 function WorldSidebar({ country, isDpChart, bbox }) {
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
   const flagEndpoint = "/assets/flags";
   const imageurl = `${flagEndpoint}/${country?.ISO_A2.toLowerCase()}.png`;
   const language = useSelector((state) => state.language.value);
@@ -123,8 +123,8 @@ function WorldSidebar({ country, isDpChart, bbox }) {
         )}
       </div>
 
-      <button className={styles.travelBtn} onClick={clickTravelBtn}>
-        <span>{language == "en" ? "TRAVEL" : "여행떠나기"}</span>
+      <button className={styles.travelBtn} onClick={() => clickTravelBtn()}>
+        <span>{language === "en" ? "TRAVEL" : "여행떠나기"}</span>
       </button>
     </>
   );
