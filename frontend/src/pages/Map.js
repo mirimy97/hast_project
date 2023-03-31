@@ -232,6 +232,12 @@ export default function Map() {
     setClickCoords({lat: e.lat, lng: e.lng})
   }
 
+  // Marker 데이터 <- 지도 내 기사 좌표들
+  // const [markers, setMarkers] = useState([])
+
+
+
+
 
   const mapRef = useRef(null);
   // styledmaptype
