@@ -3,8 +3,9 @@ import Fab from "@mui/material/Fab";
 import { useState } from "react";
 import { t } from "i18next";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace }) {
+function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace, getPlaces, center, map }) {
   const isMobile = useSelector((state) => state.status.isMobile);
   const ToggleClick = (idx) => {
     if (toggle.includes(idx)) {
@@ -18,6 +19,12 @@ function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace }) {
       setShowPlace(true);
     }
   };
+
+  // console.log(map)
+
+  // useEffect(()=> {
+  //   getPlaces(map, maps, center)
+  // },[])
 
   return (
     <Fab

@@ -14,6 +14,7 @@ import Loading from "./Loading";
 
 
 export default function Map() {
+  const mapRef = useRef(null);
   // countryInfo 값 받아오기
   const location = useLocation();
   const isMobile = useSelector((state) => state.status.isMobile);
@@ -32,18 +33,16 @@ export default function Map() {
     }, 2000);
     if (location.state === null) {
       const savedCountryInfo = localStorage.getItem("countryInfo");
-      console.log(JSON.parse(savedCountryInfo));
+      // console.log(JSON.parse(savedCountryInfo));
       setCountryInfo(JSON.parse(savedCountryInfo));
     } else {
-      console.log(location.state?.countryInfo);
+      // console.log(location.state?.countryInfo);
       setCountryInfo(location.state?.countryInfo);
     }
   }, []);
 
   useEffect(() => {
-    console.log(countryInfo);
     if (countryInfo !== null) {
-      console.log("null아님");
       localStorage.setItem("countryInfo", JSON.stringify(countryInfo));
       setCenter({
         lat: (countryInfo.ne.lat + countryInfo.sw.lat) / 2,
@@ -117,7 +116,6 @@ export default function Map() {
   const setMapBounds = (bounds) => {
     if (bounds !== null) {
       const zoom = calculateZoom(bounds);
-      console.log(zoom);
       setZoom(zoom);
       setInitialZoom(zoom)
       // if (dangerList.length === 0) {
@@ -138,58 +136,62 @@ export default function Map() {
   const [embassy, setEmbassy] = useState([]);
   const [police, setPolice] = useState([]);
 
+
+
   const getPlaces = (map, maps, coords) => {
     // console.log(center, zoom)
-    console.log({ lat: coords.lat, lng: coords.lng });
+    console.log(coords);
     console.log("places api 사용");
     const type = ["hospital", "embassy", "police"];
 
+    // console.log(map)
     const service = new maps.places.PlacesService(map);
+    console.log(service)
 
-    for (let i = 0; i < 3; i++) {
-      const request = {
-        location: { lat: coords.lat, lng: coords.lng },
-        radius: 50000,
-        type: type[i],
-        keyword: i === 0 ? "medical center|general hospital" : "",
-        language: language,
-      };
-      // 각 type별 결과 넣을 state
-      let result = [];
+    // for (let i = 0; i < 3; i++) {
+    //   const request = {
+    //     location: { lat: coords.lat, lng: coords.lng },
+    //     radius: 50000,
+    //     type: type[i],
+    //     keyword: i === 0 ? "medical center|general hospital" : "",
+    //     language: language,
+    //   };
+    //   // 각 type별 결과 넣을 state
+    //   let result = [];
 
-      service.nearbySearch(request, (results, status, pagination) => {
-        if (status === maps.places.PlacesServiceStatus.OK) {
-          console.log(results); // results.map()으로 result.geometry, result.name, results[0].geometry.location
-          const newList = results.map((res) => {
-            return {
-              placeId: res.place_id,
-              lat: res.geometry.location.lat(),
-              lng: res.geometry.location.lng(),
-              name: res.name,
-              rating: res.rating,
-              address: res.vicinity,
-            };
-          });
-          result.push(...newList);
-          console.log(result);
-          if (pagination.hasNextPage) {
-            // Use the pagination object to retrieve the next set of results
-            pagination.nextPage();
-          }
-        } else {
-          console.log("Error:", status); // Handle the error
-          // Error: ZERO_RESULTS
-        }
-      });
+    //   service.nearbySearch(request, (results, status, pagination) => {
+    //     if (status === maps.places.PlacesServiceStatus.OK) {
+    //       console.log(results); // results.map()으로 result.geometry, result.name, results[0].geometry.location
+    //       const newList = results.map((res) => {
+    //         return {
+    //           placeId: res.place_id,
+    //           lat: res.geometry.location.lat(),
+    //           lng: res.geometry.location.lng(),
+    //           name: res.name,
+    //           rating: res.rating,
+    //           address: res.vicinity,
+    //         };
+    //       });
+    //       result.push(...newList);
+    //       console.log(result);
+    //       if (pagination.hasNextPage) {
+    //         // Use the pagination object to retrieve the next set of results
+    //         pagination.nextPage();
+    //       }
+    //     } else {
+    //       console.log("Error:", status); // Handle the error
+    //       // Error: ZERO_RESULTS
+    //     }
+    //   });
 
-      if (i === 0) {
-        setHospital(result);
-      } else if (i === 1) {
-        setEmbassy(result);
-      } else {
-        setPolice(result);
-      }
-    }
+    //   if (i === 0) {
+    //     setHospital(result);
+    //   } else if (i === 1) {
+    //     setEmbassy(result);
+    //   } else {
+    //     setPolice(result);
+    //   }
+    // }
   };
 
   // zoom 변경 감지
@@ -224,7 +226,6 @@ export default function Map() {
     }
   }, [dangerList])
 
-
   useEffect(() => {
     if (heatmapData !== null) {
       setIsLoading(false)
@@ -239,16 +240,12 @@ export default function Map() {
     setZoom(13)
     console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
     setClickCoords({lat: e.lat, lng: e.lng})
+    setToggle([])
   }
 
-  // Marker 데이터 <- 지도 내 기사 좌표들
-  // const [markers, setMarkers] = useState([])
 
 
 
-
-
-  const mapRef = useRef(null);
   // styledmaptype
   const mapStyles = {
     // draggableCursor: 'default',
@@ -279,23 +276,21 @@ export default function Map() {
   const [showP, setShowP] = useState(false);
   const [showE, setShowE] = useState(false);
 
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log(mapRef.current.map); // Should log the map object
+      console.log(mapRef.current.maps); // Should log the maps object
+    }, 1000);
+  }, []);
+
+
   // Marker 클릭
   const [target, setTarget] = useState(null);
   const markerClicked = (key) => {
     console.log(key);
     setTarget(key);
   };
-
-  // initialize => 초기 나라 좌표로 이동
-  const Initialize = () => {
-    if ((center.lat !== (countryInfo.ne.lat + countryInfo.sw.lat)/2 && center.lng !== (countryInfo.ne.lng + countryInfo.sw.lng)/2) || zoom !== initialZoom) {
-      setCenter({
-        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
-        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
-      })
-      setZoom(initialZoom)
-    }
-  }
 
   const [mapMarkers, setMapMarkers] = useState([])
   useEffect(() => {
@@ -313,6 +308,19 @@ export default function Map() {
       setMapMarkers(updateList)
     }
   }, [allNews])
+
+  
+  // initialize => 초기 나라 좌표로 이동
+  const Initialize = () => {
+    if ((center.lat !== (countryInfo.ne.lat + countryInfo.sw.lat)/2 && center.lng !== (countryInfo.ne.lng + countryInfo.sw.lng)/2) || zoom !== initialZoom) {
+      setCenter({
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
+      })
+      setZoom(initialZoom)
+    }
+  }
+
 
   return isLoading ? (
     <Loading />
@@ -409,6 +417,10 @@ export default function Map() {
           toggle={toggle}
           setToggle={setToggle}
           setShowPlace={setShowH}
+          getPlaces={getPlaces}
+          // map={mapRef.current.map}
+          // maps={mapRef.current.maps}
+          center={center}
         />
         <Toggle
           icon="🚓"
@@ -417,6 +429,10 @@ export default function Map() {
           toggle={toggle}
           setToggle={setToggle}
           setShowPlace={setShowP}
+          getPlaces={getPlaces}
+          // map={mapRef.current.map}
+          // maps={mapRef.current.maps}
+          center={center}
         />
         <Toggle
           icon="🌐"
@@ -425,6 +441,10 @@ export default function Map() {
           toggle={toggle}
           setToggle={setToggle}
           setShowPlace={setShowE}
+          getPlaces={getPlaces}
+          // map={mapRef.current.map}
+          // maps={mapRef.current.maps}
+          center={center}
         />
         <div
           style={{
