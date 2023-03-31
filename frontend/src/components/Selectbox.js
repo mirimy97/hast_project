@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import styles from "./Selectbox.module.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { t } from "i18next";
+
 const Selectbox = ({ filteredNews, getFilteredNews }) => {
   // 요 카테고리 아이템들 속에는 { 이름과 상태 } 값들이 들어있다
   const category = [
-    { name: "최신 순", state: "latest" },
-    { name: "위험도 순", state: "dangerous" },
+    { name: t("selectBox.recent"), state: "latest" },
+    { name: t("selectBox.danger"), state: "dangerous" },
   ];
   //console.log(filteredNews);
   // 셀렉트박스 내 들어갈 초기값 설정

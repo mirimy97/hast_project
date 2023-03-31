@@ -4,11 +4,13 @@ import GoogleMapReact from "google-map-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
-import { Marker } from "../components/Marker";
+import { PlacesMarker } from "../components/PlacesMarker";
+import { NewsMarker } from "../components/NewsMarker";
 import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
+
 
 export default function Map() {
   // countryInfo 값 받아오기
@@ -51,16 +53,34 @@ export default function Map() {
     }
   }, [countryInfo]);
 
-  // 기사 조회해서 하위 컴포넌트에 넘겨주기
-  // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
+
+  // 치안 점수 표시 (히트맵)
   const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
-    axios.get("http://j8e106.p.ssafy.io:8080/api/info/dots").then((res) => {
-      if (res.data.resultCode === "SUCCESS") {
-        setDangerList(res.data.result);
-      }
-    });
+    axios.get("http://j8e106.p.ssafy.io:8080/api/info/dots")
+      .then((res) => {
+        if (res.data.resultCode === "SUCCESS") {
+          setDangerList(res.data.result);
+          }
+        })
+        .catch(err => console.log(err))
   }, []);
+
+  // 기사 조회해서 하위 컴포넌트에 넘겨주기
+  // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
+  const [allNews, setAllNews] = useState([])
+  useEffect(() => {
+    if (countryInfo !== null) {
+      axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/${countryInfo.FIPS}`)
+        .then((res) => {
+          if (res.data.resultCode === "SUCCESS") {
+            console.log(res.data.result)
+            setAllNews(res.data.result)
+          }
+        })
+        .catch(err => console.log(err))
+    }
+  }, [countryInfo])
 
 
   // center, zoom, bound state 사용
@@ -169,7 +189,7 @@ export default function Map() {
   };
 
   
-  const [test, setTest] = useState(null)
+  const [heatmapData, setHeatmapData] = useState(null)
 
   useEffect(() => {
     if (dangerList.length !== 0) {
@@ -180,11 +200,16 @@ export default function Map() {
           weight: danger.score
         }
       })
-      setTest({
+      setHeatmapData({
         positions: newDangerList,
         options: {
-          radius: 20,
+          radius: 25,
           opacity: 0.6,
+          gradient: [
+            'rgba(0, 255, 0, 0)', // green
+            'rgba(255, 255, 0, 1)', // yellow
+            'rgba(255, 0, 0, 1)' // red
+          ],
         }
       })
     }
@@ -192,64 +217,27 @@ export default function Map() {
 
 
   useEffect(() => {
-    if (test !== null) {
+    if (heatmapData !== null) {
       setIsLoading(false)
     }
-  }, [test])
+  }, [heatmapData])
 
 
-
-  // const customList = () => {
-  //   const newDangerList = dangerList.map((danger) => {
-  //     return {
-  //       lat: danger.latitude,
-  //       lng: danger.longitude,
-  //       weight: danger.score
-  //     }
-  //   })
-  //   console.log(newDangerList)
-  //   setTest({
-  //     position: newDangerList,
-  //     options: {
-  //       radius: 200,
-  //       opacity: 0.6,
-  //     }
-  //   })
-  // }
-
-
-  // const heatMapData = {
-  //   positions: [
-  //     {lat: 35.907757, lng: 127.766922, weight: 0.5},
-  //     {lat: 35, lng: 127, weight: 10},
-  //     {lat: 35.777, lng: 128.1, weight: 20},
-  //     {lat: 38.777, lng: 129, weight: 5},
-  //     {lat: 38.5, lng: 128.6, weight: 7},
-  //   ],
-  //   options: {
-  //     radius: 20,
-  //     opacity: 0.6,
-  //     // gradient: [
-  //     //   'rgba(0, 255, 0, 0)', // green
-  //     //   'rgba(255, 255, 0, 1)', // yellow
-  //     //   'rgba(255, 0, 0, 1)' // red
-  //     // ],
-  //   }
-  // }
-
+  // 좌표 클릭 - 클릭 이벤트
+  const [clickCoords, setClickCoords] = useState(null)
   const onClickHandler = (e) => {
     setCenter({lat: e.lat, lng: e.lng})
-    // console.log(`원래 : ${zoom}`)
     setZoom(13)
     console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
-    // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
+    setClickCoords({lat: e.lat, lng: e.lng})
   }
 
 
   const mapRef = useRef(null);
-
   // styledmaptype
   const mapStyles = {
+    // draggableCursor: 'default',
+    draggableCursor: "url(/assets/aim.png), auto",
     fullscreenControl: false,
     zoomControl: false,
     gestureHandling: "greedy",
@@ -294,10 +282,27 @@ export default function Map() {
     }
   }
 
+  const [mapMarkers, setMapMarkers] = useState([])
+  useEffect(() => {
+    if (allNews !== null) {
+      const updateList = allNews.map((news) => {
+        return {
+          id: news.id,
+          // engKeyword: news.engKeyword,
+          // korKeyword: news.korKeyword,
+          lat: news.latitude,
+          lng: news.longitude,
+          score: news.score,
+        }
+      })
+      setMapMarkers(updateList)
+    }
+  }, [allNews])
+
   return isLoading ? (
     <div></div>
   ) : (
-    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
+    <div style={{ height: "100vh", width: "100%", position: "relative", cursor: "pointer"}} >
       <GoogleMapReact
         bootstrapURLKeys={{
           key: MyKey,
@@ -317,15 +322,29 @@ export default function Map() {
           mapRef.current = { map, maps };
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
+          // map.setOptions({ draggableCursor : "url(/assets/back.png), pointer" })
         }}
         onChildClick={markerClicked}
         onClick={onClickHandler}
+        // onChildMouseOver
         options={mapStyles}
         // 히트맵으로 변경
         heatmapLibrary={true}
-        heatmap={test}
+        heatmap={heatmapData}
       >
-        {zoom >= 12 &&
+        { zoom >= 8 && 
+          mapMarkers &&
+          mapMarkers.map((marker) => 
+            <NewsMarker 
+              key={marker.placeId}
+              id={marker.id}
+              lat={marker.lat}
+              lng={marker.lng}
+              // onMouseover={() => console.log(marker)}
+            />
+          )
+        }
+        {/* {zoom >= 12 &&
           hospital &&
           showH &&
           hospital.map((hos) => (
@@ -363,81 +382,88 @@ export default function Map() {
               place={emb}
               target={emb.placeId === target}
             />
-          ))}
+          ))} */}
       </GoogleMapReact>
-      {zoom >= 12 ? (
-        <div>
-          <Toggle
-            icon="🏥"
-            place={"Loca1"}
-            idx={1}
-            toggle={toggle}
-            setToggle={setToggle}
-            setShowPlace={setShowH}
-          />
-          <Toggle
-            icon="🚓"
-            place={"Loca2"}
-            idx={2}
-            toggle={toggle}
-            setToggle={setToggle}
-            setShowPlace={setShowP}
-          />
-          <Toggle
-            icon="🌐"
-            place={"Loca3"}
-            idx={3}
-            toggle={toggle}
-            setToggle={setToggle}
-            setShowPlace={setShowE}
-          />
+
+      {/* 토글버튼 */}
+      <div>
+        <Toggle
+          icon="🏥"
+          place={"Loca1"}
+          idx={1}
+          toggle={toggle}
+          setToggle={setToggle}
+          setShowPlace={setShowH}
+        />
+        <Toggle
+          icon="🚓"
+          place={"Loca2"}
+          idx={2}
+          toggle={toggle}
+          setToggle={setToggle}
+          setShowPlace={setShowP}
+        />
+        <Toggle
+          icon="🌐"
+          place={"Loca3"}
+          idx={3}
+          toggle={toggle}
+          setToggle={setToggle}
+          setShowPlace={setShowE}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: (isMobile ? "60px" : "75px"),
+            left: "20px",
+            fontSize: (isMobile? "0.8rem" : "0.9rem"),
+            fontWeight: "bold",
+            color: "red",
+            // backgroundColor: "#FFFFFF",
+            margin: 0
+          }}
+        >
+          지도를 클릭하여 상세 정보를 확인하세요
         </div>
-      ) : (
-        <div></div>
-      )}
+      </div>
 
       {/* 반응형 */}
       { isMobile ? 
         <div>
-          {
-            zoom < 12 ? (
-              <div>
-                <Link to="/">
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "8px",
-                      left: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      fontSize: "14px",
-                    }}
-                  >
-                    <img
-                      src="/assets/back.png"
-                      alt="뒤로가기"
-                      width={50}
-                      style={{ zIndex: 10 }}
-                    />
-                    <div
-                      style={{
-                        position: "relative",
-                        left: "-20px",
-                        backgroundColor: "white",
-                        borderRadius: "8px",
-                        padding: "3px 8px 3px 15px",
-                        // paddingLeft: "10px",
-                        fontWeight: "bold",
-                        color: "grey",
-                      }}
-                    >
-                      {t("goMain.Title")}
-                    </div>
-                  </div>
-                </Link> 
+          <Link to="/">
+            <div
+              style={{
+                position: "absolute",
+                bottom: "42px",
+                left: "8px",
+                display: "flex",
+                alignItems: "center",
+                fontSize: "14px",
+              }}
+            >
+              <img
+                src="/assets/back.png"
+                alt="뒤로가기"
+                width={50}
+                style={{ zIndex: 10 }}
+              />
+              <div
+                style={{
+                  position: "relative",
+                  left: "-20px",
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  padding: "3px 8px 3px 15px",
+                  // paddingLeft: "10px",
+                  fontWeight: "bold",
+                  color: "grey",
+                }}
+              >
+                {t("goMain.Title")}
               </div>
-            ) : (<></>)
-          }
+            </div>
+          </Link> 
+
           <div
             style={{
               position: "absolute",
@@ -459,7 +485,7 @@ export default function Map() {
               width="25px"
             />
           </div>
-          <MapDrawer /> 
+          <MapDrawer allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/> 
         </div>
       : 
         <div>
@@ -517,7 +543,7 @@ export default function Map() {
               width="30px"
             />
           </div>
-          <Sidebar />
+          <Sidebar allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
         </div>
       }
     </div>
