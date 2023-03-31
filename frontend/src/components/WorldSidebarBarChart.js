@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  LabelList,
 } from "recharts";
 
 export default class BarChartExample extends PureComponent {
@@ -18,9 +19,13 @@ export default class BarChartExample extends PureComponent {
     super(props);
     this.state = {
       activeIndex: 0,
+      hovered: "",
     };
 
     this.handleClick = this.handleClick.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseOut = this.onMouseOut.bind(this);
+    this.customizedLabel = this.customizedLabel.bind(this);
     this.setActiveIndex = this.props.setActiveIndex.bind(this);
   }
 
@@ -33,26 +38,69 @@ export default class BarChartExample extends PureComponent {
     console.log(index);
   }
 
+  onMouseOver(data, index) {
+    this.setState({ hovered: index });
+  }
+  onMouseOut() {
+    this.setState({ hovered: "" });
+  }
+
+  customizedLabel(e) {
+    return (
+      <text
+        x={e.x + 10}
+        y={e.y}
+        dy={-4}
+        fill={
+          e.index === this.state.activeIndex
+            ? "#82ca9d"
+            : e.index === this.state.hovered
+            ? "#8884d8"
+            : "gray"
+        }
+        fontSize={10}
+        textAnchor="middle"
+      >
+        {e.value}
+      </text>
+    );
+  }
+
   render() {
     const data = this.props.data;
-    const { activeIndex } = this.state;
+    const { activeIndex, hovered } = this.state;
 
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart width={500} height={300} data={data}>
+        <BarChart
+          data={data}
+          margin={{ top: 20, right: 20, left: -20, bottom: 10 }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
-          <Legend />
+          <Tooltip content={() => <></>} />
 
-          <Bar dataKey="bar" onClick={this.handleClick}>
+          <Bar
+            dataKey="bar"
+            background={false}
+            label={this.customizedLabel}
+            onClick={this.handleClick}
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+          >
             {data.map((entry, index) => (
               <Cell
                 cursor="pointer"
-                fill={index === activeIndex ? "#82ca9d" : "#8884d8"}
+                fill={
+                  index === activeIndex
+                    ? "#82ca9d"
+                    : index === hovered
+                    ? "#a5a5a5"
+                    : "#8884d8"
+                }
                 key={`cell-${index}`}
-              />
+              ></Cell>
             ))}
           </Bar>
         </BarChart>
