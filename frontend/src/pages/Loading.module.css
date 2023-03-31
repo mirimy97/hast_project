@@ -1,0 +1,90 @@
+.geeks {
+  height: 40px;
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%) translateY(0%);
+  font-weight: 600;
+}
+
+.pc {
+  top: 60%;
+}
+
+.mobile {
+  top: 52%;
+}
+
+.geeks span {
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
+  color: #d8bff3;
+  display: inline-block;
+  transition: all 0.5s;
+  animation: animate 2s infinite;
+}
+
+.pc span {
+  font-size: 24px;
+}
+
+.mobile span {
+  font-size: 15px;
+}
+.geeks span:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.geeks span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.geeks span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.geeks span:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.geeks span:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.geeks span:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.geeks span:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.geeks span:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.geeks span:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.geeks span:nth-child(10) {
+  animation-delay: 1s;
+}
+.geeks span:nth-child(11) {
+  animation-delay: 1.1s;
+}
+.geeks span:nth-child(12) {
+  animation-delay: 1.2s;
+}
+.geeks span:nth-child(13) {
+  animation-delay: 1.3s;
+}
+
+@keyframes animate {
+  0% {
+    color: #7643b0;
+    transform: translateY(0);
+    margin-left: 0;
+  }
+  25% {
+    color: #b37fc8;
+    transform: translateY(0px);
+    margin-left: 10px;
+  }
+  100% {
+    color: #d8bff3;
+    transform: translateY(0);
+    margin-left: 0;
+  }
+}

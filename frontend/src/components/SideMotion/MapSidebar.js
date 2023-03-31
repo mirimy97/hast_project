@@ -59,7 +59,7 @@ function MapSidebar({allNews, setAllNews, clickCoords}) {
   //뉴스 카테고리별 필터링
   function filterNews(categoryNum) {
     let filtredCategory = getNews().filter(
-      (news) =>   news.category == categoryNum
+      (news) => news.category == categoryNum
     );
     return filtredCategory;
   }

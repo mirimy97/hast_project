@@ -1,3 +1,30 @@
+.logoPC {
+  position: absolute;
+  width: 40%;
+  top: 30%;
+  left: 30%;
+}
+
+.logoM {
+  position: absolute;
+  width: 80%;
+  top: 30%;
+  left: 10%;
+}
+
+.ani {
+  animation: logo 1s;
+}
+
+@keyframes logo {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .worldContainer {
   position: fixed;
   transition: left 1s ease;
@@ -32,8 +59,8 @@
   background-color: #ffffff80;
 
   transition: bottom 0.7s ease-out;
-  padding: 30px;
-  padding-top: 60px;
+  padding: 60px 20px 30px 20px;
+  /* padding-top: 60px; */
   /* border-radius: 10px 10px 0 0; */
 }
 .sidebar::-webkit-scrollbar {

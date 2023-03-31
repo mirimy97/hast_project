@@ -1,23 +1,25 @@
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation, withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { lanen, lanko } from "../redux/language";
 import styles from "./Header.module.css";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router";
 
 function Header(props) {
   const dispatch = useDispatch();
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
   const [language, setLanguage] = useState("ko");
-
   const [isKorean, setIsKorean] = useState(true);
+
+  const [topics, setTopics] = useState("");
 
   const handleEn = () => {
     dispatch(lanen());
@@ -35,15 +37,29 @@ function Header(props) {
   // 뒤로가기 클릭 시 (나가기)
   const backBtn = () => {
     props.globeRef.current.resumeAnimation();
-    props.setClickD(null);
     props.setPoint({
       altitude: 2.5,
     });
     props.setSidebarD(-500);
     props.setSidebarMbottom("-100vh");
     props.setLeft(-250);
-    props.setIsDpChart(false);
+    props.setClickD(null);
+    setTimeout(function () {
+      props.setIsDpChart(false);
+      props.setSidebarC(null);
+    }, 500);
   };
+
+  useEffect(() => {
+    // load Topics
+    axios
+      .get("http://j8e106.p.ssafy.io:8080/api/articles/updates")
+      .then((res) => {
+        if (res.data.resultCode === "SUCCESS") {
+          setTopics(res.data.result);
+        }
+      });
+  }, []);
 
   const navigate = useNavigate();
   const changePg = () => {
@@ -116,23 +132,22 @@ function Header(props) {
         ) : isMobile ? (
           <div className={styles.tickerM}>
             <ul className={styles.ulM}>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
+              {topics &&
+                topics.map((t) => (
+                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                ))}
             </ul>
           </div>
         ) : (
           /* &#128204; {t("header.Topic")} */
           <div className={styles.ticker}>
             <div className={styles.newstitle}>{t("header.Topic")} </div>
+
             <ul className={styles.ul}>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
+              {topics &&
+                topics.map((t) => (
+                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                ))}
             </ul>
           </div>
         )}
@@ -147,6 +162,7 @@ function Header(props) {
           <img
             className={styles.card}
             src="/assets/3d/card.png"
+            alt="game"
             onClick={changePg}
           ></img>
           // <img className={styles.icon} src="/assets/3d/airplane.png"></img>

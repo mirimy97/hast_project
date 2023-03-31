@@ -10,46 +10,49 @@ import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
+import Loading from "./Loading";
 
 
 export default function Map() {
   // countryInfo 값 받아오기
   const location = useLocation();
+  const isMobile = useSelector((state) => state.status.isMobile);
 
-  const isMobile = useSelector((state) => state.isMobile.isMobile);
+  const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
   // Globe로부터 받아올 정보
   const [countryInfo, setCountryInfo] = useState(null);
-  
+
   useEffect(() => {
-    console.log(location)
+    console.log(location);
+    setTimeout(() => {
+      setLodingPage(false);
+    }, 2000);
     if (location.state === null) {
       const savedCountryInfo = localStorage.getItem("countryInfo");
-      console.log(JSON.parse(savedCountryInfo))
+      console.log(JSON.parse(savedCountryInfo));
       setCountryInfo(JSON.parse(savedCountryInfo));
+    } else {
+      console.log(location.state?.countryInfo);
+      setCountryInfo(location.state?.countryInfo);
     }
-    else {
-      console.log(location.state?.countryInfo)
-      setCountryInfo(location.state?.countryInfo)
-    }
-  }, [])
-
+  }, []);
 
   useEffect(() => {
-    console.log(countryInfo)
+    console.log(countryInfo);
     if (countryInfo !== null) {
-      console.log('null아님')
+      console.log("null아님");
       localStorage.setItem("countryInfo", JSON.stringify(countryInfo));
       setCenter({
-        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
-        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
-      })
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat) / 2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng) / 2,
+      });
       setBounds({
         nw: { lat: countryInfo.ne.lat, lng: countryInfo.sw.lng },
         se: { lat: countryInfo.sw.lat, lng: countryInfo.ne.lng },
-      })
+      });
     }
   }, [countryInfo]);
 
@@ -70,6 +73,7 @@ export default function Map() {
   // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
   const [allNews, setAllNews] = useState([])
   useEffect(() => {
+
     if (countryInfo !== null) {
       axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/${countryInfo.FIPS}`)
         .then((res) => {
@@ -83,12 +87,18 @@ export default function Map() {
   }, [countryInfo])
 
 
+  //   if (newslist.length !== 0) {
+  //     console.log("뉴스받아오기 성공");
+  //     setIsLoading(false);
+  //   }
+  // }, [newslist]);
+
+
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
   const [bounds, setBounds] = useState(null);
   const [initialZoom, setInitialZoom] = useState(null)
-
 
   const calculateZoom = (bounds) => {
     const ZOOM_MAX = 21;
@@ -188,7 +198,6 @@ export default function Map() {
     setZoom(map.getZoom());
   };
 
-  
   const [heatmapData, setHeatmapData] = useState(null)
 
   useEffect(() => {
@@ -306,7 +315,7 @@ export default function Map() {
   }, [allNews])
 
   return isLoading ? (
-    <div></div>
+    <Loading />
   ) : (
     <div style={{ height: "100vh", width: "100%", position: "relative", cursor: "pointer"}} >
       <GoogleMapReact
