@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import * as d3 from "d3";
+import * as chromatic from "d3-scale-chromatic";
 import Globe from "react-globe.gl";
 import PointMarker from "react-globe.gl";
 import axios from "axios";
@@ -17,6 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { setIsLogo } from "../redux/status";
 import { colors } from "@mui/material";
+
+import { motion } from "framer-motion";
 
 function World() {
   const dispatch = useDispatch();
@@ -126,9 +129,10 @@ function World() {
         }),
       }));
     });
-    // logo
+
+    //logo
     setTimeout(() => {
-      setAni(true);
+      //setAni(true);
       setPoint({
         lat: 0,
         lng: 0,
@@ -143,10 +147,7 @@ function World() {
   }, []);
 
   //나라별 스코어
-  //const colorScale = d3.scaleSequentialSqrt(d3.interpolateTurbo);
-  const colorScale = d3.scaleSequential((t) =>
-    d3.interpolateBuPu(t * 0.8 + 0.1)
-  );
+
   // GDP per capita (avoiding countries with small pop)
   const getVal = (feat) => {
     //console.log(
@@ -157,12 +158,17 @@ function World() {
     const val = feat.properties.score / 100;
     return isNaN(val) ? 0 : val;
   };
-
   const maxVal = useMemo(
     () => Math.max(...countries.features.map(getVal)),
     [countries]
   );
-  console.log(maxVal);
+  // const colorScale = d3.scaleSequential((t) =>
+  //   d3.interpolateBuPu(t * 0.8 + 0.1)
+  // );
+  const colorScale = d3.scaleSequential((t) => {
+    const c = d3.color(d3.interpolateBuGn(t));
+    return `rgba(${c.r}, ${c.g}, ${c.b}, ${t * 0.8 + 0.1})`;
+  });
   colorScale.domain([0, maxVal]);
 
   //국기 불러오는 api
@@ -239,7 +245,8 @@ function World() {
                 ref={globeRef}
                 width={width + 500}
                 height={height}
-                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                //globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                globeImageUrl="/map/earthmap3.jpg"
                 backgroundImageUrl="/assets/dark2.png"
                 // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
                 //globeMaterial={globeMaterial}
@@ -333,20 +340,37 @@ function World() {
           )}
         </div>
       </div>
-      {isLogo && (
-        <img
-          className={
-            isMobile
-              ? ani
-                ? `${styles.logoM} ${styles.ani}`
-                : styles.logoM
-              : ani
-              ? `${styles.logoPC} ${styles.ani}`
-              : styles.logoPC
-          }
-          src="/assets/logo/Logo.png"
-        />
-      )}
+      {/* {isLogo && (
+        <>
+          <motion.div
+            initial={{
+              scale: 0,
+              opacity: 0,
+            }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+              transition: {
+                duration: 1,
+                ease: "easeOut",
+              },
+            }}
+          >
+            <img
+              className={
+                isMobile
+                  ? ani
+                    ? `${styles.logoM} ${styles.ani}`
+                    : styles.logoM
+                  : ani
+                  ? `${styles.logoPC} ${styles.ani}`
+                  : styles.logoPC
+              }
+              src="/assets/logo/Logo.png"
+            />
+          </motion.div>
+        </>
+      )} */}
     </>
   );
 }

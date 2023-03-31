@@ -4,11 +4,9 @@ import React, { useEffect, useState } from "react";
 import styles from "./MapSidebar.module.css";
 import NewsListItem from "../NewsListItem";
 import Selectbox from "../Selectbox";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import { motion } from "framer-motion";
 import axios from "axios";
 
-function MapSidebar({allNews, setAllNews, clickCoords}) {
+function MapSidebar({ allNews, setAllNews, clickCoords }) {
   //(정적인) 버튼 값
   const buttons = [
     {
@@ -37,16 +35,18 @@ function MapSidebar({allNews, setAllNews, clickCoords}) {
   useEffect(() => {
     if (clickCoords !== null) {
       // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
-      axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/${clickCoords.lat}/${clickCoords.lng}`)
-        .then(res => {
+      axios
+        .get(
+          `http://j8e106.p.ssafy.io:8080/api/articles/${clickCoords.lat}/${clickCoords.lng}`
+        )
+        .then((res) => {
           if (res.data.resultCode === "SUCCESS") {
-            setAllNews(res.data.result)
+            setAllNews(res.data.result);
           }
         })
-        .catch(err => console.log(err))
+        .catch((err) => console.log(err));
     }
-  }, [clickCoords])
-
+  }, [clickCoords]);
 
   const [filteredNews, setFilteredNews] = useState(null);
   const [selectBtn, setSelectBtn] = useState(null);
