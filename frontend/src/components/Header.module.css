@@ -74,7 +74,7 @@
   margin: 0px;
   list-style: none;
   white-space: nowrap;
-  animation: scroll 10s linear 0s infinite;
+  animation: scroll 30s linear 0s infinite;
   position: absolute;
 }
 .ticker ul li {
@@ -152,8 +152,10 @@
   width: 360px;
   margin: auto;
 }
-.ticker ul {
-  width: 100%;
+.ul {
+  width: 1500px;
+  display: flex;
+  justify-content: space-between;
 }
 a {
   text-align: center;

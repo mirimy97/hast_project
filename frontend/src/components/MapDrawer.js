@@ -34,7 +34,7 @@ const Puller = styled(Box)(({ theme }) => ({
   left: 'calc(50% - 15px)',
 }));
 
-function MapDrawer() {
+function MapDrawer({allNews, setAllNews, clickCoords}) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen) => () => {
@@ -87,7 +87,7 @@ function MapDrawer() {
             overflow: 'auto',
           }}
         >
-          <MapSidebar />
+          <MapSidebar  allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
           {/* <Skeleton variant="rectangular" height="100%" /> */}
         </StyledBox>
       </SwipeableDrawer>

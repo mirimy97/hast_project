@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useTranslation, withTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { lanen, lanko } from "../redux/language";
@@ -6,6 +7,7 @@ import styles from "./Header.module.css";
 import { motion } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
 
 function Header(props) {
@@ -15,8 +17,9 @@ function Header(props) {
   const { t, i18n } = useTranslation();
   // //laguage 선택
   const [language, setLanguage] = useState("ko");
-
   const [isKorean, setIsKorean] = useState(true);
+
+  const [topics, setTopics] = useState("");
 
   const handleEn = () => {
     dispatch(lanen());
@@ -46,6 +49,17 @@ function Header(props) {
       props.setSidebarC(null);
     }, 500);
   };
+
+  useEffect(() => {
+    // load Topics
+    axios
+      .get("http://j8e106.p.ssafy.io:8080/api/articles/updates")
+      .then((res) => {
+        if (res.data.resultCode === "SUCCESS") {
+          setTopics(res.data.result);
+        }
+      });
+  }, []);
 
   const navigate = useNavigate();
   const changePg = () => {
@@ -118,23 +132,22 @@ function Header(props) {
         ) : isMobile ? (
           <div className={styles.tickerM}>
             <ul className={styles.ulM}>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
+              {topics &&
+                topics.map((t) => (
+                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                ))}
             </ul>
           </div>
         ) : (
           /* &#128204; {t("header.Topic")} */
           <div className={styles.ticker}>
             <div className={styles.newstitle}>{t("header.Topic")} </div>
+
             <ul className={styles.ul}>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
-              <li>Hello News!</li>
+              {topics &&
+                topics.map((t) => (
+                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                ))}
             </ul>
           </div>
         )}
