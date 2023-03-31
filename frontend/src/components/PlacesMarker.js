@@ -1,7 +1,7 @@
 import React from "react";
 import InfoWindow from "./InfoWindow";
 
-export function Marker({id, place, target}) {
+export function PlacesMarker({id, place, target}) {
   const imgSrc = (id === 1 ? "/assets/hospital.png" : id === 2 ? "/assets/police.png" : "/assets/embassy.png")
 
   return(

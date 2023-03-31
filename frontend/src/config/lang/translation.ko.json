@@ -66,5 +66,16 @@
   },
   "goMain": {
     "Title": "메인화면으로"
+  },
+  "newsList": {
+    "daysAgo": "일전",
+    "hoursAgo": "시간전",
+    "minutesAgo": "분전",
+    "justBefore": "방금전",
+    "danger": "☠︎ 위험도"
+  },
+  "selectBox": {
+    "danger": "위험 순",
+    "recent": "최신 순"
   }
 }

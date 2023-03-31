@@ -26,7 +26,7 @@ const sidebar = {
   },
 };
 
-export const Sidebar = () => {
+export const Sidebar = ({allNews, setAllNews, clickCoords}) => {
   const [isOpen, toggleOpen] = useCycle(false, true);
   const containerRef = useRef(null);
   //const { height } = useDimensions(containerRef);
@@ -40,7 +40,7 @@ export const Sidebar = () => {
       ref={containerRef}
     >
       <motion.div className={styles.background} variants={sidebar}>
-          <Navigation />
+          <Navigation allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
           <MenuToggle toggle={() => toggleOpen()} />
       </motion.div>
     </motion.nav>

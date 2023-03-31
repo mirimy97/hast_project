@@ -70,5 +70,16 @@
   },
   "goMain": {
     "Title": "Go Main"
+  },
+  "newsList": {
+    "daysAgo": "Days Ago",
+    "hoursAgo": "Hours Ago",
+    "minutesAgo": "Minutes Ago",
+    "justBefore": "Just Before",
+    "danger": "☠︎ Danger"
+  },
+  "selectBox": {
+    "danger": "Risk Order",
+    "recent": "Newest"
   }
 }

@@ -23,6 +23,7 @@
 }
 .timestamp {
   font-size: 15px;
+  color: grey;
 }
 .headline {
   font-weight: bold;
@@ -31,4 +32,8 @@
 a {
   text-decoration: none;
   color: rgb(4, 4, 46);
+}
+
+.ahref {
+  text-align: start;
 }
