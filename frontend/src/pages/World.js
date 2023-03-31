@@ -7,17 +7,16 @@ import React, {
 } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
-import * as THREE from "three";
+import PointMarker from "react-globe.gl";
 import axios from "axios";
 import styles from "./World.module.css";
-import PreloadImages from "./PreloadImages";
-import { Color } from "three";
 
 import WorldSidebar from "../components/WorldSidebar";
 import Header from "../components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { setIsLogo } from "../redux/status";
+import { colors } from "@mui/material";
 
 function World() {
   const dispatch = useDispatch();
@@ -75,8 +74,8 @@ function World() {
     }
   };
   useEffect(() => {
-    console.log("isDpChart", isDpChart);
-    console.log("sidebar", sidebarRef);
+    //console.log("isDpChart", isDpChart);
+    //console.log("sidebar", sidebarRef);
     sidebarRef.current.addEventListener("scroll", displayChart);
     return () => {
       if (sidebarRef.current) {
@@ -98,19 +97,35 @@ function World() {
   //   // call async function
   //   getGeoJson.then((data) => setCountries(data));
   // }, [getGeoJson]);
-
-  //marker 불러오기
-  // const [marker, setMarker] = useState([]);
-  // axios
-  //     .get("http://j8e106.p.ssafy.io:8080/api//info/dots")
-  //     .then((res) => setMarker(res.result.data));
-
+  const [additionalData, setAdditionalData] = useState({ features: [] });
   useEffect(() => {
     // load data
     fetch("geojson/ne_110m_admin_0_countries.geojson")
       .then((res) => res.json())
       .then(setCountries);
 
+    // load additional data
+    axios.get("http://j8e106.p.ssafy.io:8080/api/scores").then((res) => {
+      const data = res.data.result;
+      // join additional data with GeoJSON data
+      setAdditionalData(data);
+      setCountries((prevCountries) => ({
+        type: prevCountries.type,
+        features: prevCountries.features.map((feat) => {
+          //console.log(feat);
+          const match = data.find(
+            (d) => d.countryCode === feat.properties.FIPS_10_
+          );
+          //console.log("match", match);
+          return match
+            ? {
+                ...feat,
+                properties: { ...feat.properties, score: match.score },
+              }
+            : feat;
+        }),
+      }));
+    });
     // logo
     setTimeout(() => {
       setAni(true);
@@ -123,19 +138,35 @@ function World() {
     setTimeout(() => {
       dispatch(setIsLogo(false));
     }, 3000);
+
+    console.log(countries);
   }, []);
+
+  //나라별 스코어
+  //const colorScale = d3.scaleSequentialSqrt(d3.interpolateTurbo);
+  const colorScale = d3.scaleSequential((t) =>
+    d3.interpolateBuPu(t * 0.8 + 0.1)
+  );
+  // GDP per capita (avoiding countries with small pop)
+  const getVal = (feat) => {
+    //console.log(
+    //  "GDP",
+    //feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
+    //);
+    //console.log(feat.properties);
+    const val = feat.properties.score / 100;
+    return isNaN(val) ? 0 : val;
+  };
+
+  const maxVal = useMemo(
+    () => Math.max(...countries.features.map(getVal)),
+    [countries]
+  );
+  console.log(maxVal);
+  colorScale.domain([0, maxVal]);
 
   //국기 불러오는 api
   const flagEndpoint = "/assets/flags";
-  //이미지 미리 로딩
-  // const images = [];
-  // if (images.length === 0) {
-  //   //이미지 preloading
-  //   countries.features.map((d) => {
-  //     //console.log(d);
-  //     images.push(`/assets/flags/${d.properties.ISO_A2.toLowerCase()}.png`);
-  //   });
-  // }
 
   // 클릭시 카메라 point 재설정
   const clickRegion = (d) => {
@@ -167,7 +198,6 @@ function World() {
   // point state 변경 시 카메라 옮기기
   useEffect(() => {
     globeRef.current.pointOfView(point, 500);
-
     // 클릭해서 뷰 포인트 바뀐 경우 - 왼쪽 스윽 + 애니메이션 제한
     if (clickD) {
       setLeft(-500);
@@ -182,18 +212,6 @@ function World() {
       }, 500);
     }
   }, [globeRef, point]);
-
-  const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
-
-  // GDP per capita (avoiding countries with small pop)
-  const getVal = (feat) =>
-    feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
-
-  const maxVal = useMemo(
-    () => Math.max(...countries.features.map(getVal)),
-    [countries]
-  );
-  colorScale.domain([0, maxVal]);
 
   return (
     <>
@@ -222,7 +240,7 @@ function World() {
                 width={width + 500}
                 height={height}
                 globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-                backgroundImageUrl="/assets/dark.png"
+                backgroundImageUrl="/assets/dark2.png"
                 // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
                 //globeMaterial={globeMaterial}
                 lineHoverPrecision={0}
@@ -236,17 +254,15 @@ function World() {
                   // clickD 있으면
                   clickD
                     ? d === clickD
-                      ? "#7cc2b870"
-                      : "#ffffff00"
+                      ? "#FFB52E"
+                      : colorScale(getVal(d))
                     : // clickD 없으면
                     d === hoverD
-                    ? "#7cc2b870"
-                    : "transparent"
+                    ? "#FFB52E"
+                    : colorScale(getVal(d))
                 }
                 //colorScale(getVal(d))
-                polygonSideColor={(d) =>
-                  d === clickD ? "#7cc2b8" : "#00000050"
-                }
+                polygonSideColor={(d) => (d === clickD ? "#7cc2b8" : "#000050")}
                 polygonStrokeColor={() => "#d1ced9"}
                 polygonLabel={({ properties: d }) => {
                   return clickD
@@ -263,12 +279,24 @@ function World() {
                   -webkit-text-stroke-color: black;">
                   ${language === "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
                   </p>
+                  <p style="margin-top: 0px">위험도 ${
+                    isNaN(Math.round(d.score)) ? 0 : Math.round(d.score)
+                  }</p>
                   </div>`;
                 }}
                 polygonsTransitionDuration={300}
                 onPolygonHover={setHoverD}
                 onPolygonClick={clickRegion}
-              />
+                //marker
+                // labelsData={marker}
+                // labelLat={(d) => d.latitude}
+                // labelLng={(d) => d.longitude}
+                // labelText={(d) => d.name}
+                // labelSize={(d) => 5}
+                // labelDotRadius={(d) => 5}
+                // labelColor={() => "rgba(255, 165, 0, 0.75)"}
+                // labelResolution={3}
+              ></Globe>
             </>
           )}
           {isMobile ? (
