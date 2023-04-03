@@ -69,7 +69,7 @@
   height: 250px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: start;
   align-items: center;
   text-align: center;
   background-color: #dcdcdc;
@@ -146,6 +146,12 @@
   font-weight: 600;
   width: 100%;
 }
+.labelM {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  width: 100%;
+}
 
 .value {
   margin: 1px;
@@ -153,10 +159,20 @@
   font-size: 24px;
   width: 100%;
 }
+.valueM {
+  margin: 1px;
+  font-weight: 500;
+  font-size: 18px;
+  width: 100%;
+}
 
 .subtext {
   margin: 0;
   font-size: 12px;
+}
+.subtextM {
+  margin: 0;
+  font-size: 8px;
 }
 
 .travelBtn {

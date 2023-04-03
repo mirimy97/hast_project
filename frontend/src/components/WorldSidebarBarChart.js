@@ -97,6 +97,9 @@ export default class BarChartExample extends PureComponent {
             onClick={this.handleClick}
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
+            animationBegin={900}
+            animationDuration={1600}
+            animationEasing="ease-out"
           >
             {data.map((entry, index) => (
               <Cell

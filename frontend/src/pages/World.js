@@ -65,16 +65,16 @@ function World() {
 
   // 스크롤 이벤트 -> 차트 나타내기 효과
   const displayChart = () => {
-    console.log("scroll", sidebarRef.current.scrollTop);
+    // console.log("scroll", sidebarRef.current.scrollTop);
     // console.log(isDpChart);
     if (isMobile) {
-      if (sidebarRef.current.scrollTop > 140) {
+      if (sidebarRef.current.scrollTop > 80) {
         setIsDpChart(1);
       }
-      if (sidebarRef.current.scrollTop > 430) {
+      if (sidebarRef.current.scrollTop > 600) {
         setIsDpChart(2);
       }
-      if (sidebarRef.current.scrollTop > 750) {
+      if (sidebarRef.current.scrollTop > 1040) {
         setIsDpChart(3);
       }
     } else if (!isMobile) {

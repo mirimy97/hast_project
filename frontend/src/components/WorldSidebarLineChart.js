@@ -112,12 +112,18 @@ export default class LineChartExample extends PureComponent {
             dataKey="world_tone"
             stroke="#ff7300"
             dot={false}
+            animationBegin={1300}
+            animationDuration={1600}
+            animationEasing="ease-out"
           />
           <Area
             type="monotone"
             dataKey="country_tone"
             stroke="#000"
             fill="url(#splitColor)"
+            animationBegin={900}
+            animationDuration={1600}
+            animationEasing="ease-out"
           />
         </ComposedChart>
       </ResponsiveContainer>

@@ -189,7 +189,7 @@ function WorldSidebarChartBox({ isDpChart, country }) {
       {data.length > 0 && isDpChart > 0 && (
         <div
           style={{
-            height: "500px",
+            height: isMobile ? "430px" : "500px",
             fontSize: "15px",
             display: "flex",
             flexDirection: "column",
@@ -206,7 +206,7 @@ function WorldSidebarChartBox({ isDpChart, country }) {
             <p
               className={styles.chartContent}
               style={{
-                marginBottom: "50px",
+                marginBottom: isMobile ? "30px" : "50px",
                 fontSize: isMobile ? "12px" : "15px",
               }}
             >

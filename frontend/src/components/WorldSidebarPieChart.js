@@ -59,7 +59,7 @@ export default class PieChartExample extends PureComponent {
         <p
           style={{
             position: "absolute",
-            fontSize: "15px",
+            fontSize: "20px",
             fontWeight: "600",
             margin: "0 0 10px 20px",
           }}
