@@ -103,6 +103,12 @@ function WorldSidebar({ country, isDpChart, bbox }) {
         style={isMobile ? {} : { marginTop: "50px" }}
       >
         {/* Info Box */}
+        <p
+          className={styles.titleFont}
+          style={{ fontSize: isMobile ? "21px" : "28px" }}
+        >
+          {language === "ko" ? "🔍 어떤 나라인가요?" : "🔍 About this country"}
+        </p>
         {country && (
           <WorldSidebarInfoBox
             GDP={country?.GDP_MD_EST}
@@ -113,10 +119,25 @@ function WorldSidebar({ country, isDpChart, bbox }) {
             SUBREGION={country?.SUBREGION}
           />
         )}
+      </div>
+      <div
+        className={styles.sidebarOuterBox}
+        style={isMobile ? {} : { marginTop: "30px" }}
+      >
         {isDpChart ? (
           <>
-            <p className={styles.titleFont}>📈 한눈에 보기</p>
-            <WorldSidebarChartBox isDpChart={isDpChart} />
+            <p
+              className={styles.titleFont}
+              style={{ fontSize: isMobile ? "21px" : "28px" }}
+            >
+              {language === "ko"
+                ? "📈 차트로 한눈에 보기"
+                : "📈 Let's see briefly"}
+            </p>
+            <WorldSidebarChartBox
+              isDpChart={isDpChart}
+              country={country.FIPS_10_.toLowerCase()}
+            />
           </>
         ) : (
           <div style={{ height: "100px" }}></div>

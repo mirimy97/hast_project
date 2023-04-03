@@ -17,7 +17,7 @@ function WorldSidebarInfoBox({
     <>
       <div className={styles.infoOuter}>
         {/* 경제수준 */}
-        <div className={styles.infoboxC} style={{ marginRight: "7px" }}>
+        <div className={styles.infoboxC}>
           <img className={styles.icon} src="/assets/3d/man.png"></img>
 
           <p className={styles.label} style={{ marginTop: "20px" }}>
@@ -29,7 +29,7 @@ function WorldSidebarInfoBox({
           </p>
         </div>
         {/* 인구수 */}
-        <div className={styles.infoboxC} style={{ marginLeft: "7px" }}>
+        <div className={styles.infoboxC}>
           <img className={styles.icon} src="/assets/3d/coin.png"></img>
           <p className={styles.label} style={{ marginTop: "10px" }}>
             GDP

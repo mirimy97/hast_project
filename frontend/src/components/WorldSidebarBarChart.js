@@ -18,7 +18,7 @@ export default class BarChartExample extends PureComponent {
     //리액트의 Component 클래스가 지닌 생성자 함수를 호출해 준다.
     super(props);
     this.state = {
-      activeIndex: 0,
+      activeIndex: 11,
       hovered: "",
     };
 
@@ -61,24 +61,33 @@ export default class BarChartExample extends PureComponent {
         fontSize={10}
         textAnchor="middle"
       >
-        {e.value}
+        {e.value > 1000 ? `${e.value.toString().slice(0, -3)}k` : e.value}
       </text>
     );
   }
 
   render() {
     const data = this.props.data;
+    const language = this.props.language;
     const { activeIndex, hovered } = this.state;
 
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="60%">
         <BarChart
           data={data}
-          margin={{ top: 20, right: 20, left: -20, bottom: 10 }}
+          margin={{ top: 20, right: 20, left: 20, bottom: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis
+            dataKey="name"
+            tickLine={false}
+            label={{
+              value: language === "ko" ? "월" : "month",
+              position: "insideBottom",
+              offset: -8,
+            }}
+          />
+          <YAxis tickLine={false} hide={true} />
           <Tooltip content={() => <></>} />
 
           <Bar
