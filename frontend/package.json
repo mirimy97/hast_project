@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.13",
+    "@react-navigation/native": "^6.1.6",
     "@react-three/drei": "^9.57.0",
     "@react-three/fiber": "^8.11.9",
     "@reduxjs/toolkit": "^1.9.3",

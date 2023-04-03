@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Loading";
 import { setIsLogo } from "../redux/status";
 import { colors } from "@mui/material";
-
+import { interpolateRgb } from "d3-interpolate";
 import { motion } from "framer-motion";
 
 function World() {
@@ -138,10 +138,10 @@ function World() {
         lng: 0,
         altitude: 2.5,
       });
-    }, 2000);
-    setTimeout(() => {
-      dispatch(setIsLogo(false));
-    }, 3000);
+    }, 500);
+    // setTimeout(() => {
+    //   dispatch(setIsLogo(false));
+    // }, 1000);
 
     console.log(countries);
   }, []);
@@ -156,7 +156,7 @@ function World() {
     //);
     //console.log(feat.properties);
     const val = feat.properties.score / 100;
-    return isNaN(val) ? 0 : val;
+    return isNaN(val) ? 0.1 : val;
   };
   const maxVal = useMemo(
     () => Math.max(...countries.features.map(getVal)),
@@ -166,9 +166,11 @@ function World() {
   //   d3.interpolateBuPu(t * 0.8 + 0.1)
   // );
   const colorScale = d3.scaleSequential((t) => {
-    const c = d3.color(d3.interpolateBuGn(t));
-    return `rgba(${c.r}, ${c.g}, ${c.b}, ${t * 0.8 + 0.1})`;
+    const c = d3.color(d3.interpolateRdYlGn(1 - t));
+    console.log(t);
+    return `rgba(${c.r}, ${c.g}, ${c.b}, 0.5)`;
   });
+  // ${t * 0.9 + 0.1}
   colorScale.domain([0, maxVal]);
 
   //국기 불러오는 api
@@ -219,62 +221,97 @@ function World() {
     }
   }, [globeRef, point]);
 
+  //자동 회전
+  let autoRotateId;
+  // const autoRotate = () => {
+  //   const globe = globeRef.current;
+  //   if (globe) {
+  //     globe.pointOfView({
+  //       lat: globe.pointOfView().lat + 0.05,
+  //       lng: globe.pointOfView().lng + 0.05,
+  //     });
+  //   }
+  //   autoRotateId = requestAnimationFrame(autoRotate);
+  // };
+  const autoRotate = () => {
+    const globe = globeRef.current;
+    if (globe) {
+      const currentPointOfView = globe.pointOfView();
+      globe.pointOfView({
+        lat: currentPointOfView.lat,
+        lng: currentPointOfView.lng + 0.05,
+        altitude: currentPointOfView.altitude,
+      });
+    }
+    autoRotateId = requestAnimationFrame(autoRotate);
+  };
   return (
     <>
-      <div style={{ width: "100%", height: "100%" }}>
-        <Header
-          globeRef={globeRef}
-          clickD={clickD}
-          setClickD={setClickD}
-          setSidebarC={setSidebarC}
-          setPoint={setPoint}
-          setLeft={setLeft}
-          setSidebarD={setSidebarD}
-          setSidebarMbottom={setSidebarMbottom}
-          setIsDpChart={setIsDpChart}
-        />
-        <div className={styles.background}></div>
-        <div
-          style={isMobile === true ? { left: "-250px" } : { left: `${left}px` }}
-          className={styles.worldContainer}
-        >
-          {countries.features && (
-            <>
-              {/* <PreloadImages images={images} /> */}
-              <Globe
-                ref={globeRef}
-                width={width + 500}
-                height={height}
-                //globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-                globeImageUrl="/map/earthmap3.jpg"
-                backgroundImageUrl="/assets/dark2.png"
-                // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-                //globeMaterial={globeMaterial}
-                lineHoverPrecision={0}
-                polygonsData={countries.features.filter(
-                  (d) => d.properties.ISO_A2 !== "AQ"
-                )}
-                // polygonAltitude={(d) =>
-                //   clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
-                // }
-                polygonCapColor={(d) =>
-                  // clickD 있으면
-                  clickD
-                    ? d === clickD
+      <motion.div
+        initial={{ opacity: 0.2 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 2 }}
+      >
+        <div style={{ width: "100%", height: "100%" }}>
+          <Header
+            globeRef={globeRef}
+            clickD={clickD}
+            setClickD={setClickD}
+            setSidebarC={setSidebarC}
+            setPoint={setPoint}
+            setLeft={setLeft}
+            setSidebarD={setSidebarD}
+            setSidebarMbottom={setSidebarMbottom}
+            setIsDpChart={setIsDpChart}
+          />
+
+          <div
+            style={
+              isMobile === true ? { left: "-250px" } : { left: `${left}px` }
+            }
+            className={styles.worldContainer}
+          >
+            {countries.features && (
+              <>
+                {/* <PreloadImages images={images} /> */}
+                <Globe
+                  ref={globeRef}
+                  width={width + 500}
+                  height={height}
+                  onGlobeReady={autoRotate}
+                  globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                  // globeImageUrl="/map/earthmap3.jpg"
+                  backgroundImageUrl="/assets/dark3.jpg"
+                  // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+                  //globeMaterial={globeMaterial}
+                  lineHoverPrecision={0}
+                  polygonsData={countries.features.filter(
+                    (d) => d.properties.ISO_A2 !== "AQ"
+                  )}
+                  // polygonAltitude={(d) =>
+                  //   clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
+                  // }
+                  polygonCapColor={(d) =>
+                    // clickD 있으면
+                    clickD
+                      ? d === clickD
+                        ? "#FFB52E"
+                        : colorScale(getVal(d))
+                      : // clickD 없으면
+                      d === hoverD
                       ? "#FFB52E"
                       : colorScale(getVal(d))
-                    : // clickD 없으면
-                    d === hoverD
-                    ? "#FFB52E"
-                    : colorScale(getVal(d))
-                }
-                //colorScale(getVal(d))
-                polygonSideColor={(d) => (d === clickD ? "#7cc2b8" : "#000050")}
-                polygonStrokeColor={() => "#d1ced9"}
-                polygonLabel={({ properties: d }) => {
-                  return clickD
-                    ? ``
-                    : `<div style="display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                  }
+                  //colorScale(getVal(d))
+                  polygonSideColor={(d) =>
+                    d === clickD ? "#7cc2b8" : "#000050"
+                  }
+                  polygonStrokeColor={() => "#d1ced9"}
+                  polygonLabel={({ properties: d }) => {
+                    return clickD
+                      ? ``
+                      : `<div style="display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                   <img style="width:${isMobile ? "70px" : "100px"}"
                    src="${flagEndpoint}/${d.ISO_A2.toLowerCase()}.png" alt="flag" />
                   <p style="color: #f5f5f5; margin: 0px;
@@ -290,57 +327,57 @@ function World() {
                     isNaN(Math.round(d.score)) ? 0 : Math.round(d.score)
                   }</p>
                   </div>`;
+                  }}
+                  polygonsTransitionDuration={300}
+                  onPolygonHover={setHoverD}
+                  onPolygonClick={clickRegion}
+                  //marker
+                  // labelsData={marker}
+                  // labelLat={(d) => d.latitude}
+                  // labelLng={(d) => d.longitude}
+                  // labelText={(d) => d.name}
+                  // labelSize={(d) => 5}
+                  // labelDotRadius={(d) => 5}
+                  // labelColor={() => "rgba(255, 165, 0, 0.75)"}
+                  // labelResolution={3}
+                ></Globe>
+              </>
+            )}
+            {isMobile ? (
+              <div
+                ref={sidebarRef}
+                style={{
+                  width: width,
+                  left: "250px",
+                  bottom: sidebarMbottom,
                 }}
-                polygonsTransitionDuration={300}
-                onPolygonHover={setHoverD}
-                onPolygonClick={clickRegion}
-                //marker
-                // labelsData={marker}
-                // labelLat={(d) => d.latitude}
-                // labelLng={(d) => d.longitude}
-                // labelText={(d) => d.name}
-                // labelSize={(d) => 5}
-                // labelDotRadius={(d) => 5}
-                // labelColor={() => "rgba(255, 165, 0, 0.75)"}
-                // labelResolution={3}
-              ></Globe>
-            </>
-          )}
-          {isMobile ? (
-            <div
-              ref={sidebarRef}
-              style={{
-                width: width,
-                left: "250px",
-                bottom: sidebarMbottom,
-              }}
-              className={styles.sidebarM}
-            >
-              <WorldSidebar
-                country={sidebarC?.properties}
-                isDpChart={isDpChart}
-                bbox={sidebarC?.bbox}
-              />
-            </div>
-          ) : (
-            <div
-              ref={sidebarRef}
-              style={{
-                width: `500px`,
-                right: `${sidebarD}px`,
-              }}
-              className={styles.sidebar}
-            >
-              <WorldSidebar
-                country={sidebarC?.properties}
-                isDpChart={isDpChart}
-                bbox={sidebarC?.bbox}
-              />
-            </div>
-          )}
+                className={styles.sidebarM}
+              >
+                <WorldSidebar
+                  country={sidebarC?.properties}
+                  isDpChart={isDpChart}
+                  bbox={sidebarC?.bbox}
+                />
+              </div>
+            ) : (
+              <div
+                ref={sidebarRef}
+                style={{
+                  width: `500px`,
+                  right: `${sidebarD}px`,
+                }}
+                className={styles.sidebar}
+              >
+                <WorldSidebar
+                  country={sidebarC?.properties}
+                  isDpChart={isDpChart}
+                  bbox={sidebarC?.bbox}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* {isLogo && (
+        {/* {isLogo && (
         <>
           <motion.div
             initial={{
@@ -371,6 +408,7 @@ function World() {
           </motion.div>
         </>
       )} */}
+      </motion.div>
     </>
   );
 }

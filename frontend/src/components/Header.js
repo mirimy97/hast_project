@@ -16,7 +16,6 @@ function Header(props) {
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
-  const [language, setLanguage] = useState("ko");
   const [isKorean, setIsKorean] = useState(true);
 
   const [topics, setTopics] = useState("");

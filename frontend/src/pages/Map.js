@@ -12,7 +12,6 @@ import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
 import Loading from "./Loading";
 
-
 export default function Map() {
   // countryInfo 값 받아오기
   const location = useLocation();
@@ -56,36 +55,35 @@ export default function Map() {
     }
   }, [countryInfo]);
 
-
   // 치안 점수 표시 (히트맵)
   const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
-    axios.get("http://j8e106.p.ssafy.io:8080/api/info/dots")
+    axios
+      .get("http://j8e106.p.ssafy.io:8080/api/info/dots")
       .then((res) => {
         if (res.data.resultCode === "SUCCESS") {
           setDangerList(res.data.result);
-          }
-        })
-        .catch(err => console.log(err))
+        }
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // 기사 조회해서 하위 컴포넌트에 넘겨주기
   // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
-  const [allNews, setAllNews] = useState([])
+  const [allNews, setAllNews] = useState([]);
   useEffect(() => {
-
     if (countryInfo !== null) {
-      axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/${countryInfo.FIPS}`)
+      axios
+        .get(`http://j8e106.p.ssafy.io:8080/api/articles/${countryInfo.FIPS}`)
         .then((res) => {
           if (res.data.resultCode === "SUCCESS") {
-            console.log(res.data.result)
-            setAllNews(res.data.result)
+            console.log(res.data.result);
+            setAllNews(res.data.result);
           }
         })
-        .catch(err => console.log(err))
+        .catch((err) => console.log(err));
     }
-  }, [countryInfo])
-
+  }, [countryInfo]);
 
   //   if (newslist.length !== 0) {
   //     console.log("뉴스받아오기 성공");
@@ -93,12 +91,11 @@ export default function Map() {
   //   }
   // }, [newslist]);
 
-
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
   const [bounds, setBounds] = useState(null);
-  const [initialZoom, setInitialZoom] = useState(null)
+  const [initialZoom, setInitialZoom] = useState(null);
 
   const calculateZoom = (bounds) => {
     const ZOOM_MAX = 21;
@@ -119,7 +116,7 @@ export default function Map() {
       const zoom = calculateZoom(bounds);
       console.log(zoom);
       setZoom(zoom);
-      setInitialZoom(zoom)
+      setInitialZoom(zoom);
       // if (dangerList.length === 0) {
       //   setIsLoading(false);
       // }
@@ -127,7 +124,7 @@ export default function Map() {
   };
 
   // const MyKey = process.env.REACT_APP_MAP_API;
-  const MyKey = "AIzaSyAv04v10IdfrHgjK_fTlrQw84nhHSzIQM8"
+  const MyKey = "AIzaSyAv04v10IdfrHgjK_fTlrQw84nhHSzIQM8";
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -198,7 +195,7 @@ export default function Map() {
     setZoom(map.getZoom());
   };
 
-  const [heatmapData, setHeatmapData] = useState(null)
+  const [heatmapData, setHeatmapData] = useState(null);
 
   useEffect(() => {
     if (dangerList.length !== 0) {
@@ -206,47 +203,43 @@ export default function Map() {
         return {
           lat: danger.latitude,
           lng: danger.longitude,
-          weight: danger.score
-        }
-      })
+          weight: danger.score,
+        };
+      });
       setHeatmapData({
         positions: newDangerList,
         options: {
           radius: 25,
           opacity: 0.6,
           gradient: [
-            'rgba(0, 255, 0, 0)', // green
-            'rgba(255, 255, 0, 1)', // yellow
-            'rgba(255, 0, 0, 1)' // red
+            "rgba(0, 255, 0, 0)", // green
+            "rgba(255, 255, 0, 1)", // yellow
+            "rgba(255, 0, 0, 1)", // red
           ],
-        }
-      })
+        },
+      });
     }
-  }, [dangerList])
-
+  }, [dangerList]);
 
   useEffect(() => {
     if (heatmapData !== null) {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [heatmapData])
-
+  }, [heatmapData]);
 
   // 좌표 클릭 - 클릭 이벤트
-  const [clickCoords, setClickCoords] = useState(null)
+  const [clickCoords, setClickCoords] = useState(null);
   const onClickHandler = (e) => {
-    setCenter({lat: e.lat, lng: e.lng})
-    setZoom(13)
-    console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
-    setClickCoords({lat: e.lat, lng: e.lng})
-  }
+    setCenter({ lat: e.lat, lng: e.lng });
+    setZoom(13);
+    console.log(
+      `클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`
+    );
+    setClickCoords({ lat: e.lat, lng: e.lng });
+  };
 
   // Marker 데이터 <- 지도 내 기사 좌표들
   // const [markers, setMarkers] = useState([])
-
-
-
-
 
   const mapRef = useRef(null);
   // styledmaptype
@@ -288,16 +281,20 @@ export default function Map() {
 
   // initialize => 초기 나라 좌표로 이동
   const Initialize = () => {
-    if ((center.lat !== (countryInfo.ne.lat + countryInfo.sw.lat)/2 && center.lng !== (countryInfo.ne.lng + countryInfo.sw.lng)/2) || zoom !== initialZoom) {
+    if (
+      (center.lat !== (countryInfo.ne.lat + countryInfo.sw.lat) / 2 &&
+        center.lng !== (countryInfo.ne.lng + countryInfo.sw.lng) / 2) ||
+      zoom !== initialZoom
+    ) {
       setCenter({
-        lat: (countryInfo.ne.lat + countryInfo.sw.lat)/2,
-        lng: (countryInfo.ne.lng + countryInfo.sw.lng)/2,
-      })
-      setZoom(initialZoom)
+        lat: (countryInfo.ne.lat + countryInfo.sw.lat) / 2,
+        lng: (countryInfo.ne.lng + countryInfo.sw.lng) / 2,
+      });
+      setZoom(initialZoom);
     }
-  }
+  };
 
-  const [mapMarkers, setMapMarkers] = useState([])
+  const [mapMarkers, setMapMarkers] = useState([]);
   useEffect(() => {
     if (allNews !== null) {
       const updateList = allNews.map((news) => {
@@ -308,16 +305,23 @@ export default function Map() {
           lat: news.latitude,
           lng: news.longitude,
           score: news.score,
-        }
-      })
-      setMapMarkers(updateList)
+        };
+      });
+      setMapMarkers(updateList);
     }
-  }, [allNews])
+  }, [allNews]);
 
   return isLoading ? (
     <Loading />
   ) : (
-    <div style={{ height: "100vh", width: "100%", position: "relative", cursor: "pointer"}} >
+    <div
+      style={{
+        height: "100vh",
+        width: "100%",
+        position: "relative",
+        cursor: "pointer",
+      }}
+    >
       <GoogleMapReact
         bootstrapURLKeys={{
           key: MyKey,
@@ -347,18 +351,17 @@ export default function Map() {
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        { zoom >= 8 && 
+        {zoom >= 8 &&
           mapMarkers &&
-          mapMarkers.map((marker) => 
-            <NewsMarker 
+          mapMarkers.map((marker) => (
+            <NewsMarker
               key={marker.placeId}
               id={marker.id}
               lat={marker.lat}
               lng={marker.lng}
               // onMouseover={() => console.log(marker)}
             />
-          )
-        }
+          ))}
         {/* {zoom >= 12 &&
           hospital &&
           showH &&
@@ -429,13 +432,13 @@ export default function Map() {
         <div
           style={{
             position: "absolute",
-            top: (isMobile ? "60px" : "75px"),
+            top: isMobile ? "60px" : "75px",
             left: "20px",
-            fontSize: (isMobile? "0.8rem" : "0.9rem"),
+            fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
             color: "red",
             // backgroundColor: "#FFFFFF",
-            margin: 0
+            margin: 0,
           }}
         >
           지도를 클릭하여 상세 정보를 확인하세요
@@ -443,7 +446,7 @@ export default function Map() {
       </div>
 
       {/* 반응형 */}
-      { isMobile ? 
+      {isMobile ? (
         <div>
           <Link to="/">
             <div
@@ -477,7 +480,7 @@ export default function Map() {
                 {t("goMain.Title")}
               </div>
             </div>
-          </Link> 
+          </Link>
 
           <div
             style={{
@@ -490,19 +493,19 @@ export default function Map() {
               cursor: "pointer",
               padding: "3px",
               backgroundColor: "#FFFFFF90",
-              borderRadius: "50px"
+              borderRadius: "50px",
             }}
             onClick={Initialize}
-            >
-            <img 
-              src="/assets/reset.png"
-              alt="reset"
-              width="25px"
-            />
+          >
+            <img src="/assets/reset.png" alt="reset" width="25px" />
           </div>
-          <MapDrawer allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/> 
+          <MapDrawer
+            allNews={allNews}
+            setAllNews={setAllNews}
+            clickCoords={clickCoords}
+          />
         </div>
-      : 
+      ) : (
         <div>
           <Link to="/">
             <div
@@ -512,19 +515,19 @@ export default function Map() {
                 left: "8px",
                 display: "flex",
                 alignItems: "center",
-                fontSize: "1.2rem",
+                fontSize: "1rem",
               }}
             >
               <img
                 src="/assets/back.png"
                 alt="뒤로가기"
-                width={100}
+                width={55}
                 style={{ zIndex: 10 }}
               />
               <div
                 style={{
                   position: "relative",
-                  left: "-40px",
+                  left: "-25px",
                   backgroundColor: "white",
                   borderRadius: "8px",
                   padding: "3px 8px 3px 20px",
@@ -551,16 +554,16 @@ export default function Map() {
               // borderRadius: "50px"
             }}
             onClick={Initialize}
-            >
-            <img 
-              src="/assets/reset.png"
-              alt="reset"
-              width="30px"
-            />
+          >
+            <img src="/assets/reset.png" alt="reset" width="30px" />
           </div>
-          <Sidebar allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
+          <Sidebar
+            allNews={allNews}
+            setAllNews={setAllNews}
+            clickCoords={clickCoords}
+          />
         </div>
-      }
+      )}
     </div>
   );
 }

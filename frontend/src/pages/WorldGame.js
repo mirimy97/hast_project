@@ -5,22 +5,19 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import * as d3 from "d3";
 import Globe from "react-globe.gl";
-import * as THREE from "three";
 import axios from "axios";
 import styles from "./WorldGame.module.css";
 import { motion } from "framer-motion";
 import HeaderGame from "../components/HeaderGame";
 import GameButton from "../components/GamePage/GameButton";
-import GameBox from "../components/GamePage/GameBox";
 import CapitalGame from "../components/GamePage/CapitalGame";
-import { getImageListItemBarUtilityClass } from "@mui/material";
 import FlagGame from "../components/GamePage/FlagGame";
 import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const [isHovering, setIsHovering] = useState(false); //버튼 호버
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [point, setPoint] = useState({
@@ -90,11 +87,11 @@ function World() {
     setHoverD(propHover);
     console.log(propHover);
   };
+
   return (
     <div style={isMobile ? {} : { marginLeft: `-${shiftAmmount}px` }}>
       <motion.div
-        className="container text-center"
-        initial={{ opacity: 0.5 }}
+        initial={{ opacity: 0.2 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 2 }}
@@ -138,10 +135,12 @@ function World() {
           )} */}
           {gameName === "" ? (
             <>
-              <h1 className={styles.gameTitle}>
-                Let's Play <br />
-                The Game
-              </h1>
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.8 }}>
+                <h1 className={styles.gameTitle}>
+                  Let's Play <br />
+                  The Game
+                </h1>
+              </motion.div>
               <div
                 className={styles.btnFlex}
                 style={isMobile ? { flexDirection: "column" } : {}}
