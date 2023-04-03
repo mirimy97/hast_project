@@ -6,7 +6,9 @@ import NewsListItem from "../NewsListItem";
 import Selectbox from "../Selectbox";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { motion } from "framer-motion";
-function MapSidebar({ newslist }) {
+import axios from "axios";
+
+function MapSidebar({allNews, setAllNews, clickCoords}) {
   //(정적인) 버튼 값
   const buttons = [
     {
@@ -29,72 +31,29 @@ function MapSidebar({ newslist }) {
       name: "categoryBtn",
       value: "Cate5",
     },
-    {
-      name: "categoryBtn",
-      value: "Cate6",
-    },
   ];
 
-  //뉴스 리스트 불러오기
-  // const newslist = [
-  //   {
-  //     headline: "애플페이 첫날부터 '삐걱'",
-  //     timeStamp: "2023-03-20 13:20:30",
-  //     imgUrl:
-  //       "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
-  //     articleUrl:
-  //       "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
-  //     category: 1,
-  //     score: 3.0,
-  //   },
-  //   {
-  //     headline: "애플페이 첫날부터 '삐걱'",
-  //     timeStamp: "2023-03-19 13:20:30",
-  //     imgUrl:
-  //       "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
-  //     articleUrl:
-  //       "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
-  //     category: 1,
-  //     score: 4.2,
-  //   },
-  //   {
-  //     headline: "애플페이 첫날부터 '삐걱'",
-  //     timeStamp: "2023-03-21 13:20:30",
-  //     imgUrl:
-  //       "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
-  //     articleUrl:
-  //       "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
-  //     category: 1,
-  //     score: 3.1,
-  //   },
-  //   {
-  //     headline: "애플페이 첫날부터 '삐걱'",
-  //     timeStamp: "2023-03-22 17:20:10",
-  //     imgUrl:
-  //       "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
-  //     articleUrl:
-  //       "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
-  //     category: 1,
-  //     score: 4.0,
-  //   },
-  //   {
-  //     headline: "애플페이 첫날부터 '삐걱'2",
-  //     timeStamp: "2023-03-18 17:20:10",
-  //     imgUrl:
-  //       "http://img.tvchosun.com/sitedata/image/202303/21/2023032190102_0.jpg",
-  //     articleUrl:
-  //       "http://news.tvchosun.com/site/data/html_dir/2023/03/21/2023032190102.html",
-  //     category: 2,
-  //     score: 3.5,
-  //   },
-  // ];
+  // 클릭 좌표 변경 시 마다 기사 업데이트
+  useEffect(() => {
+    if (clickCoords !== null) {
+      // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
+      axios.get(`http://j8e106.p.ssafy.io:8080/api/articles/${clickCoords.lat}/${clickCoords.lng}`)
+        .then(res => {
+          if (res.data.resultCode === "SUCCESS") {
+            setAllNews(res.data.result)
+          }
+        })
+        .catch(err => console.log(err))
+    }
+  }, [clickCoords])
+
 
   const [filteredNews, setFilteredNews] = useState(null);
   const [selectBtn, setSelectBtn] = useState(null);
 
   //모든 뉴스 리스트 불러오기
   function getNews() {
-    const newsList = newslist;
+    const newsList = allNews;
     return newsList;
   }
   //뉴스 카테고리별 필터링
@@ -107,7 +66,7 @@ function MapSidebar({ newslist }) {
 
   useEffect(() => {
     setFilteredNews(getNews());
-  }, []);
+  }, [allNews]);
 
   //카테고리 선택
   function selectNews(cate) {
@@ -124,8 +83,6 @@ function MapSidebar({ newslist }) {
   return (
     // <div className={styles.sidebar}>
     <>
-      {/* <KeyboardDoubleArrowRightIcon /> */}
-      {/* <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3> */}
       {buttons &&
         buttons.map((news, index) => (
           <>
@@ -133,7 +90,7 @@ function MapSidebar({ newslist }) {
               key={index}
               className={`${styles.button}  
                 ${
-                  selectBtn === news.value.substr(4, 4)
+                  selectBtn == news.value.substr(4, 4)
                     ? styles.buttonSelect
                     : ""
                 }`}

@@ -16,9 +16,9 @@ const variants = {
   },
 };
 
-export const Navigation = ({newslist}) => (
+export const Navigation = ({allNews, setAllNews, clickCoords}) => (
   <motion.ul variants={variants} className={styles.ul}>
     <h3 className={styles.h3}>📰 {t("categoryTitle.Title")}</h3>
-    <MapSidebar newslist={newslist}/>
+    <MapSidebar allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
   </motion.ul>
 );
