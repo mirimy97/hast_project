@@ -40,11 +40,19 @@ export default class LineChartExample extends PureComponent {
     const language = this.props.language;
 
     const gradientOffset = () => {
-      const dataMax = Math.max(...data.map((i) => i.world_tone));
-      const dataMin = Math.min(...data.map((i) => i.world_tone));
+      const wDataMax = Math.max(...data.map((i) => i.world_tone));
+      const wDataMin = Math.min(...data.map((i) => i.world_tone));
+      const cDataMax = Math.max(...data.map((i) => i.country_tone));
+      const cDataMin = Math.min(...data.map((i) => i.country_tone));
       // const dataSujm = Math.min(...data.map((i) => i.world_tone));
+      // if (dataMax <= 0) {
+      //   return 0;
+      // }
+      // if (dataMin >= 0) {
+      //   return 1;
+      // }
 
-      return dataMax / (dataMax - dataMin);
+      return (wDataMax + wDataMin) / 2 / cDataMin;
     };
 
     const off = gradientOffset();
@@ -67,7 +75,7 @@ export default class LineChartExample extends PureComponent {
               offset: -8,
             }}
           />
-          <YAxis tickLine={false} />
+          <YAxis tickLine={false} domain={[-10, 0]} />
           <Tooltip
             contentStyle={{ backgroundColor: "#ffffff70" }}
             content={this.customTooltip}
@@ -75,8 +83,9 @@ export default class LineChartExample extends PureComponent {
           <defs>
             <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
               <stop offset={0} stopColor="green" stopOpacity={0.5} />
-              <stop offset={off} stopColor="green" stopOpacity={0} />
-              <stop offset={1} stopColor="red" stopOpacity={0.5} />
+              {/* <stop offset={off - 0.1} stopColor="green" stopOpacity={0} /> */}
+              <stop offset={off} stopColor="red" stopOpacity={0.3} />
+              {/* <stop offset={1} stopColor="red" stopOpacity={0.5} /> */}
             </linearGradient>
           </defs>
           <Legend

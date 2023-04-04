@@ -53,10 +53,10 @@ export default class BarChartExample extends PureComponent {
         dy={-4}
         fill={
           e.index === this.state.activeIndex
-            ? "#82ca9d"
+            ? "#9c7bb4"
             : e.index === this.state.hovered
-            ? "#8884d8"
-            : "gray"
+            ? "#b0b0b0"
+            : "#a1a1a1"
         }
         fontSize={10}
         textAnchor="middle"
@@ -106,10 +106,10 @@ export default class BarChartExample extends PureComponent {
                 cursor="pointer"
                 fill={
                   index === activeIndex
-                    ? "#82ca9d"
+                    ? "#9c7bb4"
                     : index === hovered
-                    ? "#a5a5a5"
-                    : "#8884d8"
+                    ? "#b0b0b0"
+                    : "#c1a4d6"
                 }
                 key={`cell-${index}`}
               ></Cell>

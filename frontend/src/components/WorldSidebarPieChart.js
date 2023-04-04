@@ -17,12 +17,12 @@ import language from "../redux/language";
 // ];
 
 const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#d14d98",
-  "#9e9e9e",
+  "#ffbb60",
+  "#a2de81",
+  "#dfa6aa",
+  "#94c2e6",
+  "#c1a4d6",
+  "#b0b0b0",
 ];
 
 const RADIAN = Math.PI / 180;
@@ -37,6 +37,7 @@ export default class PieChartExample extends PureComponent {
   }
   render() {
     const month = this.props.month;
+    const isMobile = this.props.isMobile;
     const data = this.props.data.pie;
     const language = this.props.language;
     const month_en = {
@@ -59,7 +60,7 @@ export default class PieChartExample extends PureComponent {
         <p
           style={{
             position: "absolute",
-            fontSize: "20px",
+            fontSize: isMobile ? "15px" : "20px",
             fontWeight: "600",
             margin: "0 0 10px 20px",
           }}
@@ -67,7 +68,7 @@ export default class PieChartExample extends PureComponent {
           {language === "ko" ? `${month}월` : month_en[month]}
         </p>
         <ResponsiveContainer width="100%" height="100%">
-          <PieChart width={400} height={400}>
+          <PieChart width={400} height={300}>
             <Pie
               data={data}
               cx="50%"
