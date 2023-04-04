@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./Game.module.css";
 import GameResult from "./GameResult";
 function CapitalGame({ countries, hoverD, changeHover }) {
@@ -14,6 +15,9 @@ function CapitalGame({ countries, hoverD, changeHover }) {
     correctAnswers: 0,
     wrongAnswers: 0,
   });
+
+  //모바일 여부
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   //퀴즈에 필요한 데이터 불러오기
   const settingQuizData = () => {

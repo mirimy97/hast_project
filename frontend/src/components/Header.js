@@ -16,7 +16,6 @@ function Header(props) {
 
   const { t, i18n } = useTranslation();
   // //laguage 선택
-  const [language, setLanguage] = useState("ko");
   const [isKorean, setIsKorean] = useState(true);
 
   const [topics, setTopics] = useState("");
@@ -52,13 +51,12 @@ function Header(props) {
 
   useEffect(() => {
     // load Topics
-    axios
-      .get("http://j8e106.p.ssafy.io:8080/api/articles/updates")
-      .then((res) => {
-        if (res.data.resultCode === "SUCCESS") {
-          setTopics(res.data.result);
-        }
-      });
+    axios.get("http://j8e106.p.ssafy.io:8080/api/articles").then((res) => {
+      if (res.data.resultCode === "SUCCESS") {
+        console.log(res.data);
+        setTopics(res.data.result);
+      }
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -134,7 +132,8 @@ function Header(props) {
             <ul className={styles.ulM}>
               {topics &&
                 topics.map((t) => (
-                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                  // <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                  <li>t</li>
                 ))}
             </ul>
           </div>
@@ -144,10 +143,11 @@ function Header(props) {
             <div className={styles.newstitle}>{t("header.Topic")} </div>
 
             <ul className={styles.ul}>
-              {topics &&
+              {/* {topics &&
                 topics.map((t) => (
-                  <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
-                ))}
+                  // <li>{isKorean ? t.korKeyword : t.engKeyword}</li>
+                  <li>{t.countryCode}</li>
+                ))} */}
             </ul>
           </div>
         )}

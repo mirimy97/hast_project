@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styles from "./Game.module.css";
 import GameResult from "./GameResult";
 const FlagGame = ({ countries, hoverD, changeHover }) => {
@@ -15,6 +16,9 @@ const FlagGame = ({ countries, hoverD, changeHover }) => {
     correctAnswers: 0,
     wrongAnswers: 0,
   });
+
+  //모바일 여부
+  const isMobile = useSelector((state) => state.status.isMobile);
 
   let flagArray = countries.features.map((country) => {
     if (country.properties.ISO_A2)

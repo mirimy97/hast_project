@@ -5,21 +5,19 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import * as d3 from "d3";
 import Globe from "react-globe.gl";
-import * as THREE from "three";
 import axios from "axios";
 import styles from "./WorldGame.module.css";
 import { motion } from "framer-motion";
 import HeaderGame from "../components/HeaderGame";
 import GameButton from "../components/GamePage/GameButton";
-import GameBox from "../components/GamePage/GameBox";
 import CapitalGame from "../components/GamePage/CapitalGame";
-import { getImageListItemBarUtilityClass } from "@mui/material";
 import FlagGame from "../components/GamePage/FlagGame";
+import { useSelector } from "react-redux";
 
 function World() {
   const globeRef = useRef();
+  const [isHovering, setIsHovering] = useState(false); //버튼 호버
   const [countries, setCountries] = useState({ features: [] });
   const [hoverD, setHoverD] = useState();
   const [point, setPoint] = useState({
@@ -34,18 +32,21 @@ function World() {
       .then((res) => setCountries(res.data));
   }, []);
 
-  const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
-
-  // GDP per capita (avoiding countries with small pop)
-  const getVal = (feat) =>
-    feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
-  //console.log(getVal);
-  const maxVal = useMemo(
-    () => Math.max(...countries.features.map(getVal)),
-    [countries]
-  );
-  //console.log(maxVal);
-  colorScale.domain([0, maxVal]);
+  //모바일 여부
+  const isMobile = useSelector((state) => state.status.isMobile);
+  // 브라우저 창 크기 변화 이벤트 -> globe 리사이징
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const handleResize = useCallback(() => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  }, []);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
   useEffect(() => {
     if (hoverD) {
@@ -86,15 +87,11 @@ function World() {
     setHoverD(propHover);
     console.log(propHover);
   };
+
   return (
-    <div
-      style={{
-        marginLeft: `-${shiftAmmount}px`,
-      }}
-    >
+    <div style={isMobile ? {} : { marginLeft: `-${shiftAmmount}px` }}>
       <motion.div
-        className="container text-center"
-        initial={{ opacity: 0.5 }}
+        initial={{ opacity: 0.2 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 2 }}
@@ -107,7 +104,8 @@ function World() {
           >
             <Globe
               ref={globeRef}
-              width={w + shiftAmmount}
+              width={isMobile ? width : width + shiftAmmount}
+              height={height}
               globeImageUrl="map/earthmap.jpg"
               backgroundImageUrl="assets/angryimg.png"
               //lineHoverPrecision={0}
@@ -118,27 +116,35 @@ function World() {
               //   clickD ? (d === clickD ? 0.008 : 0) : d === hoverD ? 0.03 : 0
               // }
               polygonCapColor={(d) =>
-                d === hoverD ? "#fff59a" : "transparent"
+                d === hoverD ? "#FFED70" : "transparent"
               }
               //colorScale(getVal(d))
-              polygonSideColor={() => "#00000050"}
-              polygonStrokeColor={() => "	#FFFFFF"}
+              polygonSideColor={() => "#0050"}
+              polygonStrokeColor={() => "rgba(255, 241, 210, 0.4)"}
               polygonsTransitionDuration={300}
               // onPolygonHover={setHoverD}
             />
           </div>
         </div>
-        <div className={styles.gamebox}>
+        <div
+          className={styles.gamebox}
+          style={isMobile ? { width: "100%" } : {}}
+        >
           {/* {countries.features.length !== 0 && (
             <CapitalGame countries={countries} setHoverD={setHoverD} />
           )} */}
           {gameName === "" ? (
             <>
-              <h1 className={styles.gameTitle}>
-                Let's Play <br />
-                The Game
-              </h1>
-              <div className={styles.btnFlex}>
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.8 }}>
+                <h1 className={styles.gameTitle}>
+                  Let's Play <br />
+                  The Game
+                </h1>
+              </motion.div>
+              <div
+                className={styles.btnFlex}
+                style={isMobile ? { flexDirection: "column" } : {}}
+              >
                 <GameButton
                   label="국기 맞추기 게임"
                   id="1"

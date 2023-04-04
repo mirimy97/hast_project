@@ -25,6 +25,7 @@ export default class LineChartExample extends PureComponent {
     };
 
     this.customTooltip = this.customTooltip.bind(this);
+    this.gradientOffset = this.gradientOffset.bind(this);
   }
 
   customTooltip({ payload, label }) {
@@ -35,19 +36,22 @@ export default class LineChartExample extends PureComponent {
 
     return null;
   }
+
+  gradientOffset() {
+    const data = this.props.data;
+    const wDataMax = Math.max(...data.map((i) => i.world_tone));
+    const wDataMin = Math.min(...data.map((i) => i.world_tone));
+    // const cDataMax = Math.max(...data.map((i) => i.country_tone));
+    const cDataMin = Math.min(...data.map((i) => i.country_tone));
+
+    return (wDataMax + wDataMin) / 2 / cDataMin;
+  }
+
   render() {
     const data = this.props.data;
     const language = this.props.language;
+    const off = this.gradientOffset();
 
-    const gradientOffset = () => {
-      const dataMax = Math.max(...data.map((i) => i.world_tone));
-      const dataMin = Math.min(...data.map((i) => i.world_tone));
-      // const dataSujm = Math.min(...data.map((i) => i.world_tone));
-
-      return dataMax / (dataMax - dataMin);
-    };
-
-    const off = gradientOffset();
     return (
       <ResponsiveContainer width="100%" height="58%">
         <ComposedChart
@@ -67,7 +71,7 @@ export default class LineChartExample extends PureComponent {
               offset: -8,
             }}
           />
-          <YAxis tickLine={false} />
+          <YAxis tickLine={false} domain={[-10, 0]} />
           <Tooltip
             contentStyle={{ backgroundColor: "#ffffff70" }}
             content={this.customTooltip}
@@ -75,8 +79,9 @@ export default class LineChartExample extends PureComponent {
           <defs>
             <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
               <stop offset={0} stopColor="green" stopOpacity={0.5} />
-              <stop offset={off} stopColor="green" stopOpacity={0} />
-              <stop offset={1} stopColor="red" stopOpacity={0.5} />
+              <stop offset={off} stopColor="green" stopOpacity={0.2} />
+              <stop offset={off} stopColor="red" stopOpacity={0.2} />
+              <stop offset={1} stopColor="red" stopOpacity={0.7} />
             </linearGradient>
           </defs>
           <Legend
@@ -112,12 +117,18 @@ export default class LineChartExample extends PureComponent {
             dataKey="world_tone"
             stroke="#ff7300"
             dot={false}
+            animationBegin={1300}
+            animationDuration={1600}
+            animationEasing="ease-out"
           />
           <Area
             type="monotone"
             dataKey="country_tone"
             stroke="#000"
             fill="url(#splitColor)"
+            animationBegin={900}
+            animationDuration={1600}
+            animationEasing="ease-out"
           />
         </ComposedChart>
       </ResponsiveContainer>

@@ -24,4 +24,5 @@
   padding-bottom: 50px;
   color: #1e88e5;
   text-shadow: 0.5vmin 0.5vmin 0 #e79c10, -0.5vmin -0.5vmin 0 #d53a33;
+  cursor: default;
 }

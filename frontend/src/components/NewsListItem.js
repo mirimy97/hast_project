@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 function NewsListItem(props) {
   const language = useSelector((state) => state.language.value);
-
   //방금전, ~분전, ~시간전 설정
   function timeForToday(value) {
     const today = new Date();
@@ -38,19 +37,24 @@ function NewsListItem(props) {
         <span className={styles.time}>🕛 {timebefore} </span>
         <a className={styles.ahref} href={props.news.url} target="_blank">
           <div className={styles.headline}>
-            {language === 'en' ? props.news.engKeyword : props.news.korKeyword}
+            {language === "en" ? props.news.engKeyword : props.news.korKeyword}
           </div>
         </a>
-        <div className={styles.score}>{t("newsList.danger")} {props.news.score.toFixed(2)}</div>
-        <span className={styles.timestamp}>{props.news.timeStamp.substr(0, 16)}</span>
+        <div className={styles.score}>
+          {t("newsList.danger")} {props.news.score.toFixed(2)}
+        </div>
+        <span className={styles.timestamp}>
+          {props.news.timeStamp.substr(0, 16)}
+        </span>
       </div>
       <div className={styles.imgbox}>
         <img
           referrerpolicy="no-referrer"
-          className={styles.img} alt="img"
-          src={props.news.imgUrl ? props.news.imgUrl : "/assets/news.png"} 
+          className={styles.img}
+          alt="img"
+          src={props.news.imgUrl ? props.news.imgUrl : "/assets/news.png"}
           onError={(e) => {
-            e.target.src = "/assets/news.png"
+            e.target.src = "/assets/news.png";
           }}
         />
       </div>
