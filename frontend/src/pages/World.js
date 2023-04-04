@@ -51,7 +51,7 @@ function World() {
   );
   const [sidebarD, setSidebarD] = useState(-500);
   const [sidebarMbottom, setSidebarMbottom] = useState("-100vh");
-  const [isDpChart, setIsDpChart] = useState(false);
+  const [isDpChart, setIsDpChart] = useState(0);
 
   // 브라우저 창 크기 변화 이벤트 -> globe 리사이징
   const handleResize = useCallback(() => {
@@ -67,13 +67,28 @@ function World() {
 
   // 스크롤 이벤트 -> 차트 나타내기 효과
   const displayChart = () => {
-    // console.log("scroll", sidebarRef.current.scrollTop);
+    console.log("scroll", sidebarRef.current.scrollTop);
     // console.log(isDpChart);
-    if (isMobile && !isDpChart && sidebarRef.current.scrollTop > 140) {
-      setIsDpChart(true);
-      // console.log("실행ㅇㅇㅇ");
-    } else if (!isMobile && !isDpChart && sidebarRef.current.scrollTop > 1) {
-      setIsDpChart(true);
+    if (isMobile) {
+      if (sidebarRef.current.scrollTop > 140) {
+        setIsDpChart(1);
+      }
+      if (sidebarRef.current.scrollTop > 430) {
+        setIsDpChart(2);
+      }
+      if (sidebarRef.current.scrollTop > 750) {
+        setIsDpChart(3);
+      }
+    } else if (!isMobile) {
+      if (sidebarRef.current.scrollTop > 1) {
+        setIsDpChart(1);
+      }
+      if (sidebarRef.current.scrollTop > 600) {
+        setIsDpChart(2);
+      }
+      if (sidebarRef.current.scrollTop > 1050) {
+        setIsDpChart(3);
+      }
     }
   };
   useEffect(() => {

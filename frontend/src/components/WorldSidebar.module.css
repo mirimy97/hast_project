@@ -39,6 +39,9 @@
   align-items: center;
   margin-bottom: 50px;
   /* overflow: scroll; */
+  background-color: #ffffff50;
+  border-radius: 20px;
+  padding: 20px;
 }
 
 /* .sidebarOuterBox::-webkit-scrollbar {
@@ -58,10 +61,11 @@
 .infoOuter {
   display: flex;
   width: 100%;
+  justify-content: space-between;
   /* overflow: scroll; */
 }
 .infoboxC {
-  width: 50%;
+  width: 49%;
   height: 250px;
   display: flex;
   flex-direction: column;
@@ -72,6 +76,7 @@
   border: 1px solid #b8b8b8;
   border-radius: 10px;
   padding: 25px 15px 15px 15px;
+  margin-top: 15px;
   animation: slide 1s ease-out;
 }
 .infobox {
@@ -81,6 +86,7 @@
   border-radius: 10px;
   padding: 25px 15px 25px 15px;
   margin-top: 15px;
+
   animation: slide 1s ease-out;
   display: flex;
 }
@@ -100,21 +106,34 @@
 }
 
 .titleFont {
-  margin-top: 50px;
+  margin-top: 20px;
   font-weight: 600;
+  margin-right: auto;
+  margin-left: 20px;
   animation: fontSlide 1s ease-out;
 }
+
 @keyframes fontSlide {
   from {
     margin-top: 150px;
     opacity: 0;
   }
   to {
-    margin-top: 50px;
+    margin-top: 20px;
     opacity: 1;
   }
 }
+.chartTitle {
+  font-weight: 600;
 
+  margin: 0 0 20px 10px;
+}
+.chartContent {
+  margin: 0 20px 0 20px;
+  font-weight: 600;
+  color: #767676;
+  line-height: 24px;
+}
 .icon {
   width: 100px;
   height: 100px;

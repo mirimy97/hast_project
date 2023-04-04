@@ -3,10 +3,21 @@ import Fab from "@mui/material/Fab";
 import { useState } from "react";
 import { t } from "i18next";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace }) {
+function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace, placeList, mapRef, getPlaces, center, first, setFirst }) {
   const isMobile = useSelector((state) => state.status.isMobile);
+
+  // useEffect(() => {
+  //     setTimeout(() => {
+  //       console.log(mapRef.current.map); // Should log the map object
+  //       console.log(mapRef.current.maps); // Should log the maps object
+  //     }, 1000);
+  //   }, []);
+
+
   const ToggleClick = (idx) => {
+    console.log(idx)
     if (toggle.includes(idx)) {
       const newList = toggle.filter((item) => item !== idx);
       setToggle(newList);
@@ -16,8 +27,18 @@ function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace }) {
       console.log([...toggle, idx]);
       setToggle([...toggle, idx]);
       setShowPlace(true);
+      if (first) {
+        // API 요청 필요
+        console.log("API 요청")
+        getPlaces(mapRef.current.map, mapRef.current.maps, center, idx)
+        setFirst(false)
+      } else {
+        console.log("기존거 사용")
+        console.log(placeList)
+      }
     }
   };
+
 
   return (
     <Fab
