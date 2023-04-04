@@ -476,11 +476,13 @@ export default function Map() {
             left: "20px",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
-            color: "red",
+            color: "#e0e0e0",
             margin: 0,
           }}
         >
-          {language === 'en' ? "Click on the coordinates for more information" : "좌표를 클릭하여 상세 정보를 확인하세요"}
+          {language === "en"
+            ? "Click on the coordinates for more information"
+            : "원하는 위치를 클릭하여 상세 정보를 확인하세요"}
         </div>
       </div>
 

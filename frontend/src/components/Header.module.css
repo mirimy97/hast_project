@@ -53,100 +53,56 @@
 }
 
 /*뉴스 관련 CSS*/
-.ticker {
-  background-color: #fff;
-  overflow: auto;
-  width: 30px;
-  height: 35px;
-  vertical-align: middle;
-
-  box-sizing: border-box;
+.newstitle {
+  background-color: rgb(255 253 251);
+  color: #585858;
   position: relative;
-  overflow: hidden;
-  opacity: 0.9;
-  font-size: 20px;
-}
-.ul {
+  font-weight: bold;
   display: block;
-  padding: 0px;
-  line-height: 35px;
-  vertical-align: middle;
-  margin: 0px;
-  list-style: none;
-  white-space: nowrap;
-  animation: scroll 30s linear 0s infinite;
-  position: absolute;
+  height: 25px;
+  line-height: 25px;
+  z-index: 10;
+  font-size: 15px;
+  text-align: center;
+  width: 145px;
 }
-.ticker ul li {
-  display: inline-block;
-  white-space: normal;
-  margin-left: 20px;
-  font-size: 18px;
+.tickerbox {
+  position: absolute;
+  z-index: 50;
+  top: 70px;
+  right: 80px;
+  font-size: 14px;
+  list-style: none;
+  border-radius: 0.5rem;
+  /* background-color: hsl(204 20% 72%); */
+  padding: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.tickerboxM {
+  position: absolute;
+  z-index: 50;
+  top: 60px;
+  right: 55px;
+  font-size: 11px;
+  list-style: none;
+  border-radius: 0.5rem;
+  /* background-color: hsl(204 20% 72%); */
+  padding: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.tickerbox li {
+  padding: 3px;
 }
 
 /* 오늘의 토픽 모바일 ver */
-.tickerM {
-  position: fixed;
-  top: 0px;
-  /* right: 10px; */
-  margin: 0 10px 0 10px;
-  background-color: #ffffff90;
-  overflow: auto;
+.cardM {
+  width: 40px;
   height: 40px;
-  vertical-align: middle;
-  width: 90%;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  opacity: 0.9;
-  font-size: 18px;
+  float: right;
+  cursor: pointer;
 }
-.ulM {
-  display: block;
-  padding: 0px;
-  line-height: 40px;
-  vertical-align: middle;
-  margin: 0 20px 0 20px;
-  list-style: none;
-  white-space: nowrap;
-  animation: scroll 7s linear 0s infinite;
-  position: absolute;
-}
-.tickerM ul li {
-  display: inline-block;
-  white-space: normal;
-  margin-left: 20px;
-}
-
-.newstitle {
-  background-color: rgb(142 129 123);
-  color: #fff;
-  position: absolute;
-  left: 0;
-  font-weight: bold;
-  border-right: 2px solid #fff;
-  top: 0;
-  display: block;
-  height: 35px;
-  width: 135px;
-  vertical-align: middle;
-  line-height: 35px;
-  padding-left: 10px;
-  padding-right: 10px;
-  z-index: 10;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
-  font-size: 18px;
-}
-@keyframes scroll {
-  from {
-    transform: translate(100%, 0);
-  }
-
-  to {
-    transform: translate(-150%, 0);
-  }
-}
-
 /* Custom CSS */
 .ticker {
   width: 360px;
