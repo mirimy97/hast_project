@@ -25,6 +25,7 @@ export default class LineChartExample extends PureComponent {
     };
 
     this.customTooltip = this.customTooltip.bind(this);
+    this.gradientOffset = this.gradientOffset.bind(this);
   }
 
   customTooltip({ payload, label }) {
@@ -35,27 +36,22 @@ export default class LineChartExample extends PureComponent {
 
     return null;
   }
+
+  gradientOffset() {
+    const data = this.props.data;
+    const wDataMax = Math.max(...data.map((i) => i.world_tone));
+    const wDataMin = Math.min(...data.map((i) => i.world_tone));
+    // const cDataMax = Math.max(...data.map((i) => i.country_tone));
+    const cDataMin = Math.min(...data.map((i) => i.country_tone));
+
+    return (wDataMax + wDataMin) / 2 / cDataMin;
+  }
+
   render() {
     const data = this.props.data;
     const language = this.props.language;
+    const off = this.gradientOffset();
 
-    const gradientOffset = () => {
-      const wDataMax = Math.max(...data.map((i) => i.world_tone));
-      const wDataMin = Math.min(...data.map((i) => i.world_tone));
-      const cDataMax = Math.max(...data.map((i) => i.country_tone));
-      const cDataMin = Math.min(...data.map((i) => i.country_tone));
-      // const dataSujm = Math.min(...data.map((i) => i.world_tone));
-      // if (dataMax <= 0) {
-      //   return 0;
-      // }
-      // if (dataMin >= 0) {
-      //   return 1;
-      // }
-
-      return (wDataMax + wDataMin) / 2 / cDataMin;
-    };
-
-    const off = gradientOffset();
     return (
       <ResponsiveContainer width="100%" height="58%">
         <ComposedChart
@@ -83,9 +79,9 @@ export default class LineChartExample extends PureComponent {
           <defs>
             <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
               <stop offset={0} stopColor="green" stopOpacity={0.5} />
-              {/* <stop offset={off - 0.1} stopColor="green" stopOpacity={0} /> */}
-              <stop offset={off} stopColor="red" stopOpacity={0.3} />
-              {/* <stop offset={1} stopColor="red" stopOpacity={0.5} /> */}
+              <stop offset={off} stopColor="green" stopOpacity={0.2} />
+              <stop offset={off} stopColor="red" stopOpacity={0.2} />
+              <stop offset={1} stopColor="red" stopOpacity={0.7} />
             </linearGradient>
           </defs>
           <Legend
