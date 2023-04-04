@@ -1,12 +1,10 @@
 import React from "react";
 import styles from "./NewsListItem.module.css";
 import { t } from 'i18next';
+import { useSelector } from "react-redux";
 
 function NewsListItem(props) {
-  const language = 'en'
-  // 언어에 따른 키워드
-  const keyword = (language === 'en' ? "engKeyword" : "korKeyword")
-
+  const language = useSelector((state) => state.language.value);
 
   //방금전, ~분전, ~시간전 설정
   function timeForToday(value) {

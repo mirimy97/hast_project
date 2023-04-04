@@ -22,7 +22,7 @@ export default function Map() {
   // const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
-  const language = "en";
+  const language = useSelector((state) => state.language.value);
   // Globe로부터 받아올 정보
   const [countryInfo, setCountryInfo] = useState(null);
 
@@ -479,7 +479,7 @@ export default function Map() {
             margin: 0
           }}
         >
-          좌표를 클릭하여 상세 정보를 확인하세요
+          {language === 'en' ? "Click on the coordinates for more information" : "좌표를 클릭하여 상세 정보를 확인하세요"}
         </div>
       </div>
 
