@@ -11,7 +11,6 @@ import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
 import Loading from "./Loading";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 
 export default function Map() {
@@ -20,7 +19,7 @@ export default function Map() {
   const location = useLocation();
   const isMobile = useSelector((state) => state.status.isMobile);
 
-  const [loadingPage, setLodingPage] = useState(true);
+  // const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = "en";
@@ -29,9 +28,9 @@ export default function Map() {
 
   useEffect(() => {
     console.log(location);
-    setTimeout(() => {
-      setLodingPage(false);
-    }, 2000);
+    // setTimeout(() => {
+    //   setLodingPage(false);
+    // }, 2000);
     if (location.state === null) {
       const savedCountryInfo = localStorage.getItem("countryInfo");
       // console.log(JSON.parse(savedCountryInfo));
@@ -126,8 +125,8 @@ export default function Map() {
     }
   };
 
-  // const MyKey = process.env.REACT_APP_MAP_API;
-  const MyKey = "AIzaSyAv04v10IdfrHgjK_fTlrQw84nhHSzIQM8"
+  const MyKey = process.env.REACT_APP_MAP_API;
+  // const MyKey = "AIzaSyAv04v10IdfrHgjK_fTlrQw84nhHSzIQM8"
 
   useEffect(() => {
     setMapBounds(bounds);
@@ -238,18 +237,21 @@ export default function Map() {
 
   useEffect(() => {
     if (heatmapData !== null) {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      // setIsLoading(false)
     }
   }, [heatmapData])
 
 
   // 좌표 클릭 - 클릭 이벤트
-  const [clickCoords, setClickCoords] = useState(null)
+  // const [clickCoords, setClickCoords] = useState(null)
   const onClickHandler = (e) => {
     setCenter({lat: e.lat, lng: e.lng})
     setZoom(13)
     console.log(`클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`)
-    setClickCoords({lat: e.lat, lng: e.lng})
+    // setClickCoords({lat: e.lat, lng: e.lng})
     setToggle([])
     setFirstH(true)
     setFirstP(true)
@@ -292,7 +294,13 @@ export default function Map() {
 
   // Marker 클릭
   const [target, setTarget] = useState(null);
-  const markerClicked = (key) => {
+  const [marker, setMarker] = useState(null)
+  const markerClicked = (key, marker) => {
+    console.log(marker)
+    setMarker({
+      lat: marker.lat,
+      lng: marker.lng
+    })
     console.log(key);
     setTarget(key);
   };
@@ -374,7 +382,7 @@ export default function Map() {
           )
         }
         {/* 장소 api 불러올 때 spinner 넣기 */}
-        { finish ? <></> : <LoadingSpinner/>}
+        {/* { finish ? <></> : <LoadingSpinner/>} */}
         {zoom >= 12 &&
           finish &&
           showH &&
@@ -468,11 +476,10 @@ export default function Map() {
             fontSize: (isMobile? "0.8rem" : "0.9rem"),
             fontWeight: "bold",
             color: "red",
-            // backgroundColor: "#FFFFFF",
             margin: 0
           }}
         >
-          지도를 클릭하여 상세 정보를 확인하세요
+          좌표를 클릭하여 상세 정보를 확인하세요
         </div>
       </div>
 
@@ -503,7 +510,6 @@ export default function Map() {
                   backgroundColor: "white",
                   borderRadius: "8px",
                   padding: "3px 8px 3px 15px",
-                  // paddingLeft: "10px",
                   fontWeight: "bold",
                   color: "grey",
                 }}
@@ -534,7 +540,7 @@ export default function Map() {
               width="25px"
             />
           </div>
-          <MapDrawer allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/> 
+          <MapDrawer allNews={allNews} setAllNews={setAllNews} clickCoords={marker}/> 
         </div>
       : 
         <div>
@@ -562,7 +568,6 @@ export default function Map() {
                   backgroundColor: "white",
                   borderRadius: "8px",
                   padding: "3px 8px 3px 20px",
-                  // paddingLeft: "10px",
                   fontWeight: "bold",
                   color: "grey",
                 }}
@@ -592,7 +597,7 @@ export default function Map() {
               width="30px"
             />
           </div>
-          <Sidebar allNews={allNews} setAllNews={setAllNews} clickCoords={clickCoords}/>
+          <Sidebar allNews={allNews} setAllNews={setAllNews} clickCoords={marker}/>
         </div>
       }
     </div>
