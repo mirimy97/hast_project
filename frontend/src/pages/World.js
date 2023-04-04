@@ -167,7 +167,7 @@ function World() {
   // );
   const colorScale = d3.scaleSequential((t) => {
     const c = d3.color(d3.interpolateRdYlGn(1 - t));
-    console.log(t);
+    //console.log(t);
     return `rgba(${c.r}, ${c.g}, ${c.b}, 0.5)`;
   });
   // ${t * 0.9 + 0.1}
