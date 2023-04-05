@@ -87,12 +87,6 @@ export default function Map() {
     }
   }, [countryInfo]);
 
-  //   if (newslist.length !== 0) {
-  //     console.log("뉴스받아오기 성공");
-  //     setIsLoading(false);
-  //   }
-  // }, [newslist]);
-
   // center, zoom, bound state 사용
   const [center, setCenter] = useState(null);
   const [zoom, setZoom] = useState(8);
@@ -118,9 +112,6 @@ export default function Map() {
       const zoom = calculateZoom(bounds);
       setZoom(zoom);
       setInitialZoom(zoom);
-      // if (dangerList.length === 0) {
-      //   setIsLoading(false);
-      // }
     }
   };
 
@@ -222,11 +213,6 @@ export default function Map() {
         options: {
           radius: 25,
           opacity: 0.8,
-          // gradient: [
-          //   'rgba(0, 255, 0, 0)', // green
-          //   'rgba(255, 255, 0, 1)', // yellow
-          //   'rgba(255, 0, 0, 1)' // red
-          // ],
         },
       });
     }
@@ -331,6 +317,14 @@ export default function Map() {
       setZoom(initialZoom);
     }
   };
+
+  // mapRef 확인
+  // useEffect(() => {
+  //   if (mapRef.current !== null) {
+  //     console.log(mapRef.current.map)
+  //     console.log(mapRef.current.map.getCenter())
+  //   }
+  // }, [mapRef.current])
 
   return isLoading ? (
     <Loading />
