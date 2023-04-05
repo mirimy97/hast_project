@@ -332,6 +332,54 @@ export default function Map() {
     }
   };
 
+  // marker 수정
+  const handleMarkerClick = (e) => {
+    const lat = e.position.lat()
+    const lng = e.position.lng()
+    // console.log(e.position.lat(), e.position.lng())
+    axios
+      .get(`https://apitest.hastmap.duckdns.org/api/articles/${lat}/${lng}`)
+      .then((res) => {
+        if (res.data.resultCode === "SUCCESS") {
+          console.log(res.data.result)
+          setAllNews(res.data.result);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  const createMarker = (map, maps) => {
+    const markers = dangerList.map((danger) => {
+      const marker = new maps.Marker({
+        position: {lat: danger.latitude, lng: danger.longitude},
+        map,
+        icon: {
+          url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new maps.Size(20, 20)
+        },
+        // id: `${danger.latitude}-${danger.longitude}`
+      })
+
+      marker.addListener('click', () => {
+        handleMarkerClick(marker);
+      });
+      return marker
+    })
+
+    maps.event.addListener(map, 'zoom_changed', function() {
+      const zoomLevel = map.getZoom();
+      if (zoomLevel < 5) {
+        markers.forEach((marker) => {
+          marker.setVisible(false);
+        });
+      } else {
+        markers.forEach((marker) => {
+          marker.setVisible(true);
+        });
+      }
+    });
+  }
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -360,19 +408,32 @@ export default function Map() {
         onGoogleApiLoaded={({ map, maps }) => {
           // Save the map and maps variables to the ref object
           mapRef.current = { map, maps };
+
+          // createMarker
+          createMarker(map, maps)
+
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
           // map.setOptions({ draggableCursor : "url(/assets/back.png), pointer" })
+          
+          // maps.event.addListener(map, 'click', function(event) {
+          //   console.log('Map clicked');
+          // });
+          
+          // maps.event.addListener(marker, 'click', function(event) {
+          //   console.log('Marker clicked');
+          // });
+        
         }}
         onChildClick={markerClicked}
-        onClick={onClickHandler}
+        // onClick={onClickHandler}
         // onChildMouseOver
         options={mapStyles}
         // 히트맵으로 변경
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        {zoom >= 6 &&
+        {/* {zoom >= 6 &&
           mapMarkers &&
           mapMarkers.map((marker) => (
             <NewsMarker
@@ -382,7 +443,7 @@ export default function Map() {
               lng={marker.lng}
               // onMouseover={() => console.log(marker)}
             />
-          ))}
+          ))} */}
 
         {/* 장소 api 불러올 때 spinner 넣기 */}
         {/* { finish ? <></> : <LoadingSpinner/>} */}
@@ -478,7 +539,7 @@ export default function Map() {
             left: "20px",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
-            color: "rgb(107 107 107);",
+            color: "rgb(107, 107, 107)",
             margin: 0,
           }}
         >
