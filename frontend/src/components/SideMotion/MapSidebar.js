@@ -41,7 +41,7 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
       // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
       axios
         .get(
-          `http://j8e106.p.ssafy.io:8080/api/articles/${clickCoords.lat}/${clickCoords.lng}`
+          `https://apitest.hastmap.duckdns.org/api/articles/${clickCoords.lat}/${clickCoords.lng}`
         )
         .then((res) => {
           if (res.data.resultCode === "SUCCESS") {

@@ -58,7 +58,7 @@ export default function Map() {
   const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
     axios
-      .get("http://j8e106.p.ssafy.io:8080/api/info/dots")
+      .get("https://apitest.hastmap.duckdns.org/api/info/dots")
       .then((res) => {
         if (res.data.resultCode === "SUCCESS") {
           // console.log(res.data.result)
@@ -74,7 +74,9 @@ export default function Map() {
   useEffect(() => {
     if (countryInfo !== null) {
       axios
-        .get(`http://j8e106.p.ssafy.io:8080/api/articles/${countryInfo.FIPS}`)
+        .get(
+          `https://apitest.hastmap.duckdns.org/api/articles/${countryInfo.FIPS}`
+        )
         .then((res) => {
           if (res.data.resultCode === "SUCCESS") {
             console.log(res.data.result);
@@ -243,7 +245,7 @@ export default function Map() {
   // const [clickCoords, setClickCoords] = useState(null)
   const onClickHandler = (e) => {
     setCenter({ lat: e.lat, lng: e.lng });
-    setZoom(13);
+    setZoom(12);
     console.log(
       `클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`
     );
@@ -370,7 +372,7 @@ export default function Map() {
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        {zoom >= 12 &&
+        {zoom >= 6 &&
           mapMarkers &&
           mapMarkers.map((marker) => (
             <NewsMarker
