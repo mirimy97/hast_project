@@ -240,16 +240,6 @@ function World() {
 
   //자동 회전
   let autoRotateId;
-  // const autoRotate = () => {
-  //   const globe = globeRef.current;
-  //   if (globe) {
-  //     globe.pointOfView({
-  //       lat: globe.pointOfView().lat + 0.05,
-  //       lng: globe.pointOfView().lng + 0.05,
-  //     });
-  //   }
-  //   autoRotateId = requestAnimationFrame(autoRotate);
-  // };
   const autoRotate = () => {
     const globe = globeRef.current;
     if (globe) {

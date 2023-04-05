@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
+import MarkerClusterer from "@googlemaps/markerclustererplus";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
@@ -24,9 +25,7 @@ export default function Map() {
   const language = useSelector((state) => state.language.value);
   // Globe로부터 받아올 정보
   const [countryInfo, setCountryInfo] = useState(null);
-
   useEffect(() => {
-    console.log(location);
     // setTimeout(() => {
     //   setLodingPage(false);
     // }, 2000);
@@ -71,6 +70,8 @@ export default function Map() {
   // 기사 조회해서 하위 컴포넌트에 넘겨주기
   // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
   const [allNews, setAllNews] = useState([]);
+
+  //////////////article받아오기
   useEffect(() => {
     if (countryInfo !== null) {
       axios
