@@ -125,7 +125,7 @@ function World() {
       .then(setCountries);
 
     // load additional data
-    axios.get("https://j8e106.p.ssafy.io:8080/api/scores").then((res) => {
+    axios.get("http://j8e106.p.ssafy.io:8080/api/scores").then((res) => {
       const data = res.data.result;
       // join additional data with GeoJSON data
       setAdditionalData(data);

@@ -11,6 +11,10 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   const buttons = [
     {
       name: "categoryBtn",
+      value: "Cate0",
+    },
+    {
+      name: "categoryBtn",
       value: "Cate1",
     },
     {
@@ -42,6 +46,7 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
         .then((res) => {
           if (res.data.resultCode === "SUCCESS") {
             setAllNews(res.data.result);
+            setSelectBtn(0);
           }
         })
         .catch((err) => console.log(err));
@@ -49,7 +54,7 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   }, [clickCoords]);
 
   const [filteredNews, setFilteredNews] = useState(null);
-  const [selectBtn, setSelectBtn] = useState(null);
+  const [selectBtn, setSelectBtn] = useState(0);
 
   //모든 뉴스 리스트 불러오기
   function getNews() {
@@ -71,9 +76,13 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   //카테고리 선택
   function selectNews(cate) {
     let categoryNum = cate.substr(4, 4);
-    setFilteredNews(filterNews(categoryNum));
-    setSelectBtn(null);
-    setSelectBtn(categoryNum);
+    if (categoryNum === 0) {
+      setFilteredNews(getNews());
+      setSelectBtn(categoryNum);
+    } else {
+      setFilteredNews(filterNews(categoryNum));
+      setSelectBtn(categoryNum);
+    }
   }
   //최신순 위험도순 정렬
   const getFilteredNews = (news) => {
