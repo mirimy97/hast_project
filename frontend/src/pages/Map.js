@@ -58,7 +58,7 @@ export default function Map() {
   const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
     axios
-      .get("http://j8e106.p.ssafy.io:8080/api/info/dots")
+      .get("https://j8e106.p.ssafy.io:8080/api/info/dots")
       .then((res) => {
         if (res.data.resultCode === "SUCCESS") {
           // console.log(res.data.result)
@@ -476,7 +476,7 @@ export default function Map() {
             left: "20px",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
-            color: "#e0e0e0",
+            color: "rgb(107 107 107);",
             margin: 0,
           }}
         >

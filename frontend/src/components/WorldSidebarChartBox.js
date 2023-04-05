@@ -13,7 +13,7 @@ function WorldSidebarChartBox({ isDpChart, country }) {
   useEffect(() => {
     console.log(country);
     axios
-      .get(`http://j8e106.p.ssafy.io:8080/api/charts/${country}`)
+      .get(`https://j8e106.p.ssafy.io:8080/api/charts/${country}`)
       .then((res) => setData(res.data.result));
   }, []);
 
