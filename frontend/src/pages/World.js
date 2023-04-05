@@ -20,9 +20,11 @@ import { setIsLogo } from "../redux/status";
 import { colors } from "@mui/material";
 import { interpolateRgb } from "d3-interpolate";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 function World() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const globeRef = useRef();
   const sidebarRef = useRef(null);
   const isMobile = useSelector((state) => state.status.isMobile);
@@ -123,7 +125,7 @@ function World() {
       .then(setCountries);
 
     // load additional data
-    axios.get("http://j8e106.p.ssafy.io:8080/api/scores").then((res) => {
+    axios.get("https://j8e106.p.ssafy.io:8080/api/scores").then((res) => {
       const data = res.data.result;
       // join additional data with GeoJSON data
       setAdditionalData(data);
@@ -254,7 +256,7 @@ function World() {
       const currentPointOfView = globe.pointOfView();
       globe.pointOfView({
         lat: currentPointOfView.lat,
-        lng: currentPointOfView.lng + 0.05,
+        lng: currentPointOfView.lng + 0.03,
         altitude: currentPointOfView.altitude,
       });
     }
@@ -338,9 +340,9 @@ function World() {
                   -webkit-text-stroke-color: black;">
                   ${language === "ko" ? d.ADMIN_Ko : d.ADMIN} (${d.ISO_A2})
                   </p>
-                  <p style="margin-top: 0px">위험도 ${
-                    isNaN(Math.round(d.score)) ? 0 : Math.round(d.score)
-                  }</p>
+                  <p style="margin-top: 0px"> ${t("newsList.danger")} ${
+                          isNaN(Math.round(d.score)) ? 0 : Math.round(d.score)
+                        }</p>
                   </div>`;
                   }}
                   polygonsTransitionDuration={300}

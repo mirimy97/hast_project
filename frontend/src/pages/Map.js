@@ -58,7 +58,7 @@ export default function Map() {
   const [dangerList, setDangerList] = useState([]);
   useEffect(() => {
     axios
-      .get("http://j8e106.p.ssafy.io:8080/api/info/dots")
+      .get("https://j8e106.p.ssafy.io:8080/api/info/dots")
       .then((res) => {
         if (res.data.resultCode === "SUCCESS") {
           // console.log(res.data.result)
@@ -476,11 +476,13 @@ export default function Map() {
             left: "20px",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
-            color: "red",
+            color: "rgb(107 107 107);",
             margin: 0,
           }}
         >
-          {language === 'en' ? "Click on the coordinates for more information" : "좌표를 클릭하여 상세 정보를 확인하세요"}
+          {language === "en"
+            ? "Click on the coordinates for more information"
+            : "원하는 위치를 클릭하여 상세 정보를 확인하세요"}
         </div>
       </div>
 
