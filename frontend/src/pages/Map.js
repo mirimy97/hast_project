@@ -243,7 +243,7 @@ export default function Map() {
   // const [clickCoords, setClickCoords] = useState(null)
   const onClickHandler = (e) => {
     setCenter({ lat: e.lat, lng: e.lng });
-    setZoom(13);
+    setZoom(12);
     console.log(
       `클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`
     );
@@ -370,7 +370,7 @@ export default function Map() {
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        {zoom >= 12 &&
+        {zoom >= 6 &&
           mapMarkers &&
           mapMarkers.map((marker) => (
             <NewsMarker
