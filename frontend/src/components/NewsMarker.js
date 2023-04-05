@@ -6,7 +6,7 @@ export function NewsMarker() {
     <div
       style={{zIndex: 999, cursor: "pointer"}}
     >
-      <img src="/assets/redMarker.png" alt="marker" width="20px"/>
+      <img src="/assets/redMarker.png" alt="marker" width="23px"/>
     </div>
   )
 }
