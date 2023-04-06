@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
+import MarkerClusterer from "@googlemaps/markerclustererplus";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
@@ -10,7 +11,6 @@ import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
 import Loading from "./Loading";
-// import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 export default function Map() {
   const mapRef = useRef(null);
@@ -19,7 +19,7 @@ export default function Map() {
 
   const isMobile = useSelector((state) => state.status.isMobile);
 
-  // const [loadingPage, setLodingPage] = useState(true);
+  const [loadingPage, setLodingPage] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   // useState에 따라 language(en-ko) 바뀌게끔
   const language = useSelector((state) => state.language.value);
@@ -346,6 +346,14 @@ export default function Map() {
           marker.setVisible(true);
         });
       }
+    });
+
+    new MarkerClusterer(map, markers, {
+      imagePath:
+        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+
+      gridSize: 300,
+      minimumClusterSize: 20,
     });
   };
 

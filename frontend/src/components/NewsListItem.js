@@ -49,7 +49,7 @@ function NewsListItem(props) {
       </div>
       <div className={styles.imgbox}>
         <img
-          referrerpolicy="no-referrer"
+          referrerPolicy="no-referrer"
           className={styles.img}
           alt="img"
           src={props.news.imgUrl ? props.news.imgUrl : "/assets/news.png"}
