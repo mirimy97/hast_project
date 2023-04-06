@@ -16,6 +16,7 @@ export default function Map() {
   const mapRef = useRef(null);
   // countryInfo 값 받아오기
   const location = useLocation();
+
   const isMobile = useSelector((state) => state.status.isMobile);
 
   // const [loadingPage, setLodingPage] = useState(true);
@@ -233,11 +234,11 @@ export default function Map() {
     );
     setToggle([]);
     setFirstH(true);
-    setHospital([])
+    setHospital([]);
     setFirstP(true);
-    setPolice([])
+    setPolice([]);
     setFirstE(true);
-    setEmbassy([])
+    setEmbassy([]);
   };
 
   // styledmaptype
@@ -299,42 +300,42 @@ export default function Map() {
 
   // marker 수정
   const handleMarkerClick = (e) => {
-    const lat = e.position.lat()
-    const lng = e.position.lng()
+    const lat = e.position.lat();
+    const lng = e.position.lng();
     // console.log(e.position.lat(), e.position.lng())
     axios
       .get(`https://apitest.hastmap.duckdns.org/api/articles/${lat}/${lng}`)
       .then((res) => {
         if (res.data.resultCode === "SUCCESS") {
-          console.log(res.data.result)
+          console.log(res.data.result);
           setAllNews(res.data.result);
         }
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   const createMarker = (map, maps) => {
     const markers = dangerList.map((danger) => {
       const marker = new maps.Marker({
-        position: {lat: danger.latitude, lng: danger.longitude},
+        position: { lat: danger.latitude, lng: danger.longitude },
         map,
         icon: {
-          url: 'https://maps.google.com/mapfiles/ms/icons/red-pushpin.png',
-          scaledSize: new maps.Size(20, 20)
+          url: "https://maps.google.com/mapfiles/ms/icons/red-pushpin.png",
+          scaledSize: new maps.Size(20, 20),
         },
         visible: false,
         // id: `${danger.latitude}-${danger.longitude}`
-      })
+      });
 
-      marker.addListener('click', () => {
-        console.log("마커 클릭")
+      marker.addListener("click", () => {
+        console.log("마커 클릭");
         handleMarkerClick(marker);
       });
-      return marker
-    })
+      return marker;
+    });
     // new MarkerClusterer({ markers, map, gridSize: 500, minimumClusterSize: 10 });
 
-    maps.event.addListener(map, 'zoom_changed', function() {
+    maps.event.addListener(map, "zoom_changed", function () {
       const zoomLevel = map.getZoom();
       if (zoomLevel < 6) {
         markers.forEach((marker) => {
@@ -377,14 +378,13 @@ export default function Map() {
           // Save the map and maps variables to the ref object
           mapRef.current = { map, maps };
           // 지도 클릭 이벤트 추가 (마커 제외)
-          maps.event.addListener(map, "click", (e) => onClickHandler(e))
+          maps.event.addListener(map, "click", (e) => onClickHandler(e));
 
           // createMarker
-          createMarker(map, maps)
+          createMarker(map, maps);
 
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
-        
         }}
         onChildClick={markerClicked}
         options={mapStyles}
@@ -547,11 +547,7 @@ export default function Map() {
           >
             <img src="/assets/reset.png" alt="reset" width="25px" />
           </div>
-          <MapDrawer
-            allNews={allNews}
-            setAllNews={setAllNews}
-            clickCoords={marker}
-          />
+          <MapDrawer allNews={allNews} setAllNews={setAllNews} />
         </div>
       ) : (
         <div>
@@ -604,11 +600,7 @@ export default function Map() {
           >
             <img src="/assets/reset.png" alt="reset" width="30px" />
           </div>
-          <Sidebar
-            allNews={allNews}
-            setAllNews={setAllNews}
-            clickCoords={marker}
-          />
+          <Sidebar allNews={allNews} setAllNews={setAllNews} />
         </div>
       )}
     </div>

@@ -6,7 +6,7 @@ import NewsListItem from "../NewsListItem";
 import Selectbox from "../Selectbox";
 import axios from "axios";
 
-function MapSidebar({ allNews, setAllNews, clickCoords }) {
+function MapSidebar({ allNews, setAllNews }) {
   //(정적인) 버튼 값
   const buttons = [
     {
@@ -36,22 +36,22 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   ];
 
   // 클릭 좌표 변경 시 마다 기사 업데이트
-  useEffect(() => {
-    if (clickCoords !== null) {
-      // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
-      axios
-        .get(
-          `https://apitest.hastmap.duckdns.org/api/articles/${clickCoords.lat}/${clickCoords.lng}`
-        )
-        .then((res) => {
-          if (res.data.resultCode === "SUCCESS") {
-            setAllNews(res.data.result);
-            setSelectBtn(0);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [clickCoords]);
+  // useEffect(() => {
+  //   if (clickCoords !== null) {
+  //     // 해당 좌표의 반경 ~에 해당하는 기사를 긁어오기 (api 요청 필요)
+  //     axios
+  //       .get(
+  //         `https://apitest.hastmap.duckdns.org/api/articles/${clickCoords.lat}/${clickCoords.lng}`
+  //       )
+  //       .then((res) => {
+  //         if (res.data.resultCode === "SUCCESS") {
+  //           setAllNews(res.data.result);
+  //           setSelectBtn(0);
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [clickCoords]);
 
   const [filteredNews, setFilteredNews] = useState(null);
   const [selectBtn, setSelectBtn] = useState(0);
@@ -59,6 +59,7 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   //모든 뉴스 리스트 불러오기
   function getNews() {
     const newsList = allNews;
+    console.log(allNews);
     return newsList;
   }
   //뉴스 카테고리별 필터링
@@ -70,13 +71,14 @@ function MapSidebar({ allNews, setAllNews, clickCoords }) {
   }
 
   useEffect(() => {
+    setSelectBtn(0);
     setFilteredNews(getNews());
   }, [allNews]);
 
   //카테고리 선택
   function selectNews(cate) {
     let categoryNum = cate.substr(4, 4);
-    if (categoryNum === 0) {
+    if (categoryNum === "0") {
       setFilteredNews(getNews());
       setSelectBtn(categoryNum);
     } else {
