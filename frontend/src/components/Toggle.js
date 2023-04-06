@@ -17,7 +17,8 @@ function Toggle({ icon, place, idx, toggle, setToggle, setShowPlace, placeList, 
 
 
   const ToggleClick = (idx) => {
-    console.log(idx)
+    console.log(center)
+    console.log(mapRef.current.map)
     if (toggle.includes(idx)) {
       const newList = toggle.filter((item) => item !== idx);
       setToggle(newList);

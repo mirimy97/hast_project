@@ -7,7 +7,7 @@ export function PlacesMarker({id, place, target}) {
   return(
     <div>
       {target && <InfoWindow place={place} />}
-      <div style={{zIndex: (target ? 999 : 1), position: "relative", cursor: "pointer"}}>
+      <div style={{zIndex: (target ? 999 : 1), position: "relative"}}>
         <img src={imgSrc} alt={id === 1 ? "hospital" : id === 2 ? "police" : "embassy"} width="20px" style={{zIndex: 1}}/>
       </div>
     </div>
