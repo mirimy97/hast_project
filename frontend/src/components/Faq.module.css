@@ -14,6 +14,13 @@
   transition: all 0.2s ease;
 }
 
+.faqQuestionM {
+  position: relative;
+  font-size: 12px;
+  padding-right: 80px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
 .faqQuestion::after {
   content: "+";
   position: absolute;

@@ -303,18 +303,18 @@ function World() {
                     // clickD 있으면
                     clickD
                       ? d === clickD
-                        ? "#FFB52E"
+                        ? "#cec6d7"
                         : colorScale(getVal(d))
                       : // clickD 없으면
                       d === hoverD
-                      ? "#FFB52E"
+                      ? "#cec6d7"
                       : colorScale(getVal(d))
                   }
                   //colorScale(getVal(d))
                   polygonSideColor={(d) =>
                     d === clickD ? "#7cc2b8" : "#000050"
                   }
-                  polygonStrokeColor={() => "#d1ced9"}
+                  polygonStrokeColor={() => "#d8d7d9"}
                   polygonLabel={({ properties: d }) => {
                     return clickD
                       ? ``

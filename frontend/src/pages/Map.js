@@ -25,7 +25,9 @@ export default function Map() {
   const language = useSelector((state) => state.language.value);
   // Globe로부터 받아올 정보
   const [countryInfo, setCountryInfo] = useState(null);
+
   useEffect(() => {
+    console.log(location);
     // setTimeout(() => {
     //   setLodingPage(false);
     // }, 2000);
@@ -70,8 +72,6 @@ export default function Map() {
   // 기사 조회해서 하위 컴포넌트에 넘겨주기
   // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
   const [allNews, setAllNews] = useState([]);
-
-  //////////////article받아오기
   useEffect(() => {
     if (countryInfo !== null) {
       axios
@@ -333,6 +333,32 @@ export default function Map() {
     }
   };
 
+  const createMarker = (map, maps) => {
+    const markers = dangerList.map((danger) => {
+      return new maps.Marker({
+        position: { lat: danger.latitude, lng: danger.longitude },
+        map,
+        icon: {
+          url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+          scaledSize: new maps.Size(20, 20),
+        },
+      });
+    });
+
+    maps.event.addListener(map, "zoom_changed", function () {
+      const zoomLevel = map.getZoom();
+      if (zoomLevel < 5) {
+        markers.forEach((marker) => {
+          marker.setVisible(false);
+        });
+      } else {
+        markers.forEach((marker) => {
+          marker.setVisible(true);
+        });
+      }
+    });
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -361,6 +387,10 @@ export default function Map() {
         onGoogleApiLoaded={({ map, maps }) => {
           // Save the map and maps variables to the ref object
           mapRef.current = { map, maps };
+
+          // createMarker
+          createMarker(map, maps);
+
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
           // map.setOptions({ draggableCursor : "url(/assets/back.png), pointer" })
@@ -373,7 +403,7 @@ export default function Map() {
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        {zoom >= 6 &&
+        {/* {zoom >= 6 &&
           mapMarkers &&
           mapMarkers.map((marker) => (
             <NewsMarker
@@ -383,7 +413,7 @@ export default function Map() {
               lng={marker.lng}
               // onMouseover={() => console.log(marker)}
             />
-          ))}
+          ))} */}
 
         {/* 장소 api 불러올 때 spinner 넣기 */}
         {/* { finish ? <></> : <LoadingSpinner/>} */}
@@ -479,7 +509,7 @@ export default function Map() {
             left: "20px",
             fontSize: isMobile ? "0.8rem" : "0.9rem",
             fontWeight: "bold",
-            color: "rgb(107 107 107);",
+            color: "rgb(107, 107, 107)",
             margin: 0,
           }}
         >
