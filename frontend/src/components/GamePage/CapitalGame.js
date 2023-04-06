@@ -105,6 +105,7 @@ function CapitalGame({ countries, hoverD, changeHover }) {
       } else {
         setActiveQuestion(0);
         setShowResult(true);
+        changeHover();
       }
     }, 800);
   };

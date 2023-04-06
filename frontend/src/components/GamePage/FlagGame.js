@@ -21,7 +21,7 @@ const FlagGame = ({ countries, hoverD, changeHover }) => {
   const isMobile = useSelector((state) => state.status.isMobile);
 
   let flagArray = countries.features.map((country) => {
-    if (country.properties.ISO_A2)
+    if (country.properties.ISO_A2 !== "-99")
       return Object.assign(country, {
         country: country.properties.ADMIN_Ko,
         flag: country.properties.ISO_A2.toLowerCase(),
@@ -108,6 +108,7 @@ const FlagGame = ({ countries, hoverD, changeHover }) => {
       } else {
         setActiveQuestion(0);
         setShowResult(true);
+        changeHover();
       }
     }, 800);
   };

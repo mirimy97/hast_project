@@ -1,133 +1,265 @@
-# 💎 기획
+# 🛫 HAST (Have A Safe Trip) 🛫
 
-## 회의록
-
-- [02.24 - 기획 1일차](https://www.notion.so/02-24-1-dbccac9da0474093ade173a72dda7d82?pvs=4)
-
-- [02.27 - 기획 2일차](https://www.notion.so/02-27-2-1c0743a2f1b743be82cd57ab52487eac?pvs=4)
-
-- [02.28 - 기획 3일차](https://www.notion.so/02-28-3-851baa5c85164831a155bff66f4ffaf7?pvs=4)
-
-- [03.02 - 기획 4일차](https://www.notion.so/03-02-4-5da93425bff546be87a129650df578ba?pvs=4)
-
-- [03.02 - 기획 4일차](https://www.notion.so/03-02-4-5da93425bff546be87a129650df578ba?pvs=4)
-
-- [03.03 - 기획 5일차](https://www.notion.so/03-03-5-587e5f03dc4a4c8b93c231d73f421eda?pvs=4)
-
-## 기획서
-
-1. 기획안 1 (보류) - [북스토리](https://www.notion.so/3dc91cb9d2f24c6fbb74988f2a96b9e4?pvs=4)
-2. 기획안 2 (진행중) - [하스트](https://www.notion.so/b88ec4a7857e4762b6bb2dddeb96ef9a?pvs=4)
+<img src="./etc/readme_imgs/demo_gif/fasulting_logo.png" width="400"/>
 
 <br />
 
-# 📌 진행중인 기획안
+## ✨ 주제
 
-## 1️⃣ 개요
+- Face Edit GAN을 이용한 온라인 성형 상담
 
-### 프로젝트명
+## 💻 기간
 
-#### - 후보리스트
+- 2023.01.09 ~ 2023.02.17
 
-- Have a safe trip
-  - HOST (호스트)
-- Everthing but tour(여행지 빼고 다)
-  - EBT
-- localhost
-  - 로컬 + help our safe trip
-- Watch Out
-  - WO!!
-- 널 지켜줄게.
-- Safe Zone
-- 여행자 보호구역 [ 여보 ]
-  - (어린이 보호구역)
-- You Only Live Once
+## 👀 목적 및 핵심내용
 
-### 주제
+- **비대면 화상** 성형 상담을 통해 실시간으로 **성형 후 모습**을 보면서 상담 가능
 
-- 세계의 잠재적인 안전 위험을 식별하고 여행자에게 관련 정보 및 지침을 제공
+## 👪 참여 인원 및 역할
 
-### 키워드
+| 이름   | 역할                  | GitHub                                           |
+| ------ | --------------------- | ------------------------------------------------ |
+| 강민정 | BackEnd               | [@mingmingeeee](https://github.com/mingmingeeee) |
+| 구태희 | BackEnd & Team Leader | [@good-da22](https://github.com/good-da22)       |
+| 권성현 | FrontEnd              | [@sshh121](https://github.com/sshh121)           |
+| 성정언 | FrontEnd              | [@sungjeongeon](https://github.com/sungjeongeon) |
+| 장미림 | FrontEnd              | [@mirimy97 ](https://github.com/mirimy97)        |
+| 정원웅 | Server                | [@wonoong27](https://github.com/wonoong27)       |
 
-- 사건
-- 세계
-- 뉴스
-- 여행
-- 치안
-- 병원
-- 경찰서
-- 감염병
+## 💎 목차
 
-### 데이터
-
-- **GDELT PROJECT**
-
-  [https://www.gdeltproject.org](https://www.gdeltproject.org/)
-
-  - v1.0 1979.01.01 ~ 2015
-  - v2.0 2015 ~ 현재
-    세상의 모든 사건사고 뉴스들이 올라오며, 15분마다 새 정보가 업데이트 됨. (오늘 데이터 확인 완료)
-    장점 : 분산 시스템의 범위 내에서 충분한 실시간성 제공
-    [v2 코드북 번역 (1)](https://www.notion.so/v2-1-7bf91e7c41bb40e3aaf2f2cfa569a3a2)
-
-### 기간
-
-- **2023.02.27** ~ **2023.04.07**
-
-### 1차 발표
-
-- **2023.03.10**
-
-### 최종 발표
-
-- **2023.04.07**
-
-### 참여 인원
-
-- 강민정 @민정 강
-- 권성현 @성 현
-- 배충현 @배충현
-- 성정언 @정언
-- 장미림 @mirimy
-- 정원웅 @woJeong
+1. [**프로젝트 컨셉 및 주요 기능**](#1)
+1. [**개발 환경 및 문서**](#2)
+1. [**시연 시나리오**](#3)
+1. [**페이설팅 UCC**](#4)
 
 <br />
 
-## 2️⃣ 프로젝트 컨셉 & 주요 기능
+<div id="1"></div>
 
-### 의도
+# ⚙︎ 프로젝트 컨셉 및 주요 기능
 
-- 여행을 떠나는 사람들에게 해당 지역의 사건 및 뉴스를 가능한 빨리 접할 수 있게 한다.
+## 의도
 
-### 예상 사용자
+- 실시간으로 원격 상담을 통해 성형 후 이미지를 예측할 수 있다.
 
-- 혼자 여행할 수 있는 수준의 안전한 도시를 찾는 여행자
+## 예상 사용자
 
-### 기존 서비스
+- 성형외과를 방문하기 힘든 경우
+- 지방 거주 상담 희망자
+- 비대면 상담 서비스 제공 희망 성형외과
 
-- [외교부 해외안전여행](https://www.0404.go.kr/dev/main.mofa)
-  - 어떤 기준으로 단계별로 조정되는지 정확하지 않음
-  - 국가, 지역, 주 단위로 도시, 동네보다는 비교적 큰 단위로 보여짐
-  - 큰 사건 사고에 기반하여 경보 조정하는 것으로 예측
-  - 업데이트 시기가 느림
-- [여행정보센터](http://www.tourinfo.or.kr/v2/safety/safety_list.asp)
+## 주요 기능
 
-  - 여행정보센터는 문화체육관광부의 지원으로 여행과 관련한 각종 정보수집.관리 및 여행안전정보 제공을 통한 건전 여행문화 정책을 위하여 한국여행업협회에서 설치.운영하고 있습니다.
+- 성형외과 온라인 예약 서비스 제공
+- 인공지능 모델을 이용한 성형 before & after 사진 제공
+- 상담 후 견적 관리
 
-  - 시각화 부족
-  - 외교부 해외 안전여행에서 제공하는 동일한 자료
+## 세부 기능 설명
 
-### 주요 기능
+- 온라인 예약 서비스 제공
+  - 성형외과의 운영 시간에 따른 예약 신청 가능
+- 성형외과 전문의와 비대면 상담 기능
+  - 성형 상담을 실시간 비대면 회의로 진행하며 상담자 성형 후 예상 이미지를 생성
+  - 의사 기준에서 사용하기 편리하고, 상담자 입장에서 이해를 도울 수 있는 이미지 생성할 것
+    - SC-FEGAN : [https://github.com/run-youngjoo/SC-FEGAN](https://github.com/run-youngjoo/SC-FEGAN)
+- 성형 상담 견적 관리
+  - 상담 후 결과 사진 및 견적 가격을 마이페이지에서 관리 가능(ex. 견적1, 견적2…)
+  - 병원 별 상담 결과 비교
 
-1. 실시간으로 일어나는 전세계의 사건들을 보여줌
-2. 지역별 치안도 제공
+## 기대효과
 
-### 세부 기능 설명
+- 시간/공간적 제약이 있는 상담 희망자에게 편리함을 제공
+- 더 나아가 한국 성형 의료 관광에 더욱 힘을 보탤 수 있다.
+- 실시간으로 성형 후 모습을 보여줌으로써 환자의 만족감을 높이고 의사의 부담감을 줄일 수 있다.
 
-1. 실시간으로 일어나는 전세계의 사건들을 보여줌
+<br />
+<div id="2"></div>
 
-2. three.js를 활용해 지구본 시각화
-3. 해당 지역의 뉴스의 헤드라인을 WordCloud를 통해 보여줌
-4. 다양한 시각화 제공
+# 📃 개발 환경 및 문서
 
-- 세부기능을 아직 생각해보지 않았지만 여행 플랫폼에 맞춘다면 확장성이 클 것이라고 예상
+## 기술스택
+
+![](./etc/readme_imgs/stack.PNG)
+
+## 개발환경
+
+![](./etc/readme_imgs/develop.PNG)
+
+## Gantt chart
+
+[간트차트](./etc/docs/%EA%B0%84%ED%8A%B8%EC%B0%A8%ED%8A%B8.md)
+
+## 기능 명세서
+
+[기능명세서](./etc/docs/%EA%B8%B0%EB%8A%A5%EB%AA%85%EC%84%B8%EC%84%9C.md)
+
+## Entity Relationship Diagram
+
+[ERD](./etc/docs/ERD.md)
+
+## API 연동 규격서
+
+[API 연동 규격서](./etc/docs/API%EC%97%B0%EB%8F%99%EA%B7%9C%EA%B2%A9%EC%84%9C.md)
+
+## Wireframe
+
+[Wireframe](./etc/docs/Wireframe.md)
+
+## Sequence Diagram
+
+[SequenceDiagram](./etc/docs/seqDiagram.md)
+
+<br />
+<div id="3"></div>
+
+# 📌 시연 시나리오
+
+### 메인화면
+
+- 메인 배너 캐러셀 활용
+
+  <img src="./etc/readme_imgs/demo_gif/main.gif"  />
+
+<br />
+
+### 병원 리스트 검색
+
+- 메인 카테고리 확인 / 세부 카테고리 필터링 확인
+
+  <img src="./etc/readme_imgs/demo_gif/main_ctg.gif" />
+
+<br />
+
+### 병원 디테일 페이지
+
+- 병원정보, 의사 현황, 리뷰 탭 눌러 해당 인덱싱으로 이동 가능
+
+  <img src="./etc/readme_imgs/demo_gif/user_detail.gif" />
+
+<br />
+
+### 예약 진행
+
+- 날짜 및 시간 선택
+
+- 메인 카테고리, 세부 카테고리 최대 3개까지 선택
+
+- 비포 사진 업로드 후 예약 가능
+
+  <img src="./etc/readme_imgs/demo_gif/user_res.gif" />
+
+<br />
+
+<!-- 5. 나의 예약, 나의 활동 페이지
+   - 나의 예약
+     ![예약 후 나의 예약 페이지로 자동으로 이동](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/372a8435-e226-410d-92ac-4d499b5bc747/Untitled.png)
+     예약 후 나의 예약 페이지로 자동으로 이동
+     ![하루 전까지 예약 취소 가능](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/af273e3a-8b75-4ddb-9cfd-cf61593865b9/Untitled.png)
+     하루 전까지 예약 취소 가능
+   - 나의 활동
+     ![즐겨찾기 및 작성한 리뷰 확인 가능](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/43b988ec-46af-4f81-a30c-242307197a52/Untitled.png)
+     즐겨찾기 및 작성한 리뷰 확인 가능 -->
+
+### 상담 대기
+
+- 상담 대기 방에서 마이크, 캠 확인 가능
+
+  <img src="./etc/readme_imgs/demo_gif/user_start.gif" />
+
+<br />
+
+# 🏥 병원 계정
+
+### 병원 정보 수정
+
+- 기본 정보 수정 가능
+
+  <img src="./etc/readme_imgs/demo_gif/hos_modi.gif" />
+
+<br />
+
+### 다운로드
+
+- 상담에 필요한 프로그램 다운로드 가능
+
+  <img src="./etc/readme_imgs/demo_gif/hos_modi.gif" />
+
+<br />
+
+### 예약 확인
+
+- 스케줄표로 예약 확인 가능
+
+- 이미지 다운로드 시 상담자의 비포 이미지 저장 가능
+
+- 상담 시간 30분 전부터 상담 입장 버튼 활성화
+
+  <img src="./etc/readme_imgs/demo_gif/hos_reserve.gif" />
+
+<br />
+
+### 상담 대기
+
+- 의사 상담 방에서는 추가적으로 프로그램 다운로드 페이지로 링크되도록
+
+   <img src="./etc/readme_imgs/demo_gif/hos_start.gif" />
+
+<br />
+
+### 상담 진행
+
+- SC-FEGAN 프로그램 공유 화면
+
+- 마스킹, 스케치를 통해 ai 성형 상담 진행
+
+  <img src="./etc/readme_imgs/demo_gif/consulting.gif" />
+
+<br />
+
+# ✍️ 상담 후
+
+### 병원 - 견적서 작성
+
+- 상담 끝난 후 병원은 소견서 작성
+
+- 지난예약보기 최상단에서 최신 지난 예약 소견서 확인 가능
+
+  <img src="./etc/readme_imgs/demo_gif/hos_sog.gif" />
+
+<br />
+
+### 상담자 - 리뷰 작성 및 견적서 확인
+
+- 상담 끝난 후 상담자에게 소견서 관련 모달 공지
+
+- 완료된 상담은 지난예약에서 견적상세 클릭 시 소견서 확인 가능
+
+- 견적 상세 옆 리뷰 작성 버튼을 통해, 상담 리뷰 작성 가능
+
+  <img src="./etc/readme_imgs/demo_gif/user_end.gif" />
+
+<br />
+
+# 👨‍🔧 관리자
+
+### 병원 승인
+
+- 병원 승인 후 병원 로그인 가능
+
+  <img src="./etc/readme_imgs/demo_gif/admin_ap.gif" />
+
+### 신고된 리뷰 삭제
+
+- 신고된 리뷰 삭제 가능
+
+  <img src="./etc/readme_imgs/demo_gif/admin_ap.gif"/>
+
+<br />
+<div id="4"></div>
+
+# 📽 페이설팅 UCC
+
+👇 click ! 👇
+[![Fasulting UCC](https://img.youtube.com/vi/6geIUEYqqJA/0.jpg)](https://youtu.be/6geIUEYqqJA)

@@ -37,3 +37,18 @@ a {
 .ahref {
   text-align: start;
 }
+::-webkit-scrollbar {
+  width: 8px; /* 스크롤바의 너비 */
+}
+
+::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: #6e56bd; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(218, 218, 218); /*스크롤바 뒷 배경 색상*/
+  border-radius: 10px;
+}

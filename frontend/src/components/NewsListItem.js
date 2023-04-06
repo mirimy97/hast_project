@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./NewsListItem.module.css";
-import { t } from 'i18next';
+import { t } from "i18next";
 import { useSelector } from "react-redux";
 
 function NewsListItem(props) {
@@ -30,7 +30,7 @@ function NewsListItem(props) {
   }
 
   const timebefore = timeForToday(props.news.timeStamp);
-
+  const timeStamp = props.news.timeStamp.split("T");
   return (
     <div className={styles.flex}>
       <div>
@@ -44,7 +44,7 @@ function NewsListItem(props) {
           {t("newsList.danger")} {props.news.score.toFixed(2)}
         </div>
         <span className={styles.timestamp}>
-          {props.news.timeStamp.substr(0, 16)}
+          {timeStamp[0]} {timeStamp[1]}
         </span>
       </div>
       <div className={styles.imgbox}>

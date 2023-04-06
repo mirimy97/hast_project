@@ -2,12 +2,15 @@
   "header": {
     "Topic": "HAST"
   },
-  "headerContent": {
-    "Con1": "👉 The colors on the globe represent the level of danger.",
-    "Con2": "👀 Click on the country you want to travel to.",
-    "Con3": "👉 If you click on 'TRAVEL', you can see safety tips.",
-    "Con4": "👀 Click on the cards on the right.",
-    "Con5": "👉 You can play the Capital Matching Game and the Flag Matching Game."
+  "QnAContent": {
+    "Q1": "What kind of site is this?",
+    "A1": "It's a site that gives you quick access to local stories and news that may pose a threat to travelers. Plus, it gives every article a 'traveler risk score' so you can make better judgments.",
+    "Q2": "What is the risk score calculated based on?",
+    "A2": "It is a risk score calculated for travelers and is based on the 'trustworthiness' and 'sentiment score' of the news article, the 'date of occurrence' of the incident, the 'sentiment score', and a hand-calculated 'category score' with appropriate weights. Each figure is normalized and based on a total score of 100, and the date of occurrence of the incident is an exponentially weighted average.",
+    "Q3": "Where do you collect the news stories?",
+    "A3": "The data presented on this site is all collected and processed by 'The GDelt Project' and is re-presented with a focus on information for travelers.",
+    "Q4": "What is the timeframe of the data provided?",
+    "A4": "For each country, we provide a year's worth of statistical analysis, and the location of incidents and related articles by detailed region are provided on a 3-day basis. All data is being updated every 15 minutes, which is the same as the GDelt data update frequency."
   },
   "location": {
     "Loca1": "HOSPITAL",
@@ -18,7 +21,7 @@
     "Title": "Browse articles by category !"
   },
   "categoryBtn": {
-    "Cate0": "✨ Total",
+    "Cate0": "✨ All",
     "Cate1": "💊 Disease",
     "Cate2": "🚧 Accident",
     "Cate3": "🔪 Crime",
