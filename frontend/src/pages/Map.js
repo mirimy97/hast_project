@@ -1,17 +1,16 @@
 import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GoogleMapReact from "google-map-react";
-import MarkerClusterer from "@googlemaps/markerclustererplus";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Toggle from "../components/Toggle";
 import { PlacesMarker } from "../components/PlacesMarker";
-import { NewsMarker } from "../components/NewsMarker";
 import { useSelector } from "react-redux";
 import MapDrawer from "../components/MapDrawer";
 import { Sidebar } from "../components/SideMotion/Sidebar";
 import { t } from "i18next";
 import Loading from "./Loading";
+// import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 export default function Map() {
   const mapRef = useRef(null);
@@ -28,9 +27,6 @@ export default function Map() {
 
   useEffect(() => {
     console.log(location);
-    // setTimeout(() => {
-    //   setLodingPage(false);
-    // }, 2000);
     if (location.state === null) {
       const savedCountryInfo = localStorage.getItem("countryInfo");
       // console.log(JSON.parse(savedCountryInfo));
@@ -69,8 +65,7 @@ export default function Map() {
       .catch((err) => console.log(err));
   }, []);
 
-  // 기사 조회해서 하위 컴포넌트에 넘겨주기
-  // 좌표 클릭시 api 요청 -> 응답으로 기사들 넘겨주는 듯
+  // 국가 기사 조회 (500개)
   const [allNews, setAllNews] = useState([]);
   useEffect(() => {
     if (countryInfo !== null) {
@@ -224,28 +219,29 @@ export default function Map() {
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
-      // setIsLoading(false)
     }
   }, [heatmapData]);
 
   // 좌표 클릭 - 클릭 이벤트
   // const [clickCoords, setClickCoords] = useState(null)
   const onClickHandler = (e) => {
-    setCenter({ lat: e.lat, lng: e.lng });
-    setZoom(12);
+    // console.log(e.latLng.lat(), e.latLng.lng())
+    setCenter({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    setZoom(13);
     console.log(
       `클릭 이벤트 center : ${center.lat} ${center.lng}, zoom: ${zoom}`
     );
-    // setClickCoords({lat: e.lat, lng: e.lng})
     setToggle([]);
     setFirstH(true);
+    setHospital([])
     setFirstP(true);
+    setPolice([])
     setFirstE(true);
+    setEmbassy([])
   };
 
   // styledmaptype
   const mapStyles = {
-    // draggableCursor: 'default',
     draggableCursor: "url(/assets/aim.png), auto",
     fullscreenControl: false,
     zoomControl: false,
@@ -286,24 +282,6 @@ export default function Map() {
     setTarget(key);
   };
 
-  const [mapMarkers, setMapMarkers] = useState([]);
-  useEffect(() => {
-    if (dangerList !== null) {
-      const updateList = dangerList.map((news) => {
-        return {
-          id: news.id,
-          // engKeyword: news.engKeyword,
-          // korKeyword: news.korKeyword,
-          lat: news.latitude,
-          lng: news.longitude,
-          score: news.score,
-        };
-      });
-      // console.log(updateList)
-      setMapMarkers(updateList);
-    }
-  }, [dangerList]);
-
   // initialize => 초기 나라 좌표로 이동
   const Initialize = () => {
     if (
@@ -319,21 +297,46 @@ export default function Map() {
     }
   };
 
+  // marker 수정
+  const handleMarkerClick = (e) => {
+    const lat = e.position.lat()
+    const lng = e.position.lng()
+    // console.log(e.position.lat(), e.position.lng())
+    axios
+      .get(`https://apitest.hastmap.duckdns.org/api/articles/${lat}/${lng}`)
+      .then((res) => {
+        if (res.data.resultCode === "SUCCESS") {
+          console.log(res.data.result)
+          setAllNews(res.data.result);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   const createMarker = (map, maps) => {
     const markers = dangerList.map((danger) => {
-      return new maps.Marker({
-        position: { lat: danger.latitude, lng: danger.longitude },
+      const marker = new maps.Marker({
+        position: {lat: danger.latitude, lng: danger.longitude},
         map,
         icon: {
-          url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-          scaledSize: new maps.Size(20, 20),
+          url: 'https://maps.google.com/mapfiles/ms/icons/red-pushpin.png',
+          scaledSize: new maps.Size(20, 20)
         },
-      });
-    });
+        visible: false,
+        // id: `${danger.latitude}-${danger.longitude}`
+      })
 
-    maps.event.addListener(map, "zoom_changed", function () {
+      marker.addListener('click', () => {
+        console.log("마커 클릭")
+        handleMarkerClick(marker);
+      });
+      return marker
+    })
+    // new MarkerClusterer({ markers, map, gridSize: 500, minimumClusterSize: 10 });
+
+    maps.event.addListener(map, 'zoom_changed', function() {
       const zoomLevel = map.getZoom();
-      if (zoomLevel < 5) {
+      if (zoomLevel < 6) {
         markers.forEach((marker) => {
           marker.setVisible(false);
         });
@@ -373,36 +376,22 @@ export default function Map() {
         onGoogleApiLoaded={({ map, maps }) => {
           // Save the map and maps variables to the ref object
           mapRef.current = { map, maps };
+          // 지도 클릭 이벤트 추가 (마커 제외)
+          maps.event.addListener(map, "click", (e) => onClickHandler(e))
 
           // createMarker
-          createMarker(map, maps);
+          createMarker(map, maps)
 
           // 줌 변경될 때 변경된 zoom level 가져오게끔
           map.addListener("zoom_changed", () => handleZoomChange(map));
-          // map.setOptions({ draggableCursor : "url(/assets/back.png), pointer" })
+        
         }}
         onChildClick={markerClicked}
-        onClick={onClickHandler}
-        // onChildMouseOver
         options={mapStyles}
         // 히트맵으로 변경
         heatmapLibrary={true}
         heatmap={heatmapData}
       >
-        {/* {zoom >= 6 &&
-          mapMarkers &&
-          mapMarkers.map((marker) => (
-            <NewsMarker
-              key={marker.placeId}
-              id={marker.id}
-              lat={marker.lat}
-              lng={marker.lng}
-              // onMouseover={() => console.log(marker)}
-            />
-          ))} */}
-
-        {/* 장소 api 불러올 때 spinner 넣기 */}
-        {/* { finish ? <></> : <LoadingSpinner/>} */}
         {zoom >= 12 &&
           finish &&
           showH &&
