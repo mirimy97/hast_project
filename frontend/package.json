@@ -25,7 +25,6 @@
     "react-awesome-button": "^7.0.5",
     "react-dom": "^18.2.0",
     "react-globe.gl": "^2.23.3",
-    "react-google-maps": "^9.4.5",
     "react-i18next": "^12.2.0",
     "react-redux": "^8.0.5",
     "react-responsive": "^9.0.2",
