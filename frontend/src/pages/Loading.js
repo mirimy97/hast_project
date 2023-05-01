@@ -9,7 +9,14 @@ function Loading() {
     setText("H");
   }, []);
   return (
-    <div style={{ width: "100%", height: "100vh", backgroundColor: "#323232" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        backgroundColor: "#323232",
+        zIndex: 999999,
+      }}
+    >
       {isMobile ? (
         <img
           src="/assets/loading.gif"

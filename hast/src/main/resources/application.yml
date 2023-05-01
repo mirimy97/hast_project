@@ -5,17 +5,16 @@ spring:
   # MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://j8e106.p.ssafy.io:9306/hast?characterEncoding=UTF-8&serverTimezone=UTC
+
     username: root
     password: tyranno2106!
-#    url: jdbc:mysql://127.0.0.1:3306/hast?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-#    username: ssafy
-#    password: ssafy
+  #    url: jdbc:mysql://127.0.0.1:3306/hast?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+  #    username: ssafy
+  #    password: ssafy
   # JPA for auto reload
   jpa:
     show-sql: false
     hibernate.ddl-auto: none
-
 #  sql:
 #    init:
 #      mode: ${sql.init.mode}

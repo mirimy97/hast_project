@@ -161,6 +161,7 @@ export default function Map() {
             name: res.name,
             rating: res.rating,
             address: res.vicinity,
+            radius: 5000,
           };
         });
         result.push(...newList);
@@ -217,9 +218,7 @@ export default function Map() {
 
   useEffect(() => {
     if (heatmapData !== null) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+      setIsLoading(false);
     }
   }, [heatmapData]);
 
