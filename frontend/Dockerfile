@@ -1,6 +1,7 @@
 FROM node:18.12.1 as build-stage
 COPY . .
 RUN npm install
+RUN npm install @googlemaps/markerclustererplus
 RUN npm run build
 
 # runner
