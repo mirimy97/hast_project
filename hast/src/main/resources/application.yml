@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  # MySQL
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    username: root
+    password: tyranno2106!
+  #    url: jdbc:mysql://127.0.0.1:3306/hast?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+  #    username: ssafy
+  #    password: ssafy
+  # JPA for auto reload
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: none
+#  sql:
+#    init:
+#      mode: ${sql.init.mode}
+#      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+
+#logging:
+#  level:
+#    org.hibernate:
+#      type.descriptor.sql: trace #show parameter binding
+#      SQL: DEBUG

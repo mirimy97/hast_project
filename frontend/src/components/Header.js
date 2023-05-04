@@ -99,16 +99,6 @@ function Header(props) {
     }, 500);
   };
 
-  // useEffect(() => {
-  //   // load Topics
-  //   axios.get("http://j8e106.p.ssafy.io:8080/api/articles").then((res) => {
-  //     if (res.data.resultCode === "SUCCESS") {
-  //       console.log(res.data);
-  //       setTopics(res.data.result);
-  //     }
-  //   });
-  // }, []);
-
   const navigate = useNavigate();
   const changePg = () => {
     navigate("/game");
